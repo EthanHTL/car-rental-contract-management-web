@@ -1,42 +1,42 @@
 <template>
-  <div class="page-login">
-    <div class="page-login--layer page-login--layer-area">
+  <div class="page-register">
+    <div class="page-register--layer page-register--layer-area">
       <ul class="circles">
         <li v-for="n in 10" :key="n"></li>
       </ul>
     </div>
     <div
-      class="page-login--layer page-login--layer-time"
+      class="page-register--layer page-register--layer-time"
       flex="main:center cross:center">
       {{time}}
     </div>
-    <div class="page-login--layer">
+    <div class="page-register--layer">
       <div
-        class="page-login--content"
+        class="page-register--content"
         flex="dir:top main:justify cross:stretch box:justify">
-        <div class="page-login--content-header">
-          <p class="page-login--content-header-motto">
-            时间是一切财富中最宝贵的财富
+        <div class="page-register--content-header">
+          <p class="page-register--content-header-motto">
+            时间是一切财富中最宝贵的财富---注册
           </p>
         </div>
         <div
-          class="page-login--content-main"
+          class="page-register--content-main"
           flex="dir:top main:center cross:center">
           <!-- logo -->
-          <img class="page-login--logo" src="./image/logo@2x.png">
+          <!-- <img class="page-register--logo" src="./image/logo@2x.png"> -->
           <!-- form -->
-          <div class="page-login--form">
+          <div class="page-register--form">
             <el-card shadow="never">
               <el-form
-                ref="loginForm"
+                ref="registerForm"
                 label-position="top"
                 :rules="rules"
-                :model="formLogin"
+                :model="formregister"
                 size="default">
                 <el-form-item prop="username">
                   <el-input
                     type="text"
-                    v-model="formLogin.username"
+                    v-model="formregister.username"
                     placeholder="用户名">
                     <i slot="prepend" class="fa fa-user-circle-o"></i>
                   </el-input>
@@ -44,44 +44,31 @@
                 <el-form-item prop="password">
                   <el-input
                     type="password"
-                    v-model="formLogin.password"
+                    v-model="formregister.password"
                     placeholder="密码">
                     <i slot="prepend" class="fa fa-keyboard-o"></i>
                   </el-input>
                 </el-form-item>
-                <el-form-item prop="code">
-                  <el-input
-                    type="text"
-                    v-model="formLogin.code"
-                    placeholder="验证码">
-                    <template slot="append">
-                      <img class="login-code" src="./image/login-code.png">
-                    </template>
-                  </el-input>
-                </el-form-item>
+                 
                 <el-button
                   size="default"
                   @click="submit"
                   type="primary"
-                  class="button-login">
-                  登录
+                  class="button-register">
+                  注册用户
                 </el-button>
               </el-form>
             </el-card>
             <p
-              class="page-login--options"
-              flex="main:justify cross:center">
-              <span><d2-icon name="question-circle"/> 忘记密码</span>
-              <span @click="toRegister">注册用户</span>
+              class="page-register--options"
+              flex="main:right cross:center">
+              <span>已有账户，去登陆</span>
             </p>
-            <!-- quick login -->
-            <el-button class="page-login--quick" size="default" type="info" @click="dialogVisible = true">
-              快速选择用户（测试功能）
-            </el-button>
+        
           </div>
         </div>
-        <div class="page-login--content-footer">
-          <p class="page-login--content-footer-locales">
+        <div class="page-register--content-footer">
+          <p class="page-register--content-footer-locales">
             <a
               v-for="language in $languages"
               :key="language.value"
@@ -89,7 +76,7 @@
               {{ language.label }}
             </a>
           </p>
-          <p class="page-login--content-footer-copyright">
+          <p class="page-register--content-footer-copyright">
             Copyright
             <d2-icon name="copyright"/>
             2018 D2 Projects 开源组织出品
@@ -97,7 +84,7 @@
               @FairyEver
             </a>
           </p>
-          <p class="page-login--content-footer-options">
+          <p class="page-register--content-footer-options">
             <a href="#">帮助</a>
             <a href="#">隐私</a>
             <a href="#">条款</a>
@@ -105,19 +92,7 @@
         </div>
       </div>
     </div>
-    <el-dialog
-      title="快速选择用户"
-      :visible.sync="dialogVisible"
-      width="400px">
-      <el-row :gutter="10" style="margin: -20px 0px -10px 0px;">
-        <el-col v-for="(user, index) in users" :key="index" :span="8">
-          <div class="page-login--quick-user" @click="handleUserBtnClick(user)">
-            <d2-icon name="user-circle-o"/>
-            <span>{{user.name}}</span>
-          </div>
-        </el-col>
-      </el-row>
-    </el-dialog>
+
   </div>
 </template>
 
@@ -135,29 +110,11 @@ export default {
       time: dayjs().format('HH:mm:ss'),
       // 快速选择用户
       dialogVisible: false,
-      users: [
-        {
-          name: 'Admin',
-          username: 'admin',
-          password: '123456'
-        },
-        {
-          name: 'Editor',
-          username: 'editor',
-          password: 'editor'
-        },
-        {
-          name: 'User1',
-          username: 'user1',
-          password: 'user1'
-        }
-      ],
+      
       // 表单
-      formLogin: {
+      formregister: {
         username: 'admin',
-        password: '123456',
-        code: 'v9am',
-        "remember-me": false
+        password: '123456'
   },
       // 表单校验
       rules: {
@@ -195,7 +152,7 @@ export default {
   },
   methods: {
     ...mapActions('d2admin/account', [
-      'login'
+      'register'
     ]),
     refreshTime () {
       this.time = dayjs().format('HH:mm:ss')
@@ -205,26 +162,23 @@ export default {
      * @param {Object} user 用户信息
      */
     handleUserBtnClick (user) {
-      this.formLogin.username = user.username
-      this.formLogin.password = user.password
+      this.formregister.username = user.username
+      this.formregister.password = user.password
       this.submit()
-    },
-    toRegister () {
-      this.$router.push("/register")
     },
     /**
      * @description 提交表单
      */
     // 提交登录信息
     submit () {
-      this.$refs.loginForm.validate((valid) => {
+      this.$refs.registerForm.validate((valid) => {
         if (valid) {
           // 登录
           // 注意 这里的演示没有传验证码
           // 具体需要传递的数据请自行修改代码
-          this.login({
-            username: this.formLogin.username,
-            password: this.formLogin.password
+          this.register({
+            username: this.formregister.username,
+            password: this.formregister.password
           })
             .then(() => {
               // 重定向对象不存在则返回顶层路径
@@ -241,7 +195,7 @@ export default {
 </script>
 
 <style lang="scss">
-.page-login {
+.page-register {
   @extend %unable-select;
   $backgroundColor: #F0F2F5;
   // ---
@@ -249,29 +203,29 @@ export default {
   height: 100%;
   position: relative;
   // 层
-  .page-login--layer {
+  .page-register--layer {
     @extend %full;
     overflow: auto;
   }
-  .page-login--layer-area {
+  .page-register--layer-area {
     overflow: hidden;
   }
   // 时间
-  .page-login--layer-time {
+  .page-register--layer-time {
     font-size: 24em;
     font-weight: bold;
     color: rgba(0, 0, 0, 0.03);
     overflow: hidden;
   }
   // 登陆页面控件的容器
-  .page-login--content {
+  .page-register--content {
     height: 100%;
     min-height: 500px;
   }
   // header
-  .page-login--content-header {
+  .page-register--content-header {
     padding: 1em 0;
-    .page-login--content-header-motto {
+    .page-register--content-header-motto {
       margin: 0px;
       padding: 0px;
       color: $color-text-normal;
@@ -280,27 +234,27 @@ export default {
     }
   }
   // main
-  .page-login--logo {
+  .page-register--logo {
     width: 240px;
     margin-bottom: 2em;
     margin-top: -2em;
   }
   // 登录表单
-  .page-login--form {
+  .page-register--form {
     width: 280px;
     // 卡片
     .el-card {
       margin-bottom: 15px;
     }
     // 登录按钮
-    .button-login {
+    .button-register {
       width: 100%;
     }
     // 输入框左边的图表区域缩窄
     .el-input-group__prepend {
       padding: 0px 14px;
     }
-    .login-code {
+    .register-code {
       height: 40px - 2px;
       display: block;
       margin: 0px -20px;
@@ -308,7 +262,7 @@ export default {
       border-bottom-right-radius: 2px;
     }
     // 登陆选项
-    .page-login--options {
+    .page-register--options {
       margin: 0px;
       padding: 0px;
       font-size: 14px;
@@ -316,12 +270,12 @@ export default {
       margin-bottom: 15px;
       font-weight: bold;
     }
-    .page-login--quick {
+    .page-register--quick {
       width: 100%;
     }
   }
   // 快速选择用户面板
-  .page-login--quick-user {
+  .page-register--quick-user {
     @extend %flex-center-col;
     padding: 10px 0px;
     border-radius: 4px;
@@ -345,9 +299,9 @@ export default {
     }
   }
   // footer
-  .page-login--content-footer {
+  .page-register--content-footer {
     padding: 1em 0;
-    .page-login--content-footer-locales {
+    .page-register--content-footer-locales {
       padding: 0px;
       margin: 0px;
       margin-bottom: 15px;
@@ -363,7 +317,7 @@ export default {
         }
       }
     }
-    .page-login--content-footer-copyright {
+    .page-register--content-footer-copyright {
       padding: 0px;
       margin: 0px;
       margin-bottom: 10px;
@@ -375,7 +329,7 @@ export default {
         color: $color-text-normal;
       }
     }
-    .page-login--content-footer-options {
+    .page-register--content-footer-options {
       padding: 0px;
       margin: 0px;
       font-size: 12px;
