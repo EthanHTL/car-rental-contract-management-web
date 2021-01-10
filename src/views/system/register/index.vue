@@ -7,13 +7,15 @@
     </div>
     <div
       class="page-register--layer page-register--layer-time"
-      flex="main:center cross:center">
-      {{time}}
+      flex="main:center cross:center"
+    >
+      {{ time }}
     </div>
     <div class="page-register--layer">
       <div
         class="page-register--content"
-        flex="dir:top main:justify cross:stretch box:justify">
+        flex="dir:top main:justify cross:stretch box:justify"
+      >
         <div class="page-register--content-header">
           <p class="page-register--content-header-motto">
             时间是一切财富中最宝贵的财富---注册
@@ -21,7 +23,8 @@
         </div>
         <div
           class="page-register--content-main"
-          flex="dir:top main:center cross:center">
+          flex="dir:top main:center cross:center"
+        >
           <!-- logo -->
           <!-- <img class="page-register--logo" src="./image/logo@2x.png"> -->
           <!-- form -->
@@ -29,60 +32,89 @@
             <el-card shadow="never">
               <el-form
                 ref="registerForm"
-                label-position="top"
+                label-position="right"
+                label-width="80px"
                 :rules="rules"
                 :model="formregister"
-                size="default">
-                <el-form-item prop="username">
-                  <el-input
+                size="default"
+              >
+                <el-form-item prop="username" >
+                  <!-- <el-input
                     type="text"
                     v-model="formregister.username"
-                    placeholder="用户名">
+                    placeholder="用户名"
+                  >
                     <i slot="prepend" class="fa fa-user-circle-o"></i>
-                  </el-input>
+                  </el-input> -->
+                  
+                  <el-avatar shape="circle" :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
                 </el-form-item>
+                <el-form-item label="账户">
+                  <el-input v-model="formregister.username"></el-input>
+                </el-form-item>
+                <el-form-item label="用户名">
+                  <el-input v-model="formregister.nickname"></el-input>
+                </el-form-item>
+                <el-form-item label="密码">
+                  <el-input v-model="formregister.username"></el-input>
+                </el-form-item>
+                <el-form-item label="确认密码">
+                  <el-input v-model="formregister.username"></el-input>
+                </el-form-item>
+                <el-form-item label="性别">
+                  <el-input v-model="formregister.username"></el-input>
+                </el-form-item>
+                <el-form-item label="身份证号">
+                  <el-input v-model="formregister.username"></el-input>
+                </el-form-item>
+                <el-form-item label="住址">
+                  <el-input v-model="formregister.username"></el-input>
+                </el-form-item>
+                <el-form-item label="联系电话">
+                  <el-input v-model="formregister.username"></el-input>
+                </el-form-item>
+                
                 <el-form-item prop="password">
                   <el-input
                     type="password"
                     v-model="formregister.password"
-                    placeholder="密码">
+                    placeholder="密码"
+                  >
                     <i slot="prepend" class="fa fa-keyboard-o"></i>
                   </el-input>
                 </el-form-item>
-                 
+
                 <el-button
                   size="default"
                   @click="submit"
                   type="primary"
-                  class="button-register">
+                  class="button-register"
+                >
                   注册用户
                 </el-button>
               </el-form>
             </el-card>
-            <p
-              class="page-register--options"
-              flex="main:right cross:center">
+            <p class="page-register--options" flex="main:right cross:center">
               <span>已有账户，去登陆</span>
             </p>
-        
           </div>
         </div>
+
         <div class="page-register--content-footer">
           <p class="page-register--content-footer-locales">
             <a
               v-for="language in $languages"
               :key="language.value"
-              @click="onChangeLocale(language.value)">
+              @click="onChangeLocale(language.value)"
+            >
               {{ language.label }}
             </a>
           </p>
           <p class="page-register--content-footer-copyright">
             Copyright
-            <d2-icon name="copyright"/>
+            <d2-icon name="copyright" />
             2018 D2 Projects 开源组织出品
-            <a href="https://github.com/FairyEver">
-              @FairyEver
-            </a>
+            <a href="https://github.com/FairyEver"> @FairyEver </a>
           </p>
           <p class="page-register--content-footer-options">
             <a href="#">帮助</a>
@@ -92,85 +124,80 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import dayjs from 'dayjs'
-import { mapActions } from 'vuex'
-import localeMixin from '@/locales/mixin.js'
+import dayjs from "dayjs";
+import { mapActions } from "vuex";
+import localeMixin from "@/locales/mixin.js";
 export default {
-  mixins: [
-    localeMixin
-  ],
-  data () {
+  mixins: [localeMixin],
+  data() {
     return {
       timeInterval: null,
-      time: dayjs().format('HH:mm:ss'),
+      time: dayjs().format("HH:mm:ss"),
       // 快速选择用户
       dialogVisible: false,
-      
+
       // 表单
       formregister: {
-        username: 'admin',
-        password: '123456'
-  },
+        username: "admin",
+        password: "123456",
+      },
       // 表单校验
       rules: {
         username: [
           {
             required: true,
-            message: '请输入用户名',
-            trigger: 'blur'
-          }
+            message: "请输入用户名",
+            trigger: "blur",
+          },
         ],
         password: [
           {
             required: true,
-            message: '请输入密码',
-            trigger: 'blur'
-          }
+            message: "请输入密码",
+            trigger: "blur",
+          },
         ],
         code: [
           {
             required: true,
-            message: '请输入验证码',
-            trigger: 'blur'
-          }
-        ]
-      }
-    }
+            message: "请输入验证码",
+            trigger: "blur",
+          },
+        ],
+      },
+    };
   },
-  mounted () {
+  mounted() {
     this.timeInterval = setInterval(() => {
-      this.refreshTime()
-    }, 1000)
+      this.refreshTime();
+    }, 1000);
   },
-  beforeDestroy () {
-    clearInterval(this.timeInterval)
+  beforeDestroy() {
+    clearInterval(this.timeInterval);
   },
   methods: {
-    ...mapActions('d2admin/account', [
-      'register'
-    ]),
-    refreshTime () {
-      this.time = dayjs().format('HH:mm:ss')
+    ...mapActions("d2admin/account", ["register"]),
+    refreshTime() {
+      this.time = dayjs().format("HH:mm:ss");
     },
     /**
      * @description 接收选择一个用户快速登录的事件
      * @param {Object} user 用户信息
      */
-    handleUserBtnClick (user) {
-      this.formregister.username = user.username
-      this.formregister.password = user.password
-      this.submit()
+    handleUserBtnClick(user) {
+      this.formregister.username = user.username;
+      this.formregister.password = user.password;
+      this.submit();
     },
     /**
      * @description 提交表单
      */
     // 提交登录信息
-    submit () {
+    submit() {
       this.$refs.registerForm.validate((valid) => {
         if (valid) {
           // 登录
@@ -178,26 +205,25 @@ export default {
           // 具体需要传递的数据请自行修改代码
           this.register({
             username: this.formregister.username,
-            password: this.formregister.password
-          })
-            .then(() => {
-              // 重定向对象不存在则返回顶层路径
-              this.$router.replace(this.$route.query.redirect || '/')
-            })
+            password: this.formregister.password,
+          }).then(() => {
+            // 重定向对象不存在则返回顶层路径
+            this.$router.replace(this.$route.query.redirect || "/");
+          });
         } else {
           // 登录表单校验失败
-          this.$message.error('表单校验失败，请检查')
+          this.$message.error("表单校验失败，请检查");
         }
-      })
-    }
-  }
-}
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss">
 .page-register {
   @extend %unable-select;
-  $backgroundColor: #F0F2F5;
+  $backgroundColor: #f0f2f5;
   // ---
   background-color: $backgroundColor;
   height: 100%;
@@ -241,7 +267,7 @@ export default {
   }
   // 登录表单
   .page-register--form {
-    width: 280px;
+    width: 380px;
     // 卡片
     .el-card {
       margin-bottom: 15px;
@@ -311,7 +337,7 @@ export default {
       color: $color-text-normal;
       a {
         color: $color-text-normal;
-        margin: 0 .5em;
+        margin: 0 0.5em;
         &:hover {
           color: $color-text-main;
         }
@@ -357,16 +383,16 @@ export default {
       list-style: none;
       width: 20px;
       height: 20px;
-      background: #FFF;
+      background: #fff;
       animation: animate 25s linear infinite;
       bottom: -200px;
       @keyframes animate {
-        0%{
+        0% {
           transform: translateY(0) rotate(0deg);
           opacity: 1;
           border-radius: 0;
         }
-        100%{
+        100% {
           transform: translateY(-1000px) rotate(720deg);
           opacity: 0;
           border-radius: 50%;
