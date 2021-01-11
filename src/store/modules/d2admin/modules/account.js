@@ -13,7 +13,7 @@ export default {
      * @param {Object} payload password {String} 密码
      * @param {Object} payload route {Object} 登录成功后定向的路由对象 任何 vue-router 支持的格式
      */
-    async login ({ dispatch }, {
+    async login({ dispatch }, {
       username = '',
       password = ''
     } = {}) {
@@ -31,16 +31,18 @@ export default {
       // 用户登录后从持久化数据加载一系列的设置
       await dispatch('load')
     },
+    
+
     /**
      * @description 注销用户并返回登录页面
      * @param {Object} context
      * @param {Object} payload confirm {Boolean} 是否需要确认
      */
-    logout ({ commit, dispatch }, { confirm = false } = {}) {
+    logout({ commit, dispatch }, { confirm = false } = {}) {
       /**
        * @description 注销
        */
-      async function logout () {
+      async function logout() {
         // 删除cookie
         util.cookies.remove('token')
         util.cookies.remove('uuid')
@@ -69,7 +71,7 @@ export default {
      * @description 用户登录后从持久化数据加载一系列的设置
      * @param {Object} context
      */
-    async load ({ dispatch }) {
+    async load({ dispatch }) {
       // 加载用户名
       await dispatch('d2admin/user/load', null, { root: true })
       // 加载主题

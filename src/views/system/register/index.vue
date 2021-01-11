@@ -31,6 +31,7 @@
           <div class="page-register--form">
             <el-card shadow="never">
               <el-form
+                status-icon
                 ref="registerForm"
                 label-position="right"
                 label-width="80px"
@@ -38,50 +39,46 @@
                 :model="formregister"
                 size="default"
               >
-                <el-form-item prop="username" >
-                  <!-- <el-input
-                    type="text"
-                    v-model="formregister.username"
-                    placeholder="用户名"
-                  >
-                    <i slot="prepend" class="fa fa-user-circle-o"></i>
-                  </el-input> -->
+                <el-form-item prop="username">
                   
-                  <el-avatar shape="circle" :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
                 </el-form-item>
-                <el-form-item label="账户">
+                <el-form-item label="用户名" prop="username">
                   <el-input v-model="formregister.username"></el-input>
                 </el-form-item>
-                <el-form-item label="用户名">
+                <el-form-item label="昵称">
                   <el-input v-model="formregister.nickname"></el-input>
                 </el-form-item>
-                <el-form-item label="密码">
-                  <el-input v-model="formregister.username"></el-input>
-                </el-form-item>
-                <el-form-item label="确认密码">
-                  <el-input v-model="formregister.username"></el-input>
-                </el-form-item>
-                <el-form-item label="性别">
-                  <el-input v-model="formregister.username"></el-input>
-                </el-form-item>
-                <el-form-item label="身份证号">
-                  <el-input v-model="formregister.username"></el-input>
-                </el-form-item>
-                <el-form-item label="住址">
-                  <el-input v-model="formregister.username"></el-input>
-                </el-form-item>
-                <el-form-item label="联系电话">
-                  <el-input v-model="formregister.username"></el-input>
-                </el-form-item>
-                
-                <el-form-item prop="password">
+                <el-form-item label="密码" prop="password">
                   <el-input
                     type="password"
                     v-model="formregister.password"
-                    placeholder="密码"
-                  >
-                    <i slot="prepend" class="fa fa-keyboard-o"></i>
-                  </el-input>
+                    autocomplete="off"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item label="确认密码" prop="checkPass">
+                  <el-input
+                    type="password"
+                    v-model="formregister.checkPass"
+                    autocomplete="off"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item label="性别">
+                  <el-radio-group v-model="formregister.sex" size="mini">
+                    <el-radio border  v-for="item in sex" :key="item.code" 
+                    :label="item.name" :value="item.code"></el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                <el-form-item label="身份证号" prop="idCard">
+                  <el-input v-model="formregister.idCard"></el-input>
+                </el-form-item>
+                <el-form-item label="住址">
+                  <el-input v-model="formregister.addr"></el-input>
+                </el-form-item>
+                <el-form-item label="联系电话" prop="telephone">
+                  <el-input v-model="formregister.telephone"></el-input>
+                </el-form-item>
+                <el-form-item label="简介" prop="remark">
+                  <el-input type="textarea" v-model="formregister.remark"></el-input>
                 </el-form-item>
 
                 <el-button
@@ -95,7 +92,7 @@
               </el-form>
             </el-card>
             <p class="page-register--options" flex="main:right cross:center">
-              <span>已有账户，去登陆</span>
+              <span @click="tologin">已有账户，去登陆</span>
             </p>
           </div>
         </div>
@@ -129,49 +126,118 @@
 
 <script>
 import dayjs from "dayjs";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 import localeMixin from "@/locales/mixin.js";
+import log from '@/libs/util.log';
 export default {
   mixins: [localeMixin],
   data() {
+    var validateusername = (rule, value, callback) =>{
+        if(value === ''){
+          callback(new Error('请输入用户名'));
+        } else {
+          this.$store.dispatch("d2admin/system/checkUserName",{"username":value}).then(res =>{
+            console.log(res);
+            if(!res){
+               callback();
+            }else{
+              callback(new Error('该账户已存在，请重新输入！'));
+            }
+          })
+
+
+        }
+
+    };
+    var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } else {
+          if (this.formregister.password !== '') {
+            this.$refs.registerForm.validateField('checkPass');
+          }
+          callback();
+        }
+      };
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.formregister.password) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
     return {
       timeInterval: null,
       time: dayjs().format("HH:mm:ss"),
-      // 快速选择用户
-      dialogVisible: false,
-
+      // 表格数据
+      sex: {},
       // 表单
       formregister: {
         username: "admin",
-        password: "123456",
+        nickname: "张三",
+        password: "",
+        checkPass: "",
+        sex: 0,
+        addr: "重庆市",
+        telephone: "12345678911",
+        idCard: "500229199905138990",
+        remark: "",
       },
       // 表单校验
       rules: {
         username: [
           {
             required: true,
-            message: "请输入用户名",
+            validator: validateusername,
             trigger: "blur",
           },
         ],
         password: [
           {
             required: true,
-            message: "请输入密码",
+            validator: validatePass,
             trigger: "blur",
           },
         ],
-        code: [
+        checkPass: [
           {
             required: true,
-            message: "请输入验证码",
+            validator: validatePass2,
             trigger: "blur",
           },
         ],
+        idCard: [
+          {
+            required: true,
+            message: "身份证号不能为空",
+            trigger: "blur",
+          },
+        ],
+        telephone: [
+          {
+            required: true,
+            message: "电话不能为空",
+            trigger: "blur",
+          },
+        ],
+        
       },
     };
   },
+  computed: {},
   mounted() {
+    this.$store.dispatch("d2admin/system/getSexs").then(res =>{
+      this.sex = this.$store.state.d2admin.system.sexList;
+    })
+
+    // this.getSexs().then(res =>{
+    //   this.sex = this.$store.state.d2admin.system.sexList;
+    // })
+
+    
+    
     this.timeInterval = setInterval(() => {
       this.refreshTime();
     }, 1000);
@@ -180,7 +246,7 @@ export default {
     clearInterval(this.timeInterval);
   },
   methods: {
-    ...mapActions("d2admin/account", ["register"]),
+    ...mapActions("d2admin/system/", ["register", "getSexs"]),
     refreshTime() {
       this.time = dayjs().format("HH:mm:ss");
     },
@@ -193,6 +259,9 @@ export default {
       this.formregister.password = user.password;
       this.submit();
     },
+    tologin(){
+      this.$router.push("/login")
+    },
     /**
      * @description 提交表单
      */
@@ -203,12 +272,10 @@ export default {
           // 登录
           // 注意 这里的演示没有传验证码
           // 具体需要传递的数据请自行修改代码
-          this.register({
-            username: this.formregister.username,
-            password: this.formregister.password,
-          }).then(() => {
+          this.register(this.formregister).then(res => {
+            console.log(res);
             // 重定向对象不存在则返回顶层路径
-            this.$router.replace(this.$route.query.redirect || "/");
+            // this.$router.replace(this.$route.query.redirect || "/");
           });
         } else {
           // 登录表单校验失败
@@ -267,7 +334,7 @@ export default {
   }
   // 登录表单
   .page-register--form {
-    width: 380px;
+    width: 480px;
     // 卡片
     .el-card {
       margin-bottom: 15px;
@@ -300,30 +367,7 @@ export default {
       width: 100%;
     }
   }
-  // 快速选择用户面板
-  .page-register--quick-user {
-    @extend %flex-center-col;
-    padding: 10px 0px;
-    border-radius: 4px;
-    &:hover {
-      background-color: $color-bg;
-      i {
-        color: $color-text-normal;
-      }
-      span {
-        color: $color-text-normal;
-      }
-    }
-    i {
-      font-size: 36px;
-      color: $color-text-sub;
-    }
-    span {
-      font-size: 12px;
-      margin-top: 10px;
-      color: $color-text-sub;
-    }
-  }
+  
   // footer
   .page-register--content-footer {
     padding: 1em 0;

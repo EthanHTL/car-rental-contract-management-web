@@ -30,14 +30,21 @@ export default ({service, request, serviceForMock, requestForMock, mock, faker, 
   },
   SYS_USER_REGISTER(data = {}) {
     return request({
-      url: '/api/v1/car/contract/find/all',
+      url: '/api/v1/car/users/register',
       method: 'post',
       data
     })
   },
-  SYS_USER_REGISTER2(data = {}) {
+  SYS_USER_CHECK(data = {}) {
     return request({
-      url: '/api/v1/car/contract/find/page',
+      url: '/api/v1/car/users/check/username',
+      method: 'post',
+      data
+    })
+  },
+  SYS_USER_ALL_SEX(data = {"code":"sex"}) {
+    return request({
+      url: '/api/v1/car/dictionary/find/code',
       method: 'post',
       data
     })
