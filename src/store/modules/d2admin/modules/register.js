@@ -17,9 +17,9 @@ export default {
              return res;
          },
          async register({ commit }, data){
-            console.log("data",data);
+             
             const res = await api.SYS_USER_REGISTER(data)
-            console.log(res);
+            return res;
          }
     }
     

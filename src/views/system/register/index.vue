@@ -39,9 +39,6 @@
                 :model="formregister"
                 size="default"
               >
-                <el-form-item prop="username">
-                  
-                </el-form-item>
                 <el-form-item label="用户名" prop="username">
                   <el-input v-model="formregister.username"></el-input>
                 </el-form-item>
@@ -65,7 +62,7 @@
                 <el-form-item label="性别">
                   <el-radio-group v-model="formregister.sex" size="mini">
                     <el-radio border  v-for="item in sex" :key="item.code" 
-                    :label="item.name" :value="item.code"></el-radio>
+                    :label="item.code">{{item.name}}</el-radio>
                   </el-radio-group>
                 </el-form-item>
                 <el-form-item label="身份证号" prop="idCard">
@@ -98,15 +95,7 @@
         </div>
 
         <div class="page-register--content-footer">
-          <p class="page-register--content-footer-locales">
-            <a
-              v-for="language in $languages"
-              :key="language.value"
-              @click="onChangeLocale(language.value)"
-            >
-              {{ language.label }}
-            </a>
-          </p>
+        
           <p class="page-register--content-footer-copyright">
             Copyright
             <d2-icon name="copyright" />
@@ -136,7 +125,7 @@ export default {
         if(value === ''){
           callback(new Error('请输入用户名'));
         } else {
-          this.$store.dispatch("d2admin/system/checkUserName",{"username":value}).then(res =>{
+          this.$store.dispatch("d2admin/register/checkUserName",{"username":value}).then(res =>{
             console.log(res);
             if(!res){
                callback();
@@ -228,8 +217,8 @@ export default {
   },
   computed: {},
   mounted() {
-    this.$store.dispatch("d2admin/system/getSexs").then(res =>{
-      this.sex = this.$store.state.d2admin.system.sexList;
+    this.$store.dispatch("d2admin/register/getSexs").then(res =>{
+      this.sex = this.$store.state.d2admin.register.sexList;
     })
 
     // this.getSexs().then(res =>{
@@ -246,18 +235,9 @@ export default {
     clearInterval(this.timeInterval);
   },
   methods: {
-    ...mapActions("d2admin/system/", ["register", "getSexs"]),
+    ...mapActions("d2admin/register/", ["register", "getSexs"]),
     refreshTime() {
       this.time = dayjs().format("HH:mm:ss");
-    },
-    /**
-     * @description 接收选择一个用户快速登录的事件
-     * @param {Object} user 用户信息
-     */
-    handleUserBtnClick(user) {
-      this.formregister.username = user.username;
-      this.formregister.password = user.password;
-      this.submit();
     },
     tologin(){
       this.$router.push("/login")
@@ -269,11 +249,17 @@ export default {
     submit() {
       this.$refs.registerForm.validate((valid) => {
         if (valid) {
-          // 登录
-          // 注意 这里的演示没有传验证码
-          // 具体需要传递的数据请自行修改代码
           this.register(this.formregister).then(res => {
             console.log(res);
+            if(res == 1){
+              this.$message({
+                  message: '注册成功',
+                  type: 'success'
+                });
+                this.timeInterval = setInterval(() => {
+                    this.$router.push("/login")
+                }, 1000);
+            }
             // 重定向对象不存在则返回顶层路径
             // this.$router.replace(this.$route.query.redirect || "/");
           });
