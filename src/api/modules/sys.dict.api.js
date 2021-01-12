@@ -1,5 +1,6 @@
 export default ({ service, request, serviceForMock, requestForMock, mock, faker, tools }) => ({
 
+    // 字典分页
     SYS_DICT_FIND_PAGE(data = {}) {
         return request({
             url: '/api/v1/car/dictionary/find/page',
@@ -7,6 +8,7 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             data
         })
     },
+    // 字典获取
     SYS_DICT_GET(data = {}) {
         return request({
             url: '/api/v1/car/dictionary/get',
@@ -14,6 +16,7 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             data
         })
     },
+    // 字典插入
     SYS_DICT_INSERT(data = {}) {
         return request({
             url: '/api/v1/car/dictionary/insert',
@@ -21,6 +24,7 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             data
         })
     },
+    // 字典修改
     SYS_DICT_UPDATE(data = {}) {
         return request({
             url: '/api/v1/car/dictionary/update',
@@ -28,6 +32,7 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             data
         })
     },
+    // 字典删除 
     SYS_DICT_DELETE(data = {}) {
         return request({
             url: '/api/v1/car/dictionary/destory',
@@ -35,6 +40,7 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             data
         })
     },
+    // 查询字典选项
     SYS_DICT_SHOW_DETAIL(data = {}) {
         return request({
             url: '/api/v1/car/dictionary/find/code',
@@ -42,6 +48,7 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             data
         })
     },
+    // 选项获取
     SYS_DICT_DETAIL_GET(data = {}) {
         return request({
             url: '/api/v1/car/dictionary/detail/get',
@@ -49,6 +56,7 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             data
         })
     },
+    // 选项修改
     SYS_DICT_DETAIL_UPDATE(data = {}) {
         return request({
             url: '/api/v1/car/dictionary/detail/update',
@@ -56,6 +64,7 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             data
         })
     },
+    // 选项插入
     SYS_DICT_DETAIL_INSERT(data = {}) {
         return request({
             url: '/api/v1/car/dictionary/detail/insert',
@@ -63,6 +72,7 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             data
         })
     },
+    // 选项删除
     SYS_DICT_DETAIL_DELETE(data = {}) {
         return request({
             url: '/api/v1/car/dictionary/detail/destroy',

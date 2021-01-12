@@ -3,11 +3,12 @@ import Adapter from 'axios-mock-adapter'
 import { get } from 'lodash'
 import util from '@/libs/util'
 import { errorLog, errorCreate } from './tools'
+import { Message } from 'element-ui'
 
 /**
  * @description 创建请求实例
  */
-function createService () {
+function createService() {
   // 创建一个 axios 实例
   const service = axios.create()
   // 请求拦截
@@ -36,6 +37,11 @@ function createService () {
         switch (statusCode) {
           case 200:
             // [ 示例 ] code === 0 代表没有错误
+            Message({
+              message: dataAxios.message,
+              type: 'success',
+              duration: 2 * 1000
+            })
             return dataAxios.data
           case 'xxx':
             // [ 示例 ] 其它和后台约定的 code
@@ -75,7 +81,7 @@ function createService () {
  * @description 创建请求方法
  * @param {Object} service axios 实例
  */
-function createRequestFunction (service) {
+function createRequestFunction(service) {
   return function (config) {
     const token = util.cookies.get('token')
     const configDefault = {
