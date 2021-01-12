@@ -1,5 +1,10 @@
 import { uniqueId } from 'lodash'
 
+import contract from './moudules/contract'
+import system from './moudules/system'
+import workflow from './moudules/workflow'
+
+
 /**
  * @description 给菜单数据补充上 path 字段
  * @description https://github.com/d2-projects/d2-admin/issues/209
@@ -15,8 +20,12 @@ function supplementPath (menu) {
   }))
 }
 
+// 菜单 顶栏
 export const menuHeader = supplementPath([
   { path: '/index', title: '首页', icon: 'home' },
+  system,
+  contract,
+  workflow,,
   {
     title: '页面',
     icon: 'folder-o',
@@ -28,8 +37,11 @@ export const menuHeader = supplementPath([
   }
 ])
 
+// 菜单 侧边栏
 export const menuAside = supplementPath([
-  { path: '/index', title: '首页', icon: 'home' },
+  contract,
+  workflow,
+  system,
   {
     title: '页面',
     icon: 'folder-o',

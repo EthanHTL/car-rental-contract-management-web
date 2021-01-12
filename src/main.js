@@ -48,5 +48,11 @@ new Vue({
     this.$store.commit('d2admin/ua/get')
     // 初始化全屏监听
     this.$store.dispatch('d2admin/fullscreen/listen')
+  },
+  watch: {
+    '$route.matched' (val) {
+      const _side = menuAside.filter(menu => menu.path === val[0].path)
+      this.$store.commit('d2admin/menu/asideSet', _side.length > 0 ? _side[0].children : [])
+    }
   }
 }).$mount('#app')

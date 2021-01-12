@@ -9,7 +9,6 @@
      <d2-crud
       :columns="columns"
       :data="data"
-      :loading="loading"
       :pagination="pagination"
       @pagination-current-change="paginationCurrentChange"/>
   </d2-container>
