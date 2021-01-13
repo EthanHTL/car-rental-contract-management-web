@@ -15,9 +15,9 @@ export default {
         { path: 'user', name: 'system-manager-user', component: _import('system/manager/user'), meta: { ...meta, title: '客户信息管理' } },
         { path: 'employee', name: 'system-manager-employee', component: _import('system/manager/employee'), meta: { ...meta, title: '员工信息管理' } },
         { path: 'role', name: 'system-manager-role', component: _import('system/manager/role'), meta: { ...meta, title: '角色管理' } },
-        { path: 'menu', name: 'system-manager-menu', component: _import('system/manager/menu'), meta: { ...meta, title: '菜单管理' } },
+        { path: 'menu', name: 'system-manager-menu', component: _import('system/manager/sysmenu'), meta: { ...meta, title: '菜单管理' } },
         { path: 'api', name: 'system-manager-menu', component: _import('system/manager/api'), meta: { ...meta, title: '接口管理' } },
         { path: 'dict', name: 'system-manager-dict', component: _import('system/manager/dict'), meta: { ...meta, title: '字典管理' } },
-        ]
+    ]
 }
 
