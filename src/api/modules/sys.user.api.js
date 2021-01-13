@@ -55,10 +55,10 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
       data
     })
   },
-  // 用户分配角色
+  // 员工信息分页
   SYS_EMPLOYEE_PAGE(data = {}) {
     return request({
-      url: '/api/v1/car/users/manager/find/employee/all',
+      url: '/api/v1/car/users/manager/find/employee/page',
       method: 'post',
       data
     })

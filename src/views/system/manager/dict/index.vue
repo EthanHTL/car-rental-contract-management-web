@@ -4,7 +4,7 @@
       <el-collapse>
         <el-collapse-item name="1">
           <template slot="title">
-            <el-button type="primary" plain>主要按钮</el-button>
+            <el-button type="primary" plain>筛选</el-button>
           </template>
           <el-input placeholder="请输入内容">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
@@ -132,22 +132,7 @@ export default {
             var year = date.getFullYear();
             var mon = date.getMonth() + 1;
             var day = date.getDate();
-            var hours = date.getHours();
-            var minu = date.getMinutes();
-            var sec = date.getSeconds();
-            return (
-              year +
-              "/" +
-              mon +
-              "/" +
-              day +
-              " " +
-              hours +
-              ":" +
-              minu +
-              ":" +
-              sec
-            );
+            return   year + "/" +  mon + "/" +  day
           },
         },
       ],
@@ -167,13 +152,13 @@ export default {
         currentPage: 1,
         pageSize: 1,
         pageCount: 6,
-        pageSizes: [5, 20, 50],
+        pageSizes: [2,5, 20, 50],
         pageSize: 5,
         total: 500,
       },
       pageForm: {
         pageNum: "1",
-        pageSize: "5",
+        pageSize: "2",
       },
       rowHandle: {
         custom: [

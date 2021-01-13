@@ -1,16 +1,79 @@
 <template>
   <d2-container>
     <template slot="header"> 员工管理 </template>
-    <d2-crud :columns="columns" :data="employees" />
-    <!-- 
-        @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-     -->
+
+     <el-table :data="employees" style="width: 100%">
+    
+      <el-table-column
+        label="姓名"
+        width="180">
+        <template slot-scope="scope">
+          <el-popover trigger="hover" placement="top">
+            <p>姓名: {{ scope.row.nickname }}</p>
+            <p>身份证号: {{ scope.row.idCard }}</p>
+            <div slot="reference" class="name-wrapper">
+              <el-tag size="medium">{{ scope.row.nickname }}</el-tag>
+            </div>
+          </el-popover>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="sex"
+        label="性别"
+        width="100">
+      </el-table-column>
+      <el-table-column
+        prop="addr"
+        label="地址">
+      </el-table-column>
+      <el-table-column
+        prop="telephone"
+        width="150"
+        label="电话">
+      </el-table-column>
+      <el-table-column
+        label="注册时间"
+        width="150"
+        prop="createTime"
+        :formatter="formatterTime"
+        >
+      </el-table-column>
+      <el-table-column
+        label="状态"
+        width="150">
+        <template slot-scope="scope">
+        <el-switch
+          v-model="scope.row.flag"
+          :active-value="1"
+          :inactive-value="0"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+          @change="changeSwitch(scope.row)"
+          >
+        </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    
     <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
       :current-page="pagination.currentPage"
       :page-sizes="pagination.pageSizes"
       :page-size="pagination.pageSize"
       :total="pagination.total"
+      layout="total, sizes, prev, pager, next, jumper"
     >
     </el-pagination>
   </d2-container>
@@ -18,51 +81,28 @@
 
 <script>
 import { mapActions } from "vuex";
+import status from '@/views/system/manager/employee/status'
 
 export default {
   name: "employee",
+  components: {
+    status
+  },
   data() {
     return {
       employees: [],
-      columns: [
-        {
-          title: "用户名",
-          key: "username",
-          width: 150,
-        },
-        {
-          title: "昵称",
-          key: "nickname",
-        },
-        {
-          title: "性别",
-          key: "sex",
-        },
-        {
-          title: "住址",
-          key: "addr",
-        },
-        {
-          title: "电话",
-          key: "telephone",
-        },
-        {
-          title: "身份证号",
-          key: "idCard",
-        },
-      ],
       pagination: {
         currentPage: 1,
         pageSize: 1,
         pageCount: 6,
-        pageSizes: [5, 20, 50],
+        pageSizes: [2,5, 20, 50],
         pageSize: 5,
         total: 500,
       },
       pageForm: {
         pageNum: "1",
-        pageSize: "5",
-      },
+        pageSize: "2",
+      }
     };
   },
   mounted() {
@@ -71,10 +111,33 @@ export default {
   methods: {
     ...mapActions("d2admin/employee", ["findAllEmployee"]),
     init() {
-      this.findAllEmployee().then((res) => {
-        this.employees = res;
+      this.findAllEmployee(this.pageForm).then((res) => {
+        this.employees = res.list;
+        this.pagination.currentPage = res.navigateFirstPage;
+        this.pagination.pageSize = res.pageSize;
+        this.pagination.pageNum = res.pageNum;
+        this.pagination.total = res.total;  
       });
     },
+    handleSizeChange(val) {
+      this.pageForm.pageSize = val;
+      this.init();
+    },
+    handleCurrentChange(val) {
+      this.pageForm.pageNum = val;
+      this.init();
+    },
+    changeSwitch(scope){
+      console.log(scope);
+    },
+    formatterTime(row, column) {
+      var date = new Date(parseInt(row[column.property]) * 1000);
+      var year = date.getFullYear();
+      var mon = date.getMonth() + 1;
+      var day = date.getDate();
+      return year + "/" +mon +  "/" + day 
+      
+    }    
   },
 };
 </script>
