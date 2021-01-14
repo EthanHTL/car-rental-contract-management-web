@@ -13,9 +13,7 @@
       </el-collapse>
 
       <!-- 新增 -->
-      <el-button type="success" plain @click="dictInsert = true"
-        >新增</el-button
-      >
+      <el-button type="success" plain @click="dictInsert = true">新增</el-button>
       <!-- 新增字典 -->
       <el-dialog title="新增字典" :visible.sync="dictInsert">
         <el-form :model="dictForm">
