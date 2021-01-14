@@ -104,6 +104,7 @@
 
 <script>
 import { mapActions } from "vuex";
+import dayjs from "dayjs";
 
 export default {
   name: "dict",
@@ -128,11 +129,8 @@ export default {
           key: "createTime",
           formatter(row, column, cellValue, index) {
             if (cellValue == null) return null;
-            var date = new Date(parseInt(cellValue) * 1000);
-            var year = date.getFullYear();
-            var mon = date.getMonth() + 1;
-            var day = date.getDate();
-            return   year + "/" +  mon + "/" +  day
+            // return dayjs.unix(row[column.property]).format("YYYY-MM-DD");
+            return row[column.property];
           },
         },
       ],
@@ -152,7 +150,7 @@ export default {
         currentPage: 1,
         pageSize: 1,
         pageCount: 6,
-        pageSizes: [2,5, 20, 50],
+        pageSizes: [2, 5, 20, 50],
         pageSize: 5,
         total: 500,
       },
