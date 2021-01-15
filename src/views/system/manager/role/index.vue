@@ -91,7 +91,7 @@
             default-expand-all
             >
           </el-tree>
-        
+
         </el-col>
         <!-- 接口权限 -->
         <el-col :span="12">
@@ -159,7 +159,6 @@ export default {
       roleList: [],
       pagination: {
         currentPage: 1,
-        pageSize: 1,
         pageCount: 6,
         pageSizes: [2, 5, 20, 50],
         pageSize: 5,
@@ -189,7 +188,7 @@ export default {
       },
       apiData:[],
       assignPermission:{
-        
+
       }
     };
   },
@@ -230,11 +229,11 @@ export default {
       return dayjs(row[column.property]).format("YYYY-MM-DD");
     },
     insertRoleFormVisible(){
-      
+
       this.insertFormVisible = false
     },
     updateRoleFormVisible(){
-    
+
       this.updateFormVisible = false
     }
 

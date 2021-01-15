@@ -28,6 +28,22 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
       data
     })
   },
+  // 注册
+  SYS_USER_IMG(data = {}) {
+    return request({
+      url: '/files/sys_head_img/20210115122756f1257c44918a2cce786f80ed7c.png',
+      method: 'get',
+      responseType: 'arraybuffer'
+      }).then(function (response)  {
+      return 'data:image/png;base64,' + btoa(
+        new Uint8Array(response).reduce((data, byte) => data + String.fromCharCode(byte), '')
+      );
+    })
+
+
+
+
+  },
   // username验证
   SYS_USER_CHECK(data = {}) {
     return request({

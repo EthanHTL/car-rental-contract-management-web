@@ -3,26 +3,15 @@
     <template slot="header"> 员工管理 </template>
 
     <!-- 新增 -->
-    <el-button type="success" plain @click="dictInsert = true">新增</el-button>
+    <el-button type="success" plain @click="employeeFormVisible = true">新增</el-button>
 
 
     <!-- 新增员工 -->
-    <el-dialog title="新增员工" :visible.sync="insertFormVisible">
-      <el-form :model="roleForm">
-        <el-form-item label="角色名">
-          <el-input v-model="roleForm.roleZH" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="角色代码">
-          <el-input v-model="roleForm.roleName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item el-form-item label="备注" >
-          <el-input type="textarea" v-model="roleForm.remark"></el-input>
-        </el-form-item>
+    <el-dialog title="新增员工" :visible.sync="employeeFormVisible">
 
-      </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="insertFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="insertRoleFormVisible"
+        <el-button @click="employeeFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="insertEmployeeFormVisible"
           >确 定</el-button
         >
       </div>
@@ -102,7 +91,6 @@ export default {
       employees: [],
       pagination: {
         currentPage: 1,
-        pageSize: 1,
         pageCount: 6,
         pageSizes: [2, 5, 20, 50],
         pageSize: 5,
@@ -112,6 +100,8 @@ export default {
         pageNum: "1",
         pageSize: "2",
       },
+      employeeFormVisible:false,
+
     };
   },
   mounted() {
@@ -143,6 +133,15 @@ export default {
       if (row[column.property] == null) return null;
       return dayjs(row[column.property]).format("YYYY-MM-DD");
     },
+    insertEmployeeFormVisible(){
+      this.employeeFormVisible = false
+    },
+    handleEdit(){
+
+    },
+    handleDelete(){
+
+    }
   },
 };
 </script>

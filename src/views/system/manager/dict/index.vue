@@ -148,7 +148,6 @@ export default {
       loading: false,
       pagination: {
         currentPage: 1,
-        pageSize: 1,
         pageCount: 6,
         pageSizes: [2, 5, 20, 50],
         pageSize: 5,
