@@ -2,6 +2,21 @@
   <d2-container>
     <template slot="header"> 员工管理 </template>
 
+    <!-- 新增 -->
+    <el-button type="success" plain @click="employeeFormVisible = true">新增</el-button>
+
+
+    <!-- 新增员工 -->
+    <el-dialog title="新增员工" :visible.sync="employeeFormVisible">
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="employeeFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="insertEmployeeFormVisible"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
+
     <el-table :data="employees" style="width: 100%">
       <el-table-column label="姓名" width="180">
         <template slot-scope="scope">
@@ -52,7 +67,6 @@
         </template>
       </el-table-column>
     </el-table>
-
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -68,19 +82,15 @@
 
 <script>
 import { mapActions } from "vuex";
-import status from "@/views/system/manager/employee/status";
+import dayjs from "dayjs";
 
 export default {
   name: "employee",
-  components: {
-    status,
-  },
   data() {
     return {
       employees: [],
       pagination: {
         currentPage: 1,
-        pageSize: 1,
         pageCount: 6,
         pageSizes: [2, 5, 20, 50],
         pageSize: 5,
@@ -90,6 +100,8 @@ export default {
         pageNum: "1",
         pageSize: "2",
       },
+      employeeFormVisible:false,
+
     };
   },
   mounted() {
@@ -118,12 +130,18 @@ export default {
       console.log(scope);
     },
     formatterTime(row, column) {
-      var date = new Date(parseInt(row[column.property]) * 1000);
-      var year = date.getFullYear();
-      var mon = date.getMonth() + 1;
-      var day = date.getDate();
-      return year + "/" + mon + "/" + day;
+      if (row[column.property] == null) return null;
+      return dayjs(row[column.property]).format("YYYY-MM-DD");
     },
+    insertEmployeeFormVisible(){
+      this.employeeFormVisible = false
+    },
+    handleEdit(){
+
+    },
+    handleDelete(){
+
+    }
   },
 };
 </script>

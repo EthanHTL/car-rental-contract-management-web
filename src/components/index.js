@@ -9,4 +9,8 @@ Vue.component('d2-container', d2Container)
 Vue.component('d2-link-btn', d2LinkBtn)
 Vue.component('d2-icon', () => import('./d2-icon'))
 Vue.component('d2-icon-svg', () => import('./d2-icon-svg/index.vue'))
+<<<<<<< HEAD
 Vue.component('d2-ueditor', () => import('./d2-ueditor'))
+=======
+Vue.component('d2-ueditor', () => import('./d2-ueditor'))
+>>>>>>> f101280505917ad4e04deb6ce0ab196cce2c118f

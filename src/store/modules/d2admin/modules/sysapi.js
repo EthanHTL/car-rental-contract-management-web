@@ -12,6 +12,11 @@ export default {
             this.state.apiList = res
             return res;
         },
+        async showApisTree({ commit, dispatch }, data = {}) {
+            const res = await api.SYS_API_FIND_TREE(data)
+            this.state.apiList = res
+            return res;
+        },
 
     },
     mutations: {}

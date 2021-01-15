@@ -1,12 +1,12 @@
 <template>
   <d2-container type="card">
     <el-row :gutter="20">
-      <el-col :span="24">
+      <el-col :span="20">
         <d2-ueditor v-model="text"/>
       </el-col>
-      <el-col :span="10">
+      <el-col :span="20" >
         <el-card v-if="text" shadow="never" style="border: 1px solid #d4d4d4;">
-          <template slot="header">Result</template>
+          <template slot="header">结果预览</template>
           <div v-html="text" style="margin: -20px 0px;"></div>
         </el-card>
       </el-col>
@@ -24,12 +24,11 @@
 
 <script>
 export default {
+  name: 'contract-manager',
   data () {
     return {
       text: '<p>Hello World</p>'
     }
-  },
-  created(){
   }
 }
 </script>

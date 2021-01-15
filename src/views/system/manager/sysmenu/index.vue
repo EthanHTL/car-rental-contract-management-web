@@ -2,6 +2,66 @@
   <d2-container>
     <template slot="header"> 菜单管理 </template>
 
+    <!-- 筛选 -->
+    <el-form :model="searchForm" :inline="true" class="demo-form-inline">
+      <el-form-item label="菜单名称:">
+        <el-input
+          v-model="searchForm.menuName"
+          placeholder="请输入菜单名称"
+          clearable
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="菜单路径:">
+        <el-input
+          v-model="searchForm.url"
+          placeholder="请输入菜单名称"
+          clearable
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="状态:">
+        <el-select v-model="searchForm.flag" placeholder="请选择">
+          <el-option key="1" label="启用" value="1"> </el-option>
+          <el-option key="0" label="禁用" value="0"> </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="success" plain @click="dictInsert = true"
+          >搜索</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="success" plain @click="dictInsert = true"
+          >重置</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="success" plain @click="insertFormVisible = true"
+          >新增</el-button>
+      </el-form-item>
+    </el-form>
+    <!-- 新增角色 -->
+    <el-dialog title="新增角色" :visible.sync="insertFormVisible">
+      <el-form :model="insertRole">
+        <el-form-item label="角色名">
+          <el-input v-model="insertRole.roleZH" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="角色代码">
+          <el-input v-model="insertRole.roleName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item el-form-item label="备注" >
+          <el-input type="textarea" v-model="insertRole.remark"></el-input>
+        </el-form-item>
+
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="insertFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="insertMenuFormVisible"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
+
+    
+
+
     <el-table
       :data="menuTree"
       style="width: 100%; margin-bottom: 20px"
@@ -37,8 +97,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-link icon="el-icon-edit">编辑 </el-link>
-          <el-link icon="el-icon-edit">权限分配</el-link>
-          <el-link><i class="el-icon-view el-icon--right"></i> 查看 </el-link>
+          <el-link><i class="el-icon-view el-icon--right"></i> 删除 </el-link>
         </template>
       </el-table-column>
     </el-table>
@@ -53,6 +112,19 @@ export default {
   data() {
     return {
       menuTree: [],
+      searchForm:{
+        menuName:"",
+        url:"",
+        flag:""
+      },
+      insertFormVisible: false,
+      insertRole:{
+        menuName:"",
+        icon:"",
+        url:"",
+        flag:""
+      },
+      
     };
   },
   mounted() {
@@ -66,6 +138,10 @@ export default {
         this.menuTree = res;
       });
     },
+    // 新增菜单
+    insertMenuFormVisible(){
+      this.insertFormVisible = false;
+    }
   },
 };
 </script>

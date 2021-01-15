@@ -67,9 +67,9 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
     // -------------api
 
     // 所有接口
-    SYS_API_FIND_ALL(data = {}) {
+    SYS_API_FIND_TREE(data = {}) {
         return request({
-            url: '/api/v1/car/api/find/all',
+            url: '/api/v1/car/api/find/tree',
             method: 'post',
             data
         })
