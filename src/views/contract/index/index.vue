@@ -12,27 +12,24 @@
       </el-col>
     </el-row>
     
-    <el-dialog title="模板" :visible.sync="templateDialog" :fullscreen="true">
-      <el-row>
-      <el-col :span="5" v-for="(o, index) in templateList" :key="o.id" :offset="1">
-        <el-card :body-style="{ padding: '0px' }">
+    <el-drawer
+      title="合同模板"
+      :visible.sync="templateDrawer"
+      >
+      
+      <el-card :body-style="{ padding: '0px' }" v-for="(o, index) in templateList" :key="o.id">
           <img :src="url" class="image">
           <div style="padding: 14px;">
             <span>{{o.oldFilename}}</span>
             <div class="bottom clearfix">
               <time class="time">{{ currentDate }}</time>
-              <el-button type="text" class="button" @click="updateConract(o)">编辑</el-button>
+              <el-button type="text" class="button" @click="updateConract(o)">确定</el-button>
             </div>
           </div>
-        </el-card>
-      </el-col>
-    </el-row>
+      </el-card>
+      
+    </el-drawer>
 
-
-      <div slot="footer" class="dialog-footer" >
-        <el-button @click="templateDialog = false">取 消</el-button>
-      </div>
-    </el-dialog>
 
     <template slot="footer">
       <el-button type="primary" @click="text += text">
@@ -49,21 +46,45 @@
 </template>
 
 <script>
-
+import { mapActions } from "vuex";
 export default {
   name: 'contract-manager',
   data () {
     return {
       text: '<p>Hello World</p>',
-      templateDialog:false,
-      templateList:[]
+      templateDrawer:false,
+      templateList:[],
+      pageForm: {
+        pageNum: 1,
+        pageSize: 2,
+      },
 
     }
   },
-  methods: {
-    chooseTempalte(){
+  created() {
+    this.init()
 
-      this.templateDialog = true
+  },
+  methods: {
+    ...mapActions('d2admin/resource', [
+      'findContractPage',
+      'saveContractTemplate',
+    ]),
+    init() {
+      this.loading = true;
+      this.findContractPage(this.pageForm).then((res) => {
+        this.templateList = res.list;
+        this.pagination.currentPage = res.navigateFirstPage;
+        this.pagination.pageSize = res.pageSize;
+        this.pagination.pageNum = res.pageNum;
+        this.pagination.total = res.total;
+      });
+    },
+    chooseTempalte(){
+      this.templateDrawer = true
+    },
+    updateConract(tem){
+
     }
   }
 }
