@@ -4,6 +4,7 @@
     v-model="currentValue"
     :config="config"
     :destroy="true"
+    @ready="ready"
     :init="init"/>
 </template>
 
@@ -13,6 +14,7 @@ import Vue from 'vue'
 import VueUeditorWrap from 'vue-ueditor-wrap'
 import config from './ueditor.config'
 import buttonD2admin from './button/d2admin'
+import template from './dialogs/template/template'
 Vue.component('VueUeditorWrap', VueUeditorWrap)
 export default {
   props: {
@@ -46,7 +48,13 @@ export default {
     init () {
       // 注册一个测试按钮
       this.$refs.ueditor.registerButton(buttonD2admin)
-    }
+      console.log(this.$refs.ueditor);
+    },
+    ready (editorInstance) {
+      // console.log(`编辑器实例${editorInstance.key}: `, editorInstance)
+      
+    },
+    
   }
 }
 </script>

@@ -1,20 +1,40 @@
 <template>
   <d2-container>
     <div class="searchBar" style="margin-top: 15px;">
-      <el-input placeholder="请输入内容" v-model="input3">
+      <el-input placeholder="请输入内容" v-model="sreachText">
         <el-button slot="append" icon="el-icon-search"></el-button>
       </el-input>
+      <!-- <el-button type="success" plain @click="contractInsertDialog">新增</el-button> -->
     </div>
 
+    <!-- 新增模板 -->
+    <!-- <el-dialog title="新增员工" :visible.sync="contractFormVisible">
+      <d2-ueditor v-model="contractText"/>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="contractFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="insertcontractFormVisible"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog> -->
+    <!-- 修改模板 -->
+    <el-dialog title="修改模板" :visible.sync="contractUpdateDialog">
+      <d2-ueditor v-model="contractText.content"/>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="contractUpdateDialog = false">取 消</el-button>
+        <el-button type="primary" @click="save">确 定</el-button>
+      </div>
+    </el-dialog>
+
     <el-row>
-      <el-col :span="5" v-for="(o, index) in 10" :key="o" :offset="1">
+      <el-col :span="5" v-for="(o, index) in data" :key="o.id" :offset="1">
         <el-card :body-style="{ padding: '0px' }">
           <img :src="url" class="image">
           <div style="padding: 14px;">
-            <span>好吃的汉堡</span>
+            <span>{{o.oldFilename}}</span>
             <div class="bottom clearfix">
               <time class="time">{{ currentDate }}</time>
-              <el-button type="text" class="button">操作按钮</el-button>
+              <el-button type="text" class="button" @click="updateConract(o)">编辑</el-button>
             </div>
           </div>
         </el-card>
@@ -36,12 +56,17 @@
 </template>
 
 <script>
+import log from '@/libs/util.log';
+
+import { mapActions } from "vuex";
+
 export default {
   name: "contract-tempalte",
   data() {
     return {
       currentDate: new Date(),
       url: "",
+      data: [],
       pagination: {
         currentPage: 1,
         pageCount: 6,
@@ -49,27 +74,33 @@ export default {
         pageSize: 5,
         total: 500,
       },
-      input3:""
+      pageForm: {
+        pageNum: 1,
+        pageSize: 2,
+      },
+      sreachText:"",
+      contractUpdateDialog: false,
+      contractText:""
     };
   },
   created() {
-    //  http://localhost:9090/files/sys_head_img/20210115122756f1257c44918a2cce786f80ed7c.png
-    this.$store.dispatch("d2admin/register/urlImg").then(res => {
-      // console.log(res)
-      this.url = res
-    })
-    // "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+    this.init()
+
   },
   methods: {
+    ...mapActions('d2admin/resource', [
+      'findContractPage',
+      'saveContractTemplate',
+    ]),
     init() {
       this.loading = true;
-      // this.showDict(this.pageForm).then((res) => {
-      //   this.data = res.list;
-      //   this.pagination.currentPage = res.navigateFirstPage;
-      //   this.pagination.pageSize = res.pageSize;
-      //   this.pagination.pageNum = res.pageNum;
-      //   this.pagination.total = res.total;
-      // });
+      this.findContractPage(this.pageForm).then((res) => {
+        this.data = res.list;
+        this.pagination.currentPage = res.navigateFirstPage;
+        this.pagination.pageSize = res.pageSize;
+        this.pagination.pageNum = res.pageNum;
+        this.pagination.total = res.total;
+      });
     },
     handleSizeChange(val) {
       // 更改页码大小操作
@@ -79,10 +110,19 @@ export default {
     },
     handleCurrentChange(val) {
       //
-      //   console.log(`当前页: ${val}`);
+        // console.log(`当前页: ${val}`);
       this.pageForm.pageNum = val;
       this.init();
     },
+    updateConract(val){
+      this.contractText = val;
+      this.contractUpdateDialog = true
+    },
+    save(){
+      this.saveContractTemplate(this.contractText).then(res =>{
+       this.contractUpdateDialog = false
+      })
+    }
   },
 };
 </script>

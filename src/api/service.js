@@ -42,6 +42,13 @@ function createService() {
               message: dataAxios.message,
               type: 'success',
               duration: 2 * 1000
+            })
+          }
+            else{
+            Message({
+              message: "操作成功",
+              type: 'success',
+              duration: 2 * 1000
             })}
             return dataAxios.data
           case 'xxx':
