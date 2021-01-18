@@ -13,7 +13,7 @@
 import Vue from 'vue'
 import VueUeditorWrap from 'vue-ueditor-wrap'
 import config from './ueditor.config'
-import buttonD2admin from './button/d2admin'
+// import buttonD2admin from './button/d2admin'
 import template from './dialogs/template/template'
 Vue.component('VueUeditorWrap', VueUeditorWrap)
 export default {
@@ -47,12 +47,14 @@ export default {
   methods: {
     init () {
       // 注册一个测试按钮
-      this.$refs.ueditor.registerButton(buttonD2admin)
-      console.log(this.$refs.ueditor);
+      // this.$refs.ueditor.registerButton(buttonD2admin)
+      // 将ueditor的实例加入到状态管理
+      this.$store.commit("d2admin/system/UPDATE_EDITOR",this.$refs.ueditor)
+      // console.log(this.$refs.ueditor);
     },
     ready (editorInstance) {
-      // console.log(`编辑器实例${editorInstance.key}: `, editorInstance)
-      
+      console.log(`编辑器实例${editorInstance.key}: `, editorInstance)
+      // this.$store.commit("d2admin/system/UPDATE_EDITOR",editorInstance)
     },
     
   }
