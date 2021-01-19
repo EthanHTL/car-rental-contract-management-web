@@ -41,7 +41,7 @@
           <el-col :span="24">
             <el-form-item label="合同有效期" prop="contractLife">
               <el-date-picker type="datetimerange" v-model="contractData.contractLife" :default-time="['00:00:00', '12:00:00']"
-                 :style="{width: '100%'}" start-placeholder="开始日期"
+                 :style="{width: '100%'}" start-placeholder="开始日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy年MM月dd日"
                 end-placeholder="结束日期" range-separator="至" clearable></el-date-picker>
             </el-form-item>
           </el-col>
@@ -122,7 +122,8 @@ export default {
         remark: undefined,
       },
       contractText:{
-        content:'<p style="text-align:left;line-height:30px"><span style="font-size:16px;font-family:&#39;微软雅黑&#39;,sans-serif;color:#333333">&nbsp; &nbsp; &nbsp; 出租方(甲方)： 身份证号码：${customerID}</span></p><p style="text-align:left;line-height:30px"><span style="font-size:16px;font-family:&#39;微软雅黑&#39;,sans-serif;color:#333333">　　承租方(乙方)： 身份证号码：${contractName}</span></p><p style="text-align: left; line-height: 30px;"><span style="font-size:16px;font-family:&#39;微软雅黑&#39;,sans-serif;color:#333333">　　甲、乙双方通过友好协商，就档口租赁事宜达成协议如下：</span></p>'
+        // content:'<p style="text-align:left;line-height:30px"><span style="font-size:16px;font-family:&#39;微软雅黑&#39;,sans-serif;color:#333333">&nbsp; &nbsp; &nbsp; 出租方(甲方)： 身份证号码：${customerID}</span></p><p style="text-align:left;line-height:30px"><span style="font-size:16px;font-family:&#39;微软雅黑&#39;,sans-serif;color:#333333">　　承租方(乙方)： 身份证号码：${contractName}</span></p><p style="text-align: left; line-height: 30px;"><span style="font-size:16px;font-family:&#39;微软雅黑&#39;,sans-serif;color:#333333">　　甲、乙双方通过友好协商，就档口租赁事宜达成协议如下：</span></p>'
+        content:'<p style="text-align: left; line-height: 30px;"><span style="font-size:16px;font-family:&#39;微软雅黑&#39;,sans-serif;color:#333333">出租方(甲方)： 身份证号码：<span style="text-decoration:underline;">${1contractLife}</span></span></p><p style="text-align:left;line-height:30px"><span style="font-size:16px;font-family:&#39;微软雅黑&#39;,sans-serif;color:#333333">　　承租方(乙方)： 身份证号码：${contractName}</span></p><p style="text-align: left; line-height: 30px;"><span style="font-size:16px;font-family:&#39;微软雅黑&#39;,sans-serif;color:#333333">　　甲、乙双方通过友好协商，就档口租赁事宜达成协议如下：</span></p>'
         },
       rules: {
         contractName: [{
@@ -219,11 +220,13 @@ export default {
         while(start != -1){
           const end = result.indexOf(strSuffix, start);
           const key = result.substring(start + strPrefix.length, end);
-          const replaceContent ="";
+          const replaceContent = "";
           if(key != null) {
+            if(this.contractData[key] != null){
             replaceContent = this.contractData[key];
-            console.log(replaceContent);
+            }
           }
+          console.log(replaceContent);
           returnValue=result.substring(0,start)+replaceContent+result.substring(end + strSuffix.length)
           result = returnValue
           start = result.indexOf(strPrefix, start + replaceContent.length);
