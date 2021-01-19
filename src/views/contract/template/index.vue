@@ -33,7 +33,16 @@
           <div style="padding: 14px;">
             <span>{{o.oldFilename}}</span>
             <div class="bottom clearfix">
-              <time class="time">{{ currentDate }}</time>
+              <el-popconfirm
+                confirm-button-text='好的'
+                cancel-button-text='不用了'
+                icon="el-icon-info"
+                icon-color="red"
+                title="这是一段内容确定删除吗？"
+                @confirm="deleteConract(o)"
+              >
+                <el-button type="text" class="button" slot="reference"  >删除</el-button>
+              </el-popconfirm>
               <el-button type="text" class="button" @click="updateConract(o)">编辑</el-button>
             </div>
           </div>
@@ -64,7 +73,6 @@ export default {
   name: "contract-tempalte",
   data() {
     return {
-      currentDate: new Date(),
       url: "",
       data: [],
       pagination: {
@@ -117,6 +125,11 @@ export default {
     updateConract(val){
       this.contractText = val;
       this.contractUpdateDialog = true
+    },
+    deleteConract(val){
+      // 删除报表模板
+      console.log(val);
+      
     },
     save(){
       this.saveContractTemplate(this.contractText).then(res =>{

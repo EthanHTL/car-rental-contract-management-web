@@ -7,7 +7,7 @@
       <el-col :span="12" >
         <el-card v-if="text" shadow="never" style="border: 1px solid #d4d4d4;">
           <template slot="header">结果预览</template>
-          <div v-html="text" style="margin: -10px 0px;"></div>
+          <div v-html="text" class="view" style="margin: -10px 0px;"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -22,7 +22,7 @@
         <el-input placeholder="请输入内容" v-model="sreachText">
           <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
-        <!-- <el-button type="success" plain @click="contractInsertDialog">新增</el-button> -->
+        <el-checkbox v-model="isAdd">保留原有的内容</el-checkbox>
       </div>
       <div class="demo-drawer__body">
         <div class="demo-drawer__content">
@@ -91,7 +91,7 @@ export default {
         pageNum: 1,
         pageSize: 5,
       },
-
+      isAdd:false
     }
   },
   created() {
@@ -106,8 +106,7 @@ export default {
     init() {
       // var ue = UE.getEditor('editor');
       // 
-      this.$store.state.d2admin.system.myEditor.registerButton(buttonD2admin)
-      console.log();
+      // this.$store.state.d2admin.system.myEditor.registerButton(buttonD2admin)
       this.findContractPage(this.pageForm).then((res) => {
         this.templateList = res.list;
         this.pagination.currentPage = res.navigateFirstPage;
@@ -135,7 +134,15 @@ export default {
       this.templateDrawer = true
     },
     choose(tem){
-      this.text += tem.content
+      if (this.isAdd) {
+        if ( tem.content!= null) {
+          this.text += tem.content
+        }
+        
+      }else{
+        this.text = tem.content
+      }
+      
       this.templateDrawer = false
     },
     updateConract(tem){
@@ -148,13 +155,25 @@ export default {
 <style lang="scss">
   .main{
     .el-row{
-      width: 90%;
+      width: 100%;
       margin: 0 auto;
+      table{
+          border-top: 1px solid #000000;
+          border-left: 1px solid #000000;
+          border-collapse: collapse; /*设置单元格的边框合并为1*/
+      }
+      td{
+          border-bottom: 1px solid #000000;
+          border-right: 1px solid #000000;
+      }
     }
     .searchBar {
       width: 630px;
       background-color: #fff;
       margin: 40px auto 20px auto;
+      .el-checkbox{
+        margin-top: 20px;
+      }
     }
     .demo-drawer__body{
       margin-top: 7%;

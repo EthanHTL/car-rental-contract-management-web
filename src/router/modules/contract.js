@@ -11,10 +11,11 @@ export default {
     path: '/contract',
     name: 'contract',
     meta,
-    redirect: { name: 'contract-manager' },
+    redirect: { name: 'contract-tempalte' },
     component: layoutHeaderAside,
     children: [
-      { path: 'template', name: 'contract-tempalte', component: _import('contract/template'), meta: { ...meta, title: '合同模板' } },
-      { path: 'index', name: 'contract-manager', component: _import('contract/index'), meta: { ...meta, title: '合同管理',cache: true } }
+      { path: 'template', name: 'contract-tempalte', component: _import('contract/template'), meta: { ...meta, title: '合同模板管理' } },
+      { path: 'index', name: 'contract-manager', component: _import('contract/index'), meta: { ...meta, title: '创建模板',cache: true } },
+      { path: 'sign', name: 'contract-sign', component: _import('contract/sign'), meta: { ...meta, title: '签订合同',cache: true } }
     ]
   }
