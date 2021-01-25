@@ -53,7 +53,7 @@ export default {
       // console.log(this.$refs.ueditor);
     },
     ready (editorInstance) {
-      console.log(`编辑器实例${editorInstance.key}: `, editorInstance)
+      // console.log(`编辑器实例${editorInstance.key}: `, editorInstance)
       // this.$store.commit("d2admin/system/UPDATE_EDITOR",editorInstance)
     },
     
