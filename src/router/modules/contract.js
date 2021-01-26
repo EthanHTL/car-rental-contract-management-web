@@ -12,10 +12,13 @@ export default {
     name: 'contract',
     meta,
     redirect: { name: 'contract-tempalte' },
-    component: layoutHeaderAside,
+    component: layoutHeaderAside, 
     children: [
       { path: 'template', name: 'contract-tempalte', component: _import('contract/template'), meta: { ...meta, title: '合同模板管理' } },
       { path: 'index', name: 'contract-manager', component: _import('contract/index'), meta: { ...meta, title: '创建模板',cache: true } },
-      { path: 'sign', name: 'contract-sign', component: _import('contract/sign'), meta: { ...meta, title: '签订合同',cache: true } }
+      { path: 'sign', name: 'contract-sign', component: _import('contract/sign'), meta: { ...meta, title: '签订合同',cache: true } },
+      { path: 'finish/list', name: 'finish-list', component: _import('contract/finish/list'), meta: { ...meta, title: '合同列表',  } },
+      { path: 'finish/backlog', name: 'finish-backlog', component: _import('contract/finish/backlog'), meta: { ...meta, title: '我的待办',  } },
+      { path: 'finish/done', name: 'finish-done', component: _import('contract/finish/done'), meta: { ...meta, title: '我的已办',  } },
     ]
   }

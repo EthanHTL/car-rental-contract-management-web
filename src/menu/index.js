@@ -2,7 +2,7 @@ import { uniqueId } from 'lodash'
 
 import contract from './moudules/contract'
 import system from './moudules/system'
-import workflow from './moudules/workflow'
+import activiti from './moudules/activiti'
 
 
 /**
@@ -25,30 +25,12 @@ export const menuHeader = supplementPath([
   { path: '/index', title: '首页', icon: 'home' },
   system,
   contract,
-  workflow,,
-  {
-    title: '页面',
-    icon: 'folder-o',
-    children: [
-      { path: '/page1', title: '页面 1' },
-      { path: '/page2', title: '页面 2' },
-      { path: '/page3', title: '页面 3' }
-    ]
-  }
+  activiti,
 ])
 
 // 菜单 侧边栏
 export const menuAside = supplementPath([
   contract,
-  workflow,
   system,
-  {
-    title: '页面',
-    icon: 'folder-o',
-    children: [
-      { path: '/page1', title: '页面 1' },
-      { path: '/page2', title: '页面 2' },
-      { path: '/page3', title: '页面 3' }
-    ]
-  }
+  activiti,
 ])

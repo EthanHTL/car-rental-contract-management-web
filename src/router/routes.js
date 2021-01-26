@@ -1,6 +1,6 @@
 import system from '@/router/modules/system'
 import contract from '@/router/modules/contract'
-import workflow from '@/router/modules/workflow'
+import activiti from '@/router/modules/activiti'
 
 import layoutHeaderAside from '@/layout/header-aside'
 
@@ -24,34 +24,6 @@ const frameIn = [
           auth: true
         },
         component: _import('system/index')
-      },
-      // 演示页面
-      {
-        path: 'page1',
-        name: 'page1',
-        meta: {
-          title: '页面 1',
-          auth: true
-        },
-        component: _import('demo/page1')
-      },
-      {
-        path: 'page2',
-        name: 'page2',
-        meta: {
-          title: '页面 2',
-          auth: true
-        },
-        component: _import('demo/page2')
-      },
-      {
-        path: 'page3',
-        name: 'page3',
-        meta: {
-          title: '页面 3',
-          auth: true
-        },
-        component: _import('demo/page3')
       },
       // 系统 前端日志
       {
@@ -81,7 +53,7 @@ const frameIn = [
   },
   system,
   contract,
-  workflow
+  activiti
 ]
 
 /**
