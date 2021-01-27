@@ -1,10 +1,10 @@
 <template>
   <d2-container>
-    <el-steps :active="active" finish-status="success">
-  <el-step title="步骤 1"></el-step>
-  <el-step title="步骤 2"></el-step>
-  <el-step title="步骤 3"></el-step>
-</el-steps>
+    <el-steps :active="active" finish-status="success" class="active">
+      <el-step title="填写基本信息"></el-step>
+      <el-step title="验证合同"></el-step>
+      <el-step title="创建合同"></el-step>
+    </el-steps>
     <div class="contract-form" v-if="active == 1">
       <el-row :gutter="5">
         <el-form ref="contractForm" :model="contractData" :rules="rules" size="medium" label-width="111px">
@@ -83,8 +83,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item size="large">
-              <el-button type="primary" @click="submitContract">提交</el-button>
-              <el-button @click="resetForm">重置</el-button>
+              <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
             </el-form-item>
           </el-col>
         </el-form>
@@ -92,16 +91,19 @@
     </div>
     <div v-if="active == 2">
       <d2-ueditor v-model="contractText.content"/>
+      <el-button style="margin-top: 12px;" @click="next2">下一步</el-button>
+      <el-button style="margin-top: 12px;" @click="pre">上一步</el-button> 
+
     </div>
     <div v-if="active == 3">
       <el-card  shadow="never" style="border: 1px solid #d4d4d4;">
           <template slot="header">结果预览</template>
           <div v-html="contractText.content" class="view" style="margin: -10px 0px;"></div>
       </el-card>
-      <el-button type="primary" @click="submitForm">提交</el-button>
+      <el-button type="primary" @click="submitContract">提交</el-button>
+      <el-button style="margin-top: 12px;" @click="pre">上一步</el-button> 
     </div>
-    <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
-    <el-button style="margin-top: 12px;" @click="pre" v-if="active>1">上一步</el-button> 
+    
   </d2-container>
 </template>
 <script>
@@ -203,11 +205,6 @@ export default {
   mounted() {},
   methods: {
     submitContract() {
-      this.contractText.content = this.getValueByObject(this.contractText.content);
-      this.active ++
-
-    },
-    submitForm() {
       // this.$refs['contractForm'].validate(valid => {
       //   if (!valid) return
       //   // TODO 提交表单
@@ -253,7 +250,11 @@ export default {
       this.$refs['contractForm'].resetFields()
     },
     next() {
-        if (this.active++ > 2) this.active = 0;
+      this.contractText.content = this.getValueByObject(this.contractText.content);
+       this.active ++;
+    },
+    next2() {
+      this.active ++;
     },
     pre() {
       if (this.active-- < 2) this.active = 1;
@@ -263,6 +264,11 @@ export default {
 
 </script>
 <style lang="scss">
+.active{
+  width: 60%;
+  margin: 10px auto 20px auto;
+  background: center;
+}
   .contract-form{
     width: 90%;
     text-align: center;
