@@ -1,11 +1,29 @@
 <template>
   <d2-container>
     <el-steps :active="active" finish-status="success" class="active">
-      <el-step title="填写基本信息"></el-step>
-      <el-step title="验证合同"></el-step>
+      <el-step title="选择合同"></el-step>
+      <el-step title="填写信息"></el-step>
       <el-step title="创建合同"></el-step>
     </el-steps>
-    <div class="contract-form" v-if="active == 1">
+    <div v-if="active == 1">
+      <el-input placeholder="请输入内容" v-model="searchText">
+        <el-button slot="append" icon="el-icon-search"></el-button>
+      </el-input>
+      <el-row>
+        <el-col :span="5" v-for="(o, index) in contractList" :key="o.id" :offset="1">
+          <el-card :body-style="{ padding: '0px' }">
+            <img :src="url" class="image">
+            <div style="padding: 14px;">
+              <span>{{o.oldFilename}}</span>
+              <div class="bottom clearfix">
+                <el-button type="text" class="button" @click="chooseConract(o)">选择</el-button>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
+    <div class="contract-form" v-if="active == 2">
       <el-row :gutter="5">
         <el-form ref="contractForm" :model="contractData" :rules="rules" size="medium" label-width="111px">
           <el-col :span="24">
@@ -84,35 +102,43 @@
           <el-col :span="24">
             <el-form-item size="large">
               <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
+              <el-button style="margin-top: 12px;" @click="pre">上一步</el-button> 
             </el-form-item>
           </el-col>
         </el-form>
       </el-row>
     </div>
-    <div v-if="active == 2">
-      <d2-ueditor v-model="contractText.content"/>
-      <el-button style="margin-top: 12px;" @click="next2">下一步</el-button>
-      <el-button style="margin-top: 12px;" @click="pre">上一步</el-button> 
-
-    </div>
     <div v-if="active == 3">
-      <el-card  shadow="never" style="border: 1px solid #d4d4d4;">
-          <template slot="header">结果预览</template>
-          <div v-html="contractText.content" class="view" style="margin: -10px 0px;"></div>
-      </el-card>
+      <d2-ueditor v-model="contractText.content"/>
       <el-button type="primary" @click="submitContract">提交</el-button>
       <el-button style="margin-top: 12px;" @click="pre">上一步</el-button> 
     </div>
     
+    
   </d2-container>
 </template>
 <script>
+import { mapActions } from "vuex";
+
 export default {
   components: {},
   props: [],
   data() {
     return {
       active: 1,
+      contractList:[],
+      searchText:"",
+      pagination: {
+        currentPage: 1,
+        pageCount: 6,
+        pageSizes: [2, 5, 20, 50],
+        pageSize: 5,
+        total: 500,
+      },
+      pageForm: {
+        pageNum: 1,
+        pageSize: 2,
+      },
       contractData: {
         contractName: "测试合同",
         customerID: '500229',
@@ -201,9 +227,23 @@ export default {
   },
   computed: {},
   watch: {},
-  created() {},
+  created() {
+    this.init()
+  },
   mounted() {},
   methods: {
+    ...mapActions('d2admin/resource', [
+      'findContractPage',
+    ]),
+    init() {
+      this.findContractPage(this.pageForm).then((res) => {
+        this.contractList = res.list;
+        this.pagination.currentPage = res.navigateFirstPage;
+        this.pagination.pageSize = res.pageSize;
+        this.pagination.pageNum = res.pageNum;
+        this.pagination.total = res.total;
+      });
+    },
     submitContract() {
       // this.$refs['contractForm'].validate(valid => {
       //   if (!valid) return
@@ -245,7 +285,6 @@ export default {
 
 
     },
-
     resetForm() {
       this.$refs['contractForm'].resetFields()
     },
@@ -258,6 +297,10 @@ export default {
     },
     pre() {
       if (this.active-- < 2) this.active = 1;
+    },
+    chooseConract(contract){
+      console.log(contract);
+      this.active ++;
     }
   }
 }
