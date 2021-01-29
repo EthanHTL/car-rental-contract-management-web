@@ -1,6 +1,6 @@
 <template>
   <d2-container>
-    <el-steps :active="active" finish-status="success" class="active">
+    <el-steps :active="active" finish-status="success" class="activeLi">
       <el-step title="选择合同"></el-step>
       <el-step title="填写信息"></el-step>
       <el-step title="创建合同"></el-step>
@@ -10,9 +10,9 @@
         <el-button slot="append" icon="el-icon-search"></el-button>
       </el-input>
       <el-row>
-        <el-col :span="5" v-for="(o, index) in contractList" :key="o.id" :offset="1">
+        <el-col :span="5" v-for="(o) in contractList" :key="o.id" :offset="1">
           <el-card :body-style="{ padding: '0px' }">
-            <img :src="url" class="image">
+            <!-- <img :src="url" class="image"> -->
             <div style="padding: 14px;">
               <span>{{o.oldFilename}}</span>
               <div class="bottom clearfix">
@@ -22,6 +22,17 @@
           </el-card>
         </el-col>
       </el-row>
+
+      <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pagination.currentPage"
+      :page-sizes="pagination.pageSizes"
+      :page-size="pagination.pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="pagination.total"
+    >
+    </el-pagination>
     </div>
     <div class="contract-form" v-if="active == 2">
       <el-row :gutter="5">
@@ -100,9 +111,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item size="large">
-              <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
-              <el-button style="margin-top: 12px;" @click="pre">上一步</el-button> 
+            <el-form-item size="large" style="margin-top: 12px;">
+              <el-button  @click="pre">上一步</el-button> 
+              <el-button  @click="next">下一步</el-button>
             </el-form-item>
           </el-col>
         </el-form>
@@ -131,13 +142,13 @@ export default {
       pagination: {
         currentPage: 1,
         pageCount: 6,
-        pageSizes: [2, 5, 20, 50],
+        pageSizes: [10, 20, 50],
         pageSize: 5,
         total: 500,
       },
       pageForm: {
         pageNum: 1,
-        pageSize: 2,
+        pageSize: 10,
       },
       contractData: {
         contractName: "测试合同",
@@ -244,6 +255,14 @@ export default {
         this.pagination.total = res.total;
       });
     },
+    handleSizeChange(val) {
+      this.pageForm.pageSize = val;
+      this.init();
+    },
+    handleCurrentChange(val) {
+      this.pageForm.pageNum = val;
+      this.init();
+    },
     submitContract() {
       // this.$refs['contractForm'].validate(valid => {
       //   if (!valid) return
@@ -300,14 +319,15 @@ export default {
     },
     chooseConract(contract){
       console.log(contract);
+      this.contractText = contract
       this.active ++;
     }
   }
 }
 
 </script>
-<style lang="scss">
-.active{
+<style lang="scss" scope>
+.activeLi{
   width: 60%;
   margin: 10px auto 20px auto;
   background: center;

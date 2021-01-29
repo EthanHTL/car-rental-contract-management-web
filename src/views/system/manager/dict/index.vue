@@ -147,13 +147,13 @@ export default {
       pagination: {
         currentPage: 1,
         pageCount: 6,
-        pageSizes: [2, 5, 20, 50],
+        pageSizes: [2, 5, 20, 50], 
         pageSize: 5,
         total: 500,
       },
       pageForm: {
         pageNum: "1",
-        pageSize: "2",
+        pageSize: "1",
       },
       rowHandle: {
         custom: [
@@ -197,12 +197,7 @@ export default {
       "deleteDetail",
       "getDict",
     ]),
-    paginationCurrentChange(currentPage) {
-      this.pagination.currentPage = currentPage;
-      this.fetchData();
-    },
     fetchData() {
-      this.loading = true;
       this.showDict(this.pageForm).then((res) => {
         this.data = res.list;
         this.pagination.currentPage = res.navigateFirstPage;
@@ -218,7 +213,6 @@ export default {
       this.fetchData();
     },
     handleCurrentChange(val) {
-      //
       //   console.log(`当前页: ${val}`);
       this.pageForm.pageNum = val;
       this.fetchData();
