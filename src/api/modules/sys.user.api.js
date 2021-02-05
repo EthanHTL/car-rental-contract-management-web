@@ -20,6 +20,13 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
       data
     })
   },
+  SYS_USER_LOGIN_INFO() {
+    // 接口请求
+    return request({
+      url: '/api/v1/car/users/loginuser',
+      method: 'post'
+    })
+  },
   // 注册
   SYS_USER_REGISTER(data = {}) {
     return request({

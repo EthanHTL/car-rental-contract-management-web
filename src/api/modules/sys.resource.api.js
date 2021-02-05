@@ -15,4 +15,11 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             data
         })
     },
+    SYS_CONTRACT_CREATE2(data = {}) {
+        return request({
+            url: '/api/v1/car/dictionary/find/page',
+            method: 'post',
+            data
+        })
+    },
 })
