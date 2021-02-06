@@ -38,11 +38,11 @@ function createService() {
           case 200:
             // [ 示例 ] code === 0 代表没有错误
             if(dataAxios.message != null){
-            Message({
-              message: dataAxios.message,
-              type: 'success',
-              duration: 2 * 1000
-            })
+            // Message({
+            //   message: dataAxios.message,
+            //   type: 'success',
+            //   duration: 2 * 1000
+            // })
           }
             else{
             Message({

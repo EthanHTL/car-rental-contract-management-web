@@ -1,25 +1,25 @@
 <template>
     <d2-container>
         <!-- 工具栏 -->
-
+ 
 
         <!-- 表格 -->
-        <el-table :data="deployList" style="width: 100%">
-        <el-table-column prop="roleZH" label="角色名" width="180">
+        <el-table :data="taskList" style="width: 100%">
+        <el-table-column prop="contractName" label="合同名" width="180">
         </el-table-column>
-        <el-table-column prop="roleName" label="角色标识" width="100">
+        <el-table-column prop="contractNumbers" label="合同编号" width="100">
         </el-table-column>
-        <el-table-column prop="remark" label="备注" width="100">
+        <el-table-column prop="payment" label="支付方式" width="100">
         </el-table-column>
         <el-table-column label="状态" width="150">
             <template slot-scope="scope">
             <el-switch
-                v-model="scope.row.flag"
+                v-model="scope.row.state"
                 :active-value="1"
                 :inactive-value="0"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
-                @change="changeSwitch(scope.row)"
+            
             >
             </el-switch>
             </template>
@@ -43,11 +43,34 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import dayjs from "dayjs";
+
 export default {
     name: '',
     data() {
-        return {}
+        return {
+            taskList:[],
+
+        }
     },
-    methods: {}
+    created(){
+        this.init()
+    },
+    methods: {
+        ...mapActions('d2admin/contract', [
+            'myTaskList',
+        ]),
+        init(){
+            this.myTaskList().then(res =>{
+                this.taskList = res
+                console.log(res);
+            })
+        },
+        formatterTime(row, column) {
+            if (row[column.property] == null) return null;
+            return dayjs(row[column.property]).format("YYYY-MM-DD");
+        },
+    }
 }
 </script>

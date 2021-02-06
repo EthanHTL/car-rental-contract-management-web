@@ -14,10 +14,10 @@ export default {
     redirect: { name: 'activiti-list' },
     component: layoutHeaderAside,
     children: [
-        { path: 'list', name: 'activiti-list', component: _import('activiti/list'), meta: { ...meta, title: '流程实例列表',cache: true } },
+        { path: 'list', name: 'activiti-list', component: _import('activiti/list'), meta: { ...meta, title: '流程实例列表' } },
         { path: 'deploy', name: 'activiti-deploy', component: _import('activiti/deploy'), meta: { ...meta, title: '流程部署部署' } },
-        { path: 'drawAct', name: 'activiti-drawAct', component: _import('activiti/drawAct'), meta: { ...meta, title: '在线绘图',cache: true } },
-        { path: 'user', name: 'activiti-user', component: _import('activiti/user'), meta: { ...meta, title: '流程用户',cache: true } },
-        { path: 'group', name: 'activiti-group', component: _import('activiti/group'), meta: { ...meta, title: '用户组',cache: true } }
+        { path: 'drawAct', name: 'activiti-drawAct', component: _import('activiti/drawAct'), meta: { ...meta, title: '在线绘图' } },
+        { path: 'user', name: 'activiti-user', component: _import('activiti/user'), meta: { ...meta, title: '流程用户' } },
+        { path: 'group', name: 'activiti-group', component: _import('activiti/group'), meta: { ...meta, title: '用户组' } }
     ]
   }

@@ -138,7 +138,7 @@
       </el-row>
     </div>
     <div v-if="active == 2">
-      <d2-ueditor v-model="contractText.content"/>
+      <d2-ueditor v-model="contractData.content"/>
       <el-button type="primary" @click="submitContract">提交</el-button>
       <el-button style="margin-top: 12px;" @click="pre">上一步</el-button> 
     </div>
@@ -182,6 +182,7 @@ export default {
         payment: 1,
         contractAmount: 100,
         paidAmount: 0,
+        content:null,
         remark: undefined,
       },
       contractText:{
@@ -309,7 +310,7 @@ export default {
           signUnit: this.contractData.customerID,
           payment: this.contractData.payment,
           principal: this.$store.state.d2admin.user.info.id,
-          contactUserId: this.contractData.contractName,
+          contactUserId: this.contractData.customerID,
           remark: this.contractData.remark,
           contractAmount: this.contractData.contractAmount,
           paidAmount: this.contractData.paidAmount,
@@ -366,7 +367,8 @@ export default {
       this.$refs['contractForm'].resetFields()
     },
     next() {
-      this.contractText.content = this.getValueByObject(this.contractText.content);
+      console.log("next");
+      this.contractData.content = this.getValueByObject(this.contractText.content);
        this.active ++;
     },
     next2() {
