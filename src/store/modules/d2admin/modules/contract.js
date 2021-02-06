@@ -17,6 +17,14 @@ export default {
             const res = await api.SYS_CON_TASKS()
             return res;
         },
+        async completeTask({ dispatch },{
+            taskId="",
+            state='',
+            remark=''
+        } = {}) {
+            const res = await api.SYS_CON_COMPLETE({taskId,state,remark})
+            return res;
+        }
     },
     mutations: {}
 }

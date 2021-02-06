@@ -142,14 +142,19 @@ export default {
           password: '123456'
         },
         {
-          name: 'Editor',
-          username: 'editor',
-          password: 'editor'
+          name: 'employee1',
+          username: 'employee1',
+          password: '123456'
         },
         {
-          name: 'User1',
-          username: 'user1',
-          password: 'user1'
+          name: 'manager2',
+          username: 'manager2',
+          password: 'manager2'
+        },
+        {
+          name: 'loader',
+          username: 'loader',
+          password: 'loader'
         }
       ],
       // 表单
