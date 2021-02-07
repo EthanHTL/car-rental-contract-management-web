@@ -11,7 +11,7 @@ export default {
             title: '待办已办',
             icon: '',
             children:[
-                { path: '/contract/finish/list', title: '合同列表', icon: '' },
+                { path: '/contract/finish/list', title: '我的发起', icon: '' },
                 { path: '/contract/finish/backlog', title: '我的待办', icon: '' },
                 { path: '/contract/finish/done', title: '我的已办', icon: '' },
             ]

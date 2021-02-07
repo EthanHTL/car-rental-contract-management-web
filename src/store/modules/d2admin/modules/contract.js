@@ -17,6 +17,7 @@ export default {
             const res = await api.SYS_CON_TASKS()
             return res;
         },
+        
         async completeTask({ dispatch },{
             taskId="",
             state='',
@@ -24,7 +25,11 @@ export default {
         } = {}) {
             const res = await api.SYS_CON_COMPLETE({taskId,state,remark})
             return res;
-        }
+        },
+        async myHistory({ state, dispatch },) {
+            const res = await api.SYS_CON_HIS_ALL()
+            return res;
+        },
     },
     mutations: {}
 }

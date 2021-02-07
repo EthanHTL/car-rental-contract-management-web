@@ -149,12 +149,12 @@ export default {
         {
           name: 'manager2',
           username: 'manager2',
-          password: 'manager2'
+          password: '123456'
         },
         {
           name: 'loader',
           username: 'loader',
-          password: 'loader'
+          password: '123456'
         }
       ],
       // 表单

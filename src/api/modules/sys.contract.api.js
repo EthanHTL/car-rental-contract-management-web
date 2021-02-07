@@ -38,6 +38,13 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             method: 'post',
             data
         })
+    },
+    // 审核历史
+    SYS_CON_HIS_ALL(){
+        return request({
+            url: baseUrl + '/activitiHistory/getProcinstsByUserName',
+            method: 'post'
+        })
     }
 
 })

@@ -317,15 +317,13 @@ export default {
           startTime: this.contractData.contractLife[0],
           endTime: this.contractData.contractLife[1],
           contractType: this.contractData.contractType,
-          content: this.contractText.content,
+          content: this.contractData.content,
         }
       console.log(contract)
       this.createContract(contract)
-      // .then(res =>{
-      //   console.log(res)
-      //   console.log("====》创建成功");
-
-      // })
+      .then(res =>{
+        this.active = 0
+      })
 
     },
     getValueByObject(content){ 
@@ -369,7 +367,7 @@ export default {
     next() {
       console.log("next");
       this.contractData.content = this.getValueByObject(this.contractText.content);
-       this.active ++;
+      this.active ++;
     },
     next2() {
       // this.$refs['contractForm'].validate(valid => {
