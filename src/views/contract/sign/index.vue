@@ -311,6 +311,7 @@ export default {
           payment: this.contractData.payment,
           principal: this.$store.state.d2admin.user.info.id,
           contactUserId: this.contractData.customerID,
+          contactUsername: this.contractData.customerName,
           remark: this.contractData.remark,
           contractAmount: this.contractData.contractAmount,
           paidAmount: this.contractData.paidAmount,

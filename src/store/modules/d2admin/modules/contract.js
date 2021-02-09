@@ -30,6 +30,10 @@ export default {
             const res = await api.SYS_CON_HIS_ALL()
             return res;
         },
+        async myStart({ state, dispatch },) {
+            const res = await api.SYS_CON_MYSTART()
+            return res;
+        },
     },
     mutations: {}
 }

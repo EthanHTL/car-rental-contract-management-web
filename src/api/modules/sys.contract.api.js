@@ -42,7 +42,14 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
     // 审核历史
     SYS_CON_HIS_ALL(){
         return request({
-            url: baseUrl + '/activitiHistory/getProcinstsByUserName',
+            url: baseUrl + '/activitiHistory/queryDoneTasks',
+            method: 'post'
+        })
+    },
+    // 我的发起
+    SYS_CON_MYSTART(){
+        return request({
+            url: baseUrl + '/activitiHistory/queryMyStartTasks',
             method: 'post'
         })
     }
