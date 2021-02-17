@@ -28,7 +28,7 @@
     </el-form>
 
     <!-- 表格 -->
-    <el-table :data="taskList" style="width: 100%">
+    <el-table :data="taskList" style="width: 100%" v-loading="loading" >
       <el-table-column prop="contractName" label="合同名" width="180">
       </el-table-column>
       <el-table-column prop="contractNumbers" label="合同编号" width="100">
@@ -48,7 +48,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="创建时间"
+        label="创建时间1"
         width="150"
         prop="createTime"
         :formatter="formatterTime"
@@ -59,11 +59,18 @@
           <el-link
             icon="el-icon-edit"
             @click="editDialogShow(scope.$index, scope.row)"
-            >审核
+            >审核进度
           </el-link>
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog
+      title="流程进度"
+      :visible.sync="processDialog"
+      width="1300px">
+      <img :src="imgSrc" alt="" height="500px">
+    </el-dialog>
   </d2-container>
 </template>
 
@@ -75,7 +82,8 @@ export default {
   name: "",
   data() {
     return {
-        taskList: [],
+      loading: true,
+      taskList: [],
       editDialog: false,
       auditTaks: {
         content: "你是傻子吧，没多得了",
@@ -84,23 +92,29 @@ export default {
         contractName: "",
         state: "",
       },
+      processDialog:false,
+      imgSrc:''
     };
   },
   created() {
-    this.init();
+      this.loading = true
+      this.taskList = []
+      this.init();
   },
   methods: {
     ...mapActions("d2admin/contract", ["myStart"]),
     init() {
+        
       this.myStart().then((res) => {
         this.taskList = res;
+        this.loading = false
         console.log(res);
       });
     },
     editDialogShow(index, row) {
-      console.log(row);
-      this.auditTaks = row;
-      this.editDialog = true;
+      
+      this.imgSrc = 'http://localhost:9090/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId='+row.taskInfo.processInstanceId+'&f=true'
+      this.processDialog = true;
     },
     auditTask(state, remark) {
       var data = {

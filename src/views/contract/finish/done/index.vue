@@ -28,7 +28,7 @@
     </el-form>
 
     <!-- 表格 -->
-    <el-table :data="taskList" style="width: 100%">
+    <el-table :data="taskList" style="width: 100%" v-loading="loading">
       <el-table-column prop="contractName" label="合同名" width="180">
       </el-table-column>
       <el-table-column prop="contractNumbers" label="合同编号" width="100">
@@ -58,15 +58,22 @@
         <template slot-scope="scope">
           <el-link
             icon="el-icon-edit"
-            @click="editDialogShow(scope.$index, scope.row)"
-            >审核
+            @click="process(scope.$index, scope.row)"
+            >审核进度
           </el-link>
         </template>
       </el-table-column>
     </el-table>
+    
+    <el-dialog
+      title="流程进度"
+      :visible.sync="processDialog"
+      width="1300px">
+      <img :src="imgSrc" alt="" >
+    </el-dialog>
+
   </d2-container>
 </template>
-
 <script>
 import { mapActions } from "vuex";
 import dayjs from "dayjs";
@@ -75,6 +82,7 @@ export default {
   name: "",
   data() {
     return {
+      loading: false,
       taskList: [],
       editDialog: false,
       auditTaks: {
@@ -84,9 +92,13 @@ export default {
         contractName: "",
         state: "",
       },
+      imgSrc:'',
+      processDialog:false
     };
   },
   created() {
+    this.taskList = []
+    this.loading  = true
     this.init();
   },
   methods: {
@@ -94,7 +106,7 @@ export default {
     init() {
       this.myHistory().then((res) => {
         this.taskList = res;
-        console.log(res);
+        this.loading  = false
       });
     },
     editDialogShow(index, row) {
@@ -115,7 +127,12 @@ export default {
         this.editDialog = false;
       });
     },
+    process(index,data){
 
+      var src = 'http://localhost:9090/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId='+data.taskInfo.processInstanceId+'&f=true'
+      this.imgSrc = src
+      this.processDialog = true;
+    },
     formatterTime(row, column) {
       if (row[column.property] == null) return null;
       return dayjs(row[column.property]).format("YYYY-MM-DD");

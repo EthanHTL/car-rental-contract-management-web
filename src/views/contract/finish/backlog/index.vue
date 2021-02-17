@@ -28,7 +28,7 @@
     </el-form>
 
     <!-- 表格 -->
-    <el-table :data="taskList" style="width: 100%">
+    <el-table :data="taskList" style="width: 100%" v-loading="loading">
       <el-table-column prop="contractName" label="合同名" width="180">
       </el-table-column>
       <el-table-column prop="contractNumbers" label="合同编号" width="100">
@@ -82,6 +82,7 @@ export default {
   name: "",
   data() {
     return {
+      loading: false,
       taskList: [],
       editDialog: false,
       auditTaks: {
@@ -94,6 +95,8 @@ export default {
     };
   },
   created() {
+    this.taskList = []
+    this.loading  = true
     this.init();
   },
   methods: {
@@ -101,7 +104,7 @@ export default {
     init() {
       this.myTaskList().then((res) => {
         this.taskList = res;
-        console.log(res);
+        this.loading  = false
       });
     },
     editDialogShow(index,row) {
