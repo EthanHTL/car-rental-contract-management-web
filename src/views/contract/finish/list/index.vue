@@ -1,76 +1,107 @@
 <template>
-  <d2-container>
+  <d2-container >
+
     <!-- 工具栏 -->
-    <el-form :model="searchForm" :inline="true" class="demo-form-inline">
+    <div class="tool-btn">
+      <el-button class="screen" type="primary" size="small" :icon="btnIcon" @click="toggle">{{!showForm ?'筛选':'收起'}}</el-button>
+      <div class="clear"></div>
+    </div>
+    <el-form :model="searchForm" :inline="true" class="demo-form-inline tool-form" v-show="showForm">
       <el-form-item label="合同名称:">
         <el-input
           v-model="searchForm.contractName"
           placeholder="请输入合同名称"
           clearable
+          size="small"
         ></el-input>
       </el-form-item>
       <el-form-item label="状态:">
-        <el-select v-model="searchForm.state" placeholder="请选择">
-          <el-option key="1" label="启用" value="1"> </el-option>
-          <el-option key="0" label="禁用" value="0"> </el-option>
+        <el-select v-model="searchForm.state" placeholder="请选择" size="small">
+          <el-option key="1" label="待审核" value="1"> </el-option>
+          <el-option key="2" label="通过" value="2"> </el-option>
+          <el-option key="3" label="不通过" value="3"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="success" plain @click="dictInsert = true"
+        <el-button type="success" plain @click="init" size="small"
           >搜索</el-button
         >
       </el-form-item>
       <el-form-item>
-        <el-button type="success" plain @click="dictInsert = true"
+        <el-button type="info" plain @click="reset" size="small"
           >重置</el-button
         >
       </el-form-item>
     </el-form>
+    
 
-    <!-- 表格 -->
-    <el-table :data="taskList" style="width: 100%" v-loading="loading" >
-      <el-table-column prop="contractName" label="合同名" width="180">
-      </el-table-column>
-      <el-table-column prop="contractNumbers" label="合同编号" width="100">
-      </el-table-column>
-      <el-table-column prop="payment" label="支付方式" width="100">
-      </el-table-column>
-      <el-table-column label="状态" width="150">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.state"
-            :active-value="1"
-            :inactive-value="0"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          >
-          </el-switch>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="创建时间1"
-        width="150"
-        prop="createTime"
-        :formatter="formatterTime"
-      >
-      </el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-link
-            icon="el-icon-edit"
-            @click="editDialogShow(scope.$index, scope.row)"
-            >审核进度
-          </el-link>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div class="container-list">
+     <!-- 表格 -->
+      <el-table :data="taskList" style="width: 100%" v-loading="loading" >
+        <el-table-column type="index" width="50"> </el-table-column>
+        <el-table-column prop="contractName" label="合同名" show-overflow-tooltip min-width="80">
+        </el-table-column>
+        <el-table-column prop="contractNumbers" label="合同编号" ></el-table-column>
+        <el-table-column prop="contractUsername" label="客户名" width="130"></el-table-column>
+        <el-table-column label="状态" width="150" prop="state">
+          <template slot-scope="scope">
+            <el-tag
+            :type="stateTagsType[scope.row.state -1]"
+            disable-transitions>{{stateTags[scope.row.state -1]}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="创建时间"
+          width="150"
+          prop="createTime"
+          :formatter="formatterTime"
+        >
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-link
+              icon="el-icon-view"
+              type="info"
+              @click="editDialogShow2(scope.$index, scope.row)"
+              style="margin-right:10px"
+              >详情
+            </el-link>
+
+            <el-link
+              icon="el-icon-finished"
+              @click="editDialogShow(scope.$index, scope.row)"
+              type="success"
+              >进度
+            </el-link>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pagination.currentPage"
+      :page-sizes="pagination.pageSizes"
+      :page-size="pagination.pageSize"
+      :total="pagination.total"
+      layout="total,sizes, prev, pager, next,  jumper "
+    >
+    </el-pagination>
+
+    </div>
 
     <el-dialog
       title="流程进度"
       :visible.sync="processDialog"
       width="1300px">
-      <img :src="imgSrc" alt="" height="500px">
+      <img :src="imgSrc" alt="" >
     </el-dialog>
+    <el-dialog
+      title="合同详情"
+      :visible.sync="contractDialog"
+      width="1000px">
+      
+    </el-dialog>
+
   </d2-container>
 </template>
 
@@ -82,8 +113,19 @@ export default {
   name: "",
   data() {
     return {
+      btnIcon: 'el-icon-arrow-down',
+      showForm:false,
       loading: true,
+      stateTags:['待审核','未通过','通过'],
+      stateTagsType:['primary','danger','success'],
       taskList: [],
+      pagination: {
+        currentPage: 1,
+        pageCount: 6,
+        pageSizes: [2, 5, 20, 50],
+        pageSize: 5,
+        total: 500,
+      },
       editDialog: false,
       auditTaks: {
         content: "你是傻子吧，没多得了",
@@ -91,45 +133,60 @@ export default {
       searchForm: {
         contractName: "",
         state: "",
+        pageSize: 10,
+        pageNum: 1
       },
       processDialog:false,
+      contractDialog:false,
       imgSrc:''
     };
   },
   created() {
-      this.loading = true
       this.taskList = []
       this.init();
   },
   methods: {
     ...mapActions("d2admin/contract", ["myStart"]),
     init() {
-        
-      this.myStart().then((res) => {
-        this.taskList = res;
+      this.loading = true
+      this.searchForm.pageSize = this.pagination.pageSize
+      this.searchForm.pageNum = this.pagination.currentPage
+      this.myStart(this.searchForm).then((res) => {
+        // console.log(res);
+        this.taskList = res.list;
+        this.pagination.currentPage = res.navigateFirstPage;
+        this.pagination.pageSize = res.pageSize;
+        this.pagination.pageNum = res.pageNum;
+        this.pagination.total = res.total;
         this.loading = false
-        console.log(res);
       });
+    },
+    toggle: function(){
+      this.btnIcon = this.showForm ? 'el-icon-arrow-down': 'el-icon-arrow-up'
+      this.showForm = !this.showForm;
     },
     editDialogShow(index, row) {
-      
-      this.imgSrc = 'http://localhost:9090/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId='+row.taskInfo.processInstanceId+'&f=true'
+      this.imgSrc = row.state == '1' ? 'http://localhost:9090/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId='+row.taskInfo.processInstanceId+'&f=true'
+      :'http://localhost:9090/bpmn/contract.png'
       this.processDialog = true;
     },
-    auditTask(state, remark) {
-      var data = {
-        taskId: this.auditTaks.taskInfo.taskId,
-        state: state,
-        remark: remark,
-      };
-      console.log(data);
-      //  this.editDialog = false;
-      this.completeTask(data).then((res) => {
-        console.log(res);
-        this.editDialog = false;
-      });
+    editDialogShow2(index, row) {
+      this.processDialog = true;
     },
-
+    reset(){
+      this.searchForm =  {
+        contractName: "",
+        state: "",
+      }
+    },
+    handleSizeChange(val) {
+      this.searchForm.pageSize = val;
+      this.init();
+    },
+    handleCurrentChange(val) {
+      this.searchForm.pageNum = val;
+      this.init();
+    },
     formatterTime(row, column) {
       if (row[column.property] == null) return null;
       return dayjs(row[column.property]).format("YYYY-MM-DD");
@@ -137,3 +194,27 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.tool-btn{
+  width: 100%;
+  padding: 5px;
+  .clear{
+    clear: both;
+  }
+  .screen{
+    // float: right;
+    margin: auto 3%;
+  }
+}
+
+.tool-form{
+  max-width: 90%;
+  margin: 10px auto 10px 6%;
+}
+
+.container-list{
+    max-width: 90%;
+    margin: 0 auto;
+}
+</style>

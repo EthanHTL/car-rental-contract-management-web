@@ -25,10 +25,11 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
         })
     },
     // 待办
-    SYS_CON_TASKS(){
+    SYS_CON_TASKS(data){
         return request({
             url: baseUrl + '/flow/tasks',
-            method: 'post'
+            method: 'post',
+            data
         })
     },
     // 审批
@@ -40,17 +41,19 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
         })
     },
     // 审核历史
-    SYS_CON_HIS_ALL(){
+    SYS_CON_HIS_ALL(data){
         return request({
             url: baseUrl + '/activitiHistory/queryDoneTasks',
-            method: 'post'
+            method: 'post',
+            data
         })
     },
     // 我的发起
-    SYS_CON_MYSTART(){
+    SYS_CON_MYSTART(data){
         return request({
             url: baseUrl + '/activitiHistory/queryMyStartTasks',
-            method: 'post'
+            method: 'post',
+            data
         })
     }
 

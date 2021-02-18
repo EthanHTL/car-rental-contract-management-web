@@ -12,6 +12,10 @@ import router from './router'
 import { menuHeader, menuAside } from '@/menu'
 import { frameInRoutes } from '@/router/routes'
 
+import animated from 'animate.css' // npm install animate.css --save安装，在引入
+
+Vue.use(animated)
+
 
 // D2-Crud 表格组件
 import ElementUI from 'element-ui'

@@ -13,8 +13,8 @@ export default {
             const res = await api.SYS_CON_FIND_ALL()
             return res;
         },
-        async myTaskList({ state, dispatch },) {
-            const res = await api.SYS_CON_TASKS()
+        async myTaskList({ state, dispatch },data={}) {
+            const res = await api.SYS_CON_TASKS(data)
             return res;
         },
         
@@ -26,12 +26,13 @@ export default {
             const res = await api.SYS_CON_COMPLETE({taskId,state,remark})
             return res;
         },
-        async myHistory({ state, dispatch },) {
-            const res = await api.SYS_CON_HIS_ALL()
+        async myHistory({ state, dispatch },data={}) {
+            const res = await api.SYS_CON_HIS_ALL(data)
             return res;
         },
-        async myStart({ state, dispatch },) {
-            const res = await api.SYS_CON_MYSTART()
+        async myStart({ state, dispatch },data={}) {
+            console.log(data);
+            const res = await api.SYS_CON_MYSTART(data)
             return res;
         },
     },

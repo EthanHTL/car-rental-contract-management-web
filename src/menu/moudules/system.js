@@ -9,6 +9,7 @@ export default {
         { path: '/system/manager/menu',title: '菜单管理',icon: '' },
         { path: '/system/manager/api',title: '接口管理',icon: '' },
         { path: '/system/manager/dict',title: '字典管理',icon: '' },
+        { path: '/system/manager/vehicle',title: '车辆管理',icon: '' },
         
     ]
 }
