@@ -168,15 +168,16 @@ export default {
     },
     editDialogShow(index, row) {
       console.log(row);
-      this.imgSrc = 'http://localhost:9090/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId='+row.taskInfo.processInstanceId+'&f=true'
+      this.imgSrc = row.state == '1' ? 'http://localhost:9090/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId='+row.taskInfo.processInstanceId+'&f=true'
+      :'http://localhost:9090/bpmn/contract.png'
       this.processDialog = true;
     },
     handleSizeChange(val) {
-      this.searchForm.pageSize = val;
+      this.pagination.pageSize = val;
       this.init();
     },
     handleCurrentChange(val) {
-      this.searchForm.pageNum = val;
+      this.pagination.pageNum = val;
       this.init();
     },
     formatterTime(row, column) {
@@ -196,7 +197,7 @@ export default {
   }
   .screen{
     // float: right;
-    margin: auto 3%;
+    margin: 10px 3%;
   }
 }
 

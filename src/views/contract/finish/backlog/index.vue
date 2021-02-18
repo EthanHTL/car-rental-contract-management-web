@@ -165,7 +165,7 @@ export default {
   }
   .screen{
     // float: right;
-    margin: auto 3%;
+    margin: 10px 3%;
   }
 }
 
