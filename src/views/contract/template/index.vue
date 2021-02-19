@@ -73,7 +73,7 @@ export default {
   name: "contract-tempalte",
   data() {
     return {
-      url: "",
+      url:"http://localhost:9090/bpmn/contract.png",
       data: [],
       pagination: {
         currentPage: 1,
@@ -84,7 +84,7 @@ export default {
       },
       pageForm: {
         pageNum: 1,
-        pageSize: 2,
+        pageSize: 5,
         types:[9]
       },
       sreachText:"",

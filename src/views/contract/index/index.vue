@@ -27,7 +27,7 @@
       <div class="demo-drawer__body">
         <div class="demo-drawer__content">
           <el-card :body-style="{ padding: '0px' }" v-for="(o, index) in templateList" :key="o.id">
-              <!-- <img :src="url" class="image"> -->
+              <img :src="url" class="image">
               <div style="padding: 14px;">
                 <span>{{o.oldFilename}}</span>
                 <div class="bottom clearfix">
@@ -79,6 +79,7 @@ export default {
       text: '<p>Hello World</p>',
       templateDrawer:false,
       templateList:[],
+      url:"",
       pagination: {
         currentPage: 1,
         pageCount: 6,

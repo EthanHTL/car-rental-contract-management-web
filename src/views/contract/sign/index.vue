@@ -12,7 +12,7 @@
       <el-row>
         <el-col :span="5" v-for="(o) in contractList" :key="o.id" :offset="1">
           <el-card :body-style="{ padding: '0px' }">
-            <!-- <img :src="url" class="image"> -->
+            <img :src="url" class="image">
             <div style="padding: 14px;">
               <span>{{o.oldFilename}}</span>
               <div class="bottom clearfix">
@@ -157,6 +157,7 @@ export default {
       active: 0,
       contractList:[],
       searchText:"",
+      url:"http://localhost:9090/bpmn/contract.png",
       pagination: {
         currentPage: 1,
         pageCount: 6,
