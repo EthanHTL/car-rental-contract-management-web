@@ -71,15 +71,15 @@
             <el-link
               icon="el-icon-view"
               type="info"
-              @click="editDialogShow2(scope.$index, scope.row)"
+              @click="editDialogShow2(scope.row)"
               style="margin-right: 10px"
-              >详情
+              >修改
             </el-link>
             <el-link
               icon="el-icon-finished"
               @click="detailDrawer(scope.row)"
               type="success"
-              >进度
+              >车辆信息
             </el-link>
           </template>
         </el-table-column>
@@ -116,7 +116,7 @@
           class="createBtn"
           type="primary"
           size="small"
-          @click="typeDialog = true"
+          @click="createVehicle"
           >新增</el-button
         >
         <div class="clear"></div>
@@ -172,6 +172,17 @@
           label="出租"
           width="150"
         ></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-link
+              icon="el-icon-view"
+              type="info"
+              @click="editDialogShow3(scope.row)"
+              style="margin-right: 10px"
+              >编辑
+            </el-link>
+          </template>
+        </el-table-column>
       </el-table>
       <el-pagination
         @size-change="handleSizeChange2"
@@ -185,28 +196,7 @@
       </el-pagination>
     </el-drawer>
 
-    <el-dialog title="新增类别" :visible.sync="typeDialog" width="550px">
-        <!-- action="https://jsonplaceholder.typicode.com/posts/"
-        http://localhost:9090/api/v1/car/vehicle/upload
-         -->
-      <el-upload
-        class="avatar-uploader"
-        action="http://localhost:9090/api/v1/car/vehicle/upload"
-        :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :on-preview="handlePictureCardPreview"
-        :on-progress="uploadImageProcess"
-        :before-upload="beforeAvatarUpload"
-      >
-        <img v-if="imageUrl!='' && imageFlag == false" :src="imageUrl" class="avatar" />
-        <i v-else-if="imageUrl=='' && imageFlag == false" class="el-icon-plus avatar-uploader-icon"></i>
-        <el-progress v-if="imageFlag == true" type="circle" :percentage="parseFloat(imageUploadPercent)" style="margin:28px;"></el-progress>
-        <!-- <i class="el-icon-plus avatar-uploader-icon"></i> -->
-      </el-upload>  
-      <el-dialog :visible.sync="dialogVisible" >
-        <img width="100%" :src="dialogImageUrl" alt="">
-      </el-dialog>
-
+    <el-dialog :title="typeTitle" :visible.sync="typeDialog" width="550px">
       <el-row :gutter="5">
         <el-form
           ref="contractForm"
@@ -232,6 +222,59 @@
                 type="textarea"
                 placeholder="请输入备注"
                 :autosize="{ minRows: 4, maxRows: 4 }"
+                :style="{ width: '100%' }"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-form>
+      </el-row>
+      <div slot="footer">
+        <el-button>取消</el-button>
+        <el-button type="primary" @click="handelConfirm">确定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog :title="vehicleTitle" :visible.sync="vehicleDialog" width="550px">
+      <el-row :gutter="5">
+        <el-form
+          ref="contractForm"
+          :model="vehicleData"
+          :rules="rules"
+          size="medium"
+          label-width="111px"
+        >
+          <el-col :span="24">
+            <el-form-item label="车辆图片" >
+               <el-upload
+                class="avatar-uploader"
+                :action="actionUrl"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :on-progress="uploadImageProcess"
+                :on-error="uploadError"
+                :before-upload="beforeAvatarUpload"
+              >
+                <img v-if="imageUrl != '' && imageFlag == false" :src="imageUrl"  class="avatar" />
+                <i v-else-if="imageUrl == '' && imageFlag == false" class="el-icon-plus avatar-uploader-icon" ></i>
+                <el-progress v-if="imageFlag == true"  type="circle"  :percentage="parseFloat(imageUploadPercent)"  style="margin: 28px" ></el-progress>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="车辆编号" prop="vehicleTypeName">
+              <el-input
+                v-model="vehicleData.vehicleNumber"
+                placeholder="请输入编号"
+                clearable
+                :style="{ width: '100%' }"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="车辆名" prop="remark">
+              <el-input
+                v-model="vehicleData.vehicleName"
+                placeholder="请输入名字"
                 :style="{ width: '100%' }"
               ></el-input>
             </el-form-item>
@@ -288,15 +331,24 @@ export default {
       },
       processDialog: false,
       typeDialog: false,
+      typeTitle: "类别",
+      vehicleTitle: "类别",
+      vehicleDialog: false,
       imageUrl: "",
-      dialogImageUrl: '',
-      dialogVisible: false,
       imageFlag: false,
       imageUploadPercent: 0,
+      actionUrl: "http://localhost:9090/api/v1/car/vehicle/upload",
+      // actionUrl: 'https://jsonplaceholder.typicode.com/posts/',
       typeData: {
         imageUrl: "",
         vehicleTypeName: undefined,
         remark: undefined,
+      },
+      vehicleData: {
+        vehicleNumber:"",
+        vehicleName:"",
+        vehicleTypeId:"",
+        picPath:"",
       },
       rules: {
         vehicleTypeName: [
@@ -348,7 +400,9 @@ export default {
         state: "",
       };
     },
+    // 新增类型
     createType() {
+      this.typeTitle = "新增类型"
       this.typeData = {
         imageUrl: "",
         vehicleTypeName: undefined,
@@ -356,14 +410,35 @@ export default {
       };
       this.typeDialog = true;
     },
+    // 修改类型
+    editDialogShow2(row){
+      this.typeTitle = "修改类型"
+      this.typeData = row
+      this.typeDialog = true
+    },
+    createVehicle(){
+      this.vehicleTitle = "新增车辆"
+      this.vehicleDialog = true
+    },
+    // 修改车辆
+    editDialogShow3(row){
+      this.vehicleTitle = "修改车辆信息"
+      this.vehicleData = row
+      this.vehicleDialog = true
+      console.log(row);
+      this.imageUrl = "http://localhost:9090"+row.picPath
+    },
+    // 
     handleSizeChange(val) {
       this.pagination.pageSize = val;
       this.init();
     },
+    // 下一页
     handleCurrentChange(val) {
       this.pagination.pageNum = val;
       this.init();
     },
+    // 根据类别获取车辆信息
     getVehicleList() {
       this.searchVechileForm.pageSize = this.pagination2.pageSize;
       this.searchVechileForm.pageNum = this.pagination2.currentPage;
@@ -374,6 +449,15 @@ export default {
         this.pagination2.pageSize = res.pageSize;
         this.pagination2.pageNum = res.pageNum;
         this.pagination2.total = res.total;
+      });
+    },
+    // 车辆信息 drawer
+    detailDrawer(row) {
+      this.title = row.vehicleTypeName;
+      this.searchVechileForm.id = row.id;
+      this.vehicleData.vehicleTypeId = row.id
+      this.getVehicleList().then(() => {
+        this.vehicleDrawer = true;
       });
     },
     handleSizeChange2(val) {
@@ -390,22 +474,41 @@ export default {
         this.close();
       });
     },
-    handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
-      },
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
+    // 上传失败
+    uploadError(err, file, fileList) {
+      console.log(file, fileList);
+    },
+    // 上传成功
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
       this.imageFlag = false;
       this.imageUploadPercent = 0;
+      console.log(res);
+      this.vehicleData.picPath = res.data
     },
-    uploadImageProcess(event, file, fileList){
-        this.imageFlag = true;
-        this.imageUploadPercent = file.percentage.toFixed(2);
+    // 上传进度条
+    uploadImageProcess(event, file, fileList) {
+      this.imageFlag = true;
+      let precentage = file.percentage.toFixed(2);
+      // if (this.imageUploadPercent == 0 && precentage == 1) {
+      //   let timer = setInterval(() => {
+      //     this.imageUploadPercent += 10;
+      //     console.log(this.imageUploadPercent);
+      //     if (this.imageUploadPercent == 100) {
+      //       clearInterval(timer);
+      //       timer = null;
+      //       this.imageUploadPercent = 0;
+      //       this.imageFlag = false;
+      //       return;
+      //     }
+      //   }, 1000);
+      // }
+      this.imageUploadPercent = precentage;
     },
+    // 上传之前
     beforeAvatarUpload(file) {
       const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 10;
@@ -416,15 +519,11 @@ export default {
       if (!isLt2M) {
         this.$message.error("上传头像图片大小不能超过 10MB!");
       }
+      this.imageFlag = true;
       return isJPG && isLt2M;
     },
-    detailDrawer(row) {
-      this.title = row.vehicleTypeName;
-      this.searchVechileForm.id = row.id;
-      this.getVehicleList().then(() => {
-        this.vehicleDrawer = true;
-      });
-    },
+
+    
   },
 };
 </script>
@@ -489,7 +588,7 @@ export default {
 }
 .avatar-uploader {
   width: 180px;
-  margin: 0 auto 15px auto;
+  margin: 0 auto 0 auto;
   .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
