@@ -639,13 +639,16 @@ export default {
     },
     deleteType(row) {
       // console.log(row);
-      this.typeDelete({"id":row.id});
-      this.init()
+      this.typeDelete({"id":row.id}).then(()=>{
+        this.init()
+      })
     },
     deleteVehicle(row) {
       // console.log(row);
-      this.vehicleDelete({"id":row.id});
-      this.getVehicleList()
+      this.vehicleDelete({"id":row.id}).then(()=>{
+        this.getVehicleList()
+      })
+      
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
