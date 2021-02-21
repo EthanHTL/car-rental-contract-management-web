@@ -73,6 +73,27 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             method: 'post',
             data
         })
+    }, 
+    SYS_API_CREATE(data = {}) {
+        return request({
+            url: '/api/v1/car/api/create',
+            method: 'post',
+            data
+        })
+    },
+    SYS_API_UPDATE(data = {}) {
+        return request({
+            url: '/api/v1/car/api/update',
+            method: 'post',
+            data
+        })
+    },
+    SYS_API_DELETE(data = {}) {
+        return request({
+            url: '/api/v1/car/api/delete',
+            method: 'post',
+            data
+        })
     },
     // 接口分页
     SYS_API_FIND_PAGE(data = {}) {

@@ -1,6 +1,5 @@
 <template>
   <d2-container>
-    <template slot="header">Header</template>
     <!-- 工具栏 -->
     <div class="tool-btn">
       <el-button
@@ -54,7 +53,7 @@
           prop="vehicleTypeName"
           label="类型名"
           show-overflow-tooltip
-          min-width="80"
+          min-width="30"
         >
         </el-table-column>
         <el-table-column prop="vehicleNo" label="类型编号"></el-table-column>
@@ -80,12 +79,13 @@
               icon="el-icon-finished"
               @click="detailDrawer(scope.row)"
               type="success"
+              style="margin-right: 10px"
               >车辆信息
             </el-link>
             <el-popconfirm
               title="这是一段内容确定删除吗？"
               @confirm="deleteType(scope.row)"
-              ><el-link icon="el-icon-finished" type="success" slot="reference">删除 </el-link>
+              ><el-link icon="el-icon-delete" type="danger" slot="reference">删除 </el-link>
             </el-popconfirm>
           </template>
         </el-table-column>
@@ -220,7 +220,7 @@
              <el-popconfirm
               title="这是一段内容确定删除吗？"
               @confirm="deleteVehicle(scope.row)"
-              ><el-link icon="el-icon-finished" type="success" slot="reference">删除 </el-link>
+              ><el-link icon="el-icon-delete" type="danger" slot="reference">删除 </el-link>
             </el-popconfirm>
           </template>
         </el-table-column>
@@ -410,7 +410,6 @@ export default {
       },
       searchForm: {
         vehicleTypeName: "",
-        
         pageSize: 5,
         pageNum: 1,
       },
@@ -752,7 +751,7 @@ export default {
 }
 
 .container-list {
-  max-width: 60%;
+  max-width: 70%;
   margin: 0 auto;
 }
 

@@ -2,56 +2,85 @@
   <d2-container>
     <template slot="header"> 接口管理 </template>
 
-    <!-- 新增 -->
-    <el-button type="success" plain @click="apiInsert = true">新增</el-button>
-    <!-- 新增员工 -->
-    <el-dialog title="新增接口" :visible.sync="apiInsert">
-      <el-form :model="apiForm">
-        <tree-select
-          :props="treeProps"
-          :options="options"
-        ></tree-select>
+    <!-- 工具栏 -->
+    <div class="tool-btn">
+      <el-button
+        class="screen"
+        type="primary"
+        size="small"
+        :icon="btnIcon"
+        @click="toggle"
+        >{{ !showForm ? "筛选" : "收起" }}</el-button
+      >
+      <el-button
+        class="createBtn"
+        type="primary"
+        size="small"
+        @click="createApiHandle"
+        >新增</el-button
+      >
+      <div class="clear"></div>
+    </div>
+    <!-- 搜索条件 -->
+    <el-form
+      :model="pageForm"
+      :inline="true"
+      class="demo-form-inline tool-form"
+      v-show="showForm"
+    >
+      <el-form-item label="名称">
+        <el-input
+          v-model="pageForm.apiName"
+          placeholder="请输入名称"
+          clearable
+          size="small"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="接口">
+        <el-input
+          v-model="pageForm.url"
+          placeholder="请输入接口"
+          clearable
+          size="small"
+        ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="success" plain @click="init" size="small"
+          >搜索</el-button
+        >
+      </el-form-item>
+      <el-form-item>
+        <el-button type="info" plain size="small">重置</el-button>
+      </el-form-item>
+    </el-form>
 
+    <el-dialog :title="dialogTitle" :visible.sync="apiDialog">
+      <el-form :model="apiForm">
+        <el-tree-select
+          popoverClass="test-class-wrap"
+          v-model="values"
+          :styles="styles"
+          :selectParams="selectParams"
+          :treeParams="treeParams"
+          :filterNodeMethod="_filterFun"
+          ref="treeSelect"
+          :treeRenderFun="_renderFun"
+          @searchFun="_searchFun"
+        ></el-tree-select>
         <el-form-item label="接口名">
           <el-input v-model="apiForm.apiName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="地址">
           <el-input v-model="apiForm.url" autocomplete="off"></el-input>
         </el-form-item>
-
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="apiInsert = false">取 消</el-button>
-        <el-button type="primary" @click="apiInsertFormVisible"
-          >确 定</el-button
-        >
+        <el-button @click="apiDialog = false">取 消</el-button>
+        <el-button type="primary" @click="submitForm">确 定</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog title="修改接口" :visible.sync="apiUpdate">
-      <el-form :model="apiForm">
-        <tree-select
-          :props="treeProps"
-          :options="options"
-        ></tree-select>
-
-        <el-form-item label="接口名">
-          <el-input v-model="apiForm.apiName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="地址">
-          <el-input v-model="apiForm.url" autocomplete="off"></el-input>
-        </el-form-item>
-
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="apiUpdate = false">取 消</el-button>
-        <el-button type="primary" @click="apiUpdateFormVisible"
-          >确 定</el-button
-        >
-      </div>
-    </el-dialog>
-
-    <el-table :data="apiList" style="width: 100%">
+    <el-table :data="apiList" class="api-table">
       <el-table-column prop="apiName" label="名字" width="200">
       </el-table-column>
       <el-table-column prop="url" label="地址" width="200"> </el-table-column>
@@ -70,30 +99,22 @@
         :formatter="formatterTime"
       >
       </el-table-column>
-      <el-table-column label="状态" width="150">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.flag"
-            :active-value="1"
-            :inactive-value="0"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            @change="changeSwitch(scope.row)"
-          >
-          </el-switch>
-        </template>
-      </el-table-column>
+
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button
+          <el-link
+            type="warning"
+            @click="updateApiHandle(scope.row)"
+            style="margin-right: 5px"
+            >修改</el-link
           >
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)"
-            >删除</el-button
-          >
+          <el-popconfirm
+            title="这是一段内容确定删除吗？"
+            @confirm="handleDelete(scope.row)"
+            ><el-link icon="el-icon-delete" type="danger" slot="reference"
+              >删除
+            </el-link>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -101,7 +122,7 @@
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="pagination.currentPage"
+      :current-page="pagination.pageNum"
       :page-sizes="pagination.pageSizes"
       :page-size="pagination.pageSize"
       :total="pagination.total"
@@ -114,37 +135,72 @@
 <script>
 import { mapActions } from "vuex";
 import dayjs from "dayjs";
-import treeSelect from '@/components/tree-select/index.vue';
+import TreeSelect from "@/components/tree-select/index.vue";
+import ElTreeSelect from "@/components/el-tree-select/index.vue";
 
 export default {
-  components: { treeSelect },
+  components: { TreeSelect, ElTreeSelect },
   name: "api",
   data() {
     return {
-      apiList: [],
+      btnIcon: "el-icon-arrow-down",
+      showForm: false,
       pagination: {
-        currentPage: 1,
+        pageNum: 1,
         pageCount: 6,
         pageSizes: [2, 5, 20, 50],
         pageSize: 5,
         total: 500,
       },
+      apiList: [],
       pageForm: {
+        apiName: "",
+        url: "",
         pageNum: "1",
-        pageSize: "2",
+        pageSize: "5",
       },
-      apiInsert:false,
-      apiUpdate:false,
-      apiForm:{
-        apiName:"",
-        url:"",
+      apiDialog: false,
+      isInsertApi: false,
+      dialogTitle: "",
+      select: "",
+      apiForm: {
+        apiName: "",
+        url: "",
       },
-      treeProps:{
-          value:'id',             // ID字段名
-          label: 'apiName',         // 显示名称
-          children: 'children'    // 子级字段名
+      treeProps: {
+        value: "id", // ID字段名
+        label: "apiName", // 显示名称
+        children: "children", // 子级字段名
       },
-      options:[]
+      apiTreeData: [],
+      styles: {
+        width: "300px",
+      },
+      values: "" ,
+      selectParams: {
+        clearable: true,
+        placeholder: "请输入内容",
+      },
+      treeParams: {
+        clickParent: true,
+        filterable: true,
+        // 只想要子节点，不需要父节点
+        leafOnly: true,
+        includeHalfChecked: false,
+        "check-strictly": false,
+        "default-expand-all": true,
+        "expand-on-click-node": false,
+        "render-content": this._renderFun,
+        data: [],
+        props: {
+          children: "children",
+          label: "apiName",
+          rootId: "0",
+          disabled: "disabled",
+          parentId: "parentId",
+          value: "id",
+        }
+      },
 
     };
   },
@@ -152,20 +208,36 @@ export default {
     this.init();
   },
   methods: {
-    ...mapActions("d2admin/sysapi", ["showApis","showApisTree"]),
+    ...mapActions("d2admin/sysapi", [
+      "showApis",
+      "showApisTree",
+      "updateApi",
+      "deleteApi",
+      "createApi",
+    ]),
     init() {
-      this.showApis(this.pageForm).then((res) => {
-        this.apiList = res.list;
-        this.pagination.currentPage = res.navigateFirstPage;
-        this.pagination.pageSize = res.pageSize;
-        this.pagination.pageNum = res.pageNum;
-        this.pagination.total = res.total;
-      });
+      this.showApis(this.pageForm)
+        .then((res) => {
+          this.apiList = res.list;
+          this.pagination.pageSize = res.pageSize;
+          this.pagination.pageNum = res.pageNum;
+          this.pagination.total = res.total;
+        })
+        .then((res) => {
+          this.apiTree();
+        });
+    },
+    apiTree() {
+      // 树
       this.showApisTree().then((res) => {
-        // console.log(res);
-        this.options = res;
+        this.apiTreeData = res;
+        this.treeParams.data = res
+        // this.values = res;
       });
-
+    },
+    toggle: function () {
+      this.btnIcon = this.showForm ? "el-icon-arrow-down" : "el-icon-arrow-up";
+      this.showForm = !this.showForm;
     },
     handleSizeChange(val) {
       this.pageForm.pageSize = val;
@@ -179,18 +251,68 @@ export default {
       if (row[column.property] == null) return null;
       return dayjs(row[column.property]).format("YYYY-MM-DD");
     },
-    apiInsertFormVisible(){
-
-      this.apiInsert = false
+    createApiHandle() {
+      this.dialogTitle = "新增接口";
+      this.isInsertApi = true;
+      this.apiDialog = true;
     },
-    handleEdit(index,data){
-      console.log(index,data);
-      this.apiUpdate = true
+    updateApiHandle(data) {
+      this.apiForm = data;
+      this.dialogTitle = "修改接口";
+      this.isInsertApi = false;
+      this.apiDialog = true;
     },
-    apiUpdateFormVisible(){
-
-      this.apiUpdate = false
-    }
+    handleDelete(data) {
+      this.deleteApi({ id: data.ig });
+    },
+    submitForm() {
+      if (this.isInsertApi) {
+        this.createApi(this.apiForm).then((res) => {
+          this.apiDialog = false;
+        });
+      } else {
+        // console.log(this.apiForm);
+        console.log(this.values);
+        // this.updateApi(this.apiForm).then(res => {
+        //   this.apiDialog = false;
+        // });
+      }
+    },
+     _filterFun(value, data, node) {
+      if (!value) return true;
+      return data.id.indexOf(value) !== -1;
+    },
+    // 树过滤
+    _searchFun(value) {
+      console.log(value, "<--_searchFun");
+      // 自行判断 是走后台查询，还是前端过滤
+      this.$refs.treeSelect.filterFun(value);
+      // 后台查询
+      // this.$refs.treeSelect.treeDataUpdateFun(treeData);
+    },
+    // 自定义render
+    _renderFun(h, { node, data, store }) {
+      const { props, clickParent } = this.treeParams;
+      return (
+        <span
+          class={[
+            "custom-tree-node",
+            !clickParent && data[props.children] && data[props.children].length
+              ? "disabled"
+              : null,
+          ]}
+        >
+          <span>{node.label}</span>
+        </span>
+      );
+    },
   },
 };
 </script>
+
+<style lang="scss">
+.api-table {
+  width: 80%;
+  margin: 10px auto 0 auto;
+}
+</style>

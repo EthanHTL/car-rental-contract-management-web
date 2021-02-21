@@ -44,12 +44,6 @@ function createService() {
             //   duration: 2 * 1000
             // })
           }
-            else{
-            Message({
-              message: "操作成功",
-              type: 'success',
-              duration: 2 * 1000
-            })}
             return dataAxios.data
           case 'xxx':
             // [ 示例 ] 其它和后台约定的 code

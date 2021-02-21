@@ -19,8 +19,9 @@ export default {
             const res = await api.SYS_DICT_DELETE(data)
             return res;
         },
-        async showDict({ commit, dispatch }, data = {}) {
+        async showDict({ state, dispatch }, data = {}) {
             const res = await api.SYS_DICT_FIND_PAGE(data)
+            state.dict = res
             return res;
         },
         // 选项操作
