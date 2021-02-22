@@ -99,7 +99,7 @@
               :props="menuProps"
               :data="menuData"
               node-key="id"
-              :default-checked-keys="checkMenus"
+              ref="menuTree"
               show-checkbox
               default-expand-all
             >
@@ -112,7 +112,7 @@
               :props="apiProps"
               :data="apiData"
               node-key="id"
-              :default-checked-keys="checkApis"
+              ref="apiTree"
               show-checkbox
               default-expand-all
             >
@@ -167,6 +167,7 @@
 <script>
 import { mapActions } from "vuex";
 import dayjs from "dayjs";
+import log from '@/libs/util.log';
 export default {
   name: "role",
   components: {},
@@ -289,24 +290,28 @@ export default {
       }
     },
     assignDialogHandle(row) {
+      var apii = []
+      var menuu = []
       var data = [];
       data.push(row);
-      // console.log(data);
       this.getRolePermission(data).then((res) => {
-        console.log(res);
-        var api
-        var menu
+        let api
+        let menu
         for(api in res.apiResponseInfos){
-          console.log(api);
-          this.checkApis.push(res.apiResponseInfos[api].id)
+          apii.push(res.apiResponseInfos[api].id)
         }
         for(menu in res.menuResponseInfos){
-          this.checkMenus.push(res.menuResponseInfos[menu].id)
+          menuu.push(res.menuResponseInfos[menu].id)
         }
-        console.log(this.checkApis);
-        console.log(this.checkMenus);
+        // console.log(this.checkApis);
+        // console.log(this.checkMenus);
         this.assignPermissionVisible = true;
-      });
+      }).then(()=>{
+        this.$refs.apiTree.setCheckedKeys([]);
+        this.$refs.apiTree.setCheckedKeys(apii);
+        this.$refs.menuTree.setCheckedKeys([]);
+        this.$refs.menuTree.setCheckedKeys(apii);
+      })
     },
     assignSaveHandle() {},
   },
