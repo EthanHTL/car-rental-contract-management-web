@@ -538,7 +538,7 @@ export default {
     // 修改类型
     editDialogShow2(row) {
       this.typeTitle = "修改类型";
-      this.typeData = row;
+      this.typeData = JSON.parse(JSON.stringify(row))
       this.typeData.isInsert = false;
       this.typeDialog = true;
     },
@@ -685,7 +685,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .el-row {
   width: 90%;
 }

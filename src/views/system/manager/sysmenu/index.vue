@@ -2,69 +2,58 @@
   <d2-container>
     <template slot="header"> 菜单管理 </template>
 
-    <!-- 筛选 -->
-    <el-form :model="searchForm" :inline="true" class="demo-form-inline">
-      <el-form-item label="菜单名称:">
-        <el-input
-          v-model="searchForm.menuName"
-          placeholder="请输入菜单名称"
-          clearable
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="菜单路径:">
-        <el-input
-          v-model="searchForm.url"
-          placeholder="请输入菜单名称"
-          clearable
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="状态:">
-        <el-select v-model="searchForm.flag" placeholder="请选择">
-          <el-option key="1" label="启用" value="1"> </el-option>
-          <el-option key="0" label="禁用" value="0"> </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="success" plain @click="dictInsert = true"
-          >搜索</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="success" plain @click="dictInsert = true"
-          >重置</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="success" plain @click="insertFormVisible = true"
-          >新增</el-button>
-      </el-form-item>
-    </el-form>
-    <!-- 新增角色 -->
-    <el-dialog title="新增角色" :visible.sync="insertFormVisible">
-      <el-form :model="insertRole">
-        <el-form-item label="角色名">
-          <el-input v-model="insertRole.roleZH" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="角色代码">
-          <el-input v-model="insertRole.roleName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item el-form-item label="备注" >
-          <el-input type="textarea" v-model="insertRole.remark"></el-input>
-        </el-form-item>
+    <!-- 工具栏 -->
+    <div class="tool-btn">
+      <el-button
+        class="createBtn"
+        type="primary"
+        size="small"
+        @click="createMenuHandle"
+        >新增</el-button
+      >
+      <div class="clear"></div>
+    </div>
 
+    <!-- 新增菜单 -->
+    <el-dialog :title="menuDialogTitle" :visible.sync="menuFormDialog">
+      <el-form :model="menuForm" ref="menuForm">
+        <el-form-item label="名字">
+          <el-input v-model="menuForm.menuName"></el-input>
+        </el-form-item>
+        <el-form-item el-form-item label="路径">
+          <el-input v-model="menuForm.url"></el-input>
+        </el-form-item>
+        <el-form-item label="父级菜单">
+          <el-tree-select
+            popoverClass="test-class-wrap"
+            v-model="menuForm.menuPid"
+            :styles="styles"
+            :selectParams="selectParams"
+            :treeParams="treeParams"
+            :filterNodeMethod="_filterFun"
+            ref="treeSelect"
+            :treeRenderFun="_renderFun"
+            @searchFun="_searchFun"
+          ></el-tree-select>
+        </el-form-item>
+        <el-form-item label="图标">
+          <e-icon-picker
+            ref="iconPicker"
+            v-model="menuForm.icon"
+            :options="options"
+          />
+        </el-form-item>
       </el-form>
+
       <div slot="footer" class="dialog-footer">
-        <el-button @click="insertFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="insertMenuFormVisible"
-          >确 定</el-button
-        >
+        <el-button @click="menuFormDialog = false">取 消</el-button>
+        <el-button type="primary" @click="comfirmHandle">确 定</el-button>
       </div>
     </el-dialog>
 
-    
-
-
     <el-table
+      class="menu-table"
       :data="menuTree"
-      style="width: 100%; margin-bottom: 20px"
       row-key="id"
       default-expand-all
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -74,7 +63,11 @@
         label="名字"
         width="180"
       ></el-table-column>
-      <el-table-column prop="icon" label="图标" width="180"> </el-table-column>
+      <el-table-column prop="icon" label="图标" width="180">
+        <template slot-scope="scope">
+          <i :class="scope.row.icon"></i>
+        </template>
+      </el-table-column>
       <el-table-column prop="url" label="路径" width="180"></el-table-column>
       <el-table-column
         prop="createTime"
@@ -96,8 +89,16 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-link icon="el-icon-edit">编辑 </el-link>
-          <el-link><i class="el-icon-view el-icon--right"></i> 删除 </el-link>
+          <el-link icon="el-icon-edit" @click="editMenuHandle(scope.row)"
+            >编辑
+          </el-link>
+          <el-popconfirm
+            title="这是一段内容确定删除吗？"
+            @confirm="handleDelete(scope.row)"
+            ><el-link icon="el-icon-delete" type="danger" slot="reference"
+              >删除
+            </el-link>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -106,42 +107,173 @@
 
 <script>
 import { mapActions } from "vuex";
+import dayjs from "dayjs";
+import ElTreeSelect from "@/components/el-tree-select/index.vue";
 
 export default {
   name: "sysmenu",
+  components: { ElTreeSelect },
   data() {
     return {
+      btnIcon: "el-icon-arrow-down",
+      showForm: false,
       menuTree: [],
-      searchForm:{
-        menuName:"",
-        url:"",
-        flag:""
+      menuForm: {
+        id: "",
+        menuPid: 0,
+        menuName: "",
+        icon: "",
+        url: "",
       },
-      insertFormVisible: false,
-      insertRole:{
-        menuName:"",
-        icon:"",
-        url:"",
-        flag:""
+      menuDialogTitle: "",
+      isInsert: false,
+      menuFormDialog: false,
+      options: {
+        FontAwesome: true,
+        ElementUI: true,
+        eIcon: true, //自带的图标，来自阿里妈妈
+        eIconSymbol: true, //是否开启彩色图标
+        addIconList: [],
+        removeIconList: [],
       },
-      
+      styles: {
+        width: "300px",
+      },
+      selectParams: {
+        multiple: true,
+        clearable: true,
+        placeholder: "请输入内容",
+      },
+      treeParams: {
+        clickParent: true,
+        filterable: true,
+        // 只想要子节点，不需要父节点
+        leafOnly: false,
+        includeHalfChecked: true,
+        "check-strictly": true,
+        "default-expand-all": true,
+        "expand-on-click-node": false,
+        "render-content": this._renderFun,
+        data: [],
+        props: {
+          children: "children",
+          label: "menuName",
+          rootId: "0",
+          disabled: "disabled",
+          parentId: "menuPid",
+          value: "id",
+        },
+      },
     };
   },
   mounted() {
     this.init();
   },
   methods: {
-    ...mapActions("d2admin/sysmenu", ["showMenuTree"]),
+    ...mapActions("d2admin/sysmenu", [
+      "showMenuTree",
+      "updateMenu",
+      "createMenu",
+      "deleteMenu",
+    ]),
     init() {
       this.showMenuTree(this.pageForm).then((res) => {
-        console.log(res);
+        // console.log(res);
         this.menuTree = res;
+        this.treeParams.data = res;
       });
     },
-    // 新增菜单
-    insertMenuFormVisible(){
-      this.insertFormVisible = false;
-    }
+    toggle: function () {
+      this.btnIcon = this.showForm ? "el-icon-arrow-down" : "el-icon-arrow-up";
+      this.showForm = !this.showForm;
+    },
+    createMenuHandle(formName) {
+      this.menuForm.menuPid = "";
+      this.menuForm.menuName = "";
+      this.menuForm.icon = "";
+      this.menuForm.url = "";
+      this.menuDialogTitle = "新增菜单";
+      this.isInsert = true;
+      this.menuFormDialog = true;
+    },
+    editMenuHandle(row) {
+      this.menuForm = JSON.parse(JSON.stringify(row));
+      this.menuDialogTitle = "修改菜单";
+      this.isInsert = false;
+      this.menuFormDialog = true;
+    },
+    handleDelete(row) {
+      this.deleteMenu({ id: row.id }).then((res) => {
+        this.init();
+      });
+    },
+    comfirmHandle() {
+      console.log(this.menuForm.menuPid);
+      if (this.menuForm.menuPid == null || this.menuForm.menuPid == "") {
+        this.menuForm.menuPid = 0;
+      }
+      if (this.isInsert) {
+        this.createMenu(this.menuForm).then(() => {
+          this.init();
+          this.menuFormDialog = false;
+        });
+      } else {
+        this.updateMenu(this.menuForm).then(() => {
+          this.init();
+          this.menuFormDialog = false;
+        });
+      }
+    },
+    _filterFun(value, data, node) {
+      if (!value) return true;
+      return data.apiName.toString().indexOf(value) !== -1;
+    },
+    // 树过滤
+    _searchFun(value) {
+      console.log(value, "<--_searchFun");
+      // 自行判断 是走后台查询，还是前端过滤
+      this.$refs.treeSelect.filterFun(value);
+      // 后台查询
+      // this.$refs.treeSelect.treeDataUpdateFun(treeData);
+    },
+    // 自定义render
+    _renderFun(h, { node, data, store }) {
+      const { props, clickParent } = this.treeParams;
+      return (
+        <span
+          class={[
+            "custom-tree-node",
+            !clickParent && data[props.children] && data[props.children].length
+              ? "disabled"
+              : null,
+          ]}
+        >
+          <span>{node.label}</span>
+        </span>
+      );
+    },
   },
 };
 </script>
+<style lang="scss" scoped>
+.tool-btn{
+  width: 75%;
+  padding: 5px;
+  margin: 0 auto;
+  .createBtn {
+    float: right;
+    margin: 10px 5% auto auto;
+  }
+  .clear{
+    clear: both;
+  }
+  .screen{
+    // float: right;
+    margin: 10px 3%;
+  }
+}
+.menu-table {
+  width: 70%;
+  margin: 10px auto 0 auto;
+}
+</style>

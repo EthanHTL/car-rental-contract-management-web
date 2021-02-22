@@ -8,7 +8,6 @@ export default {
     actions: {
         // 接口增删改查
         async showApis({ commit, dispatch }, data = {}) {
-            console.log(data);
             const res = await api.SYS_API_FIND_PAGE(data)
             this.state.apiList = res
             return res;

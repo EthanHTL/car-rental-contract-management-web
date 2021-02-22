@@ -47,6 +47,14 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             data
         })
     },
+    // 角色拥有权限
+    SYS_ROLE_PERMISSION(data = {}) {
+        return request({
+            url: '/api/v1/car/role/security/find',
+            method: 'post',
+            data
+        })
+    },
     // ----------menu
     // 菜单树
     SYS_MENU_TREE(data = {}) {
@@ -56,9 +64,23 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             data
         })
     },
+    SYS_ROLE_UPDATE(data = {}) {
+        return request({
+            url: '/api/v1/car/menu/update',
+            method: 'post',
+            data
+        })
+    },
+    SYS_ROLE_CREATE(data = {}) {
+        return request({
+            url: '/api/v1/car/menu/create',
+            method: 'post',
+            data
+        })
+    },
     SYS_ROLE_DELETE(data = {}) {
         return request({
-            url: '/api/v1/car/role',
+            url: '/api/v1/car/menu/delete',
             method: 'post',
             data
         })

@@ -27,6 +27,7 @@
       :inline="true"
       class="demo-form-inline tool-form"
       v-show="showForm"
+      ref="pageForm"
     >
       <el-form-item label="名称">
         <el-input
@@ -48,17 +49,15 @@
         <el-button type="success" plain @click="init" size="small"
           >搜索</el-button
         >
-      </el-form-item>
-      <el-form-item>
-        <el-button type="info" plain size="small">重置</el-button>
+        <el-button type="info" plain @click="resetApiForm('pageForm')" size="small">重置</el-button>
       </el-form-item>
     </el-form>
 
     <el-dialog :title="dialogTitle" :visible.sync="apiDialog">
-      <el-form :model="apiForm">
+      <el-form :model="apiForm" >
         <el-tree-select
           popoverClass="test-class-wrap"
-          v-model="values"
+          v-model="apiForm.apiPid"
           :styles="styles"
           :selectParams="selectParams"
           :treeParams="treeParams"
@@ -67,10 +66,10 @@
           :treeRenderFun="_renderFun"
           @searchFun="_searchFun"
         ></el-tree-select>
-        <el-form-item label="接口名">
+        <el-form-item label="接口名：">
           <el-input v-model="apiForm.apiName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="地址">
+        <el-form-item label="地址：">
           <el-input v-model="apiForm.url" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
@@ -80,10 +79,10 @@
       </div>
     </el-dialog>
 
-    <el-table :data="apiList" class="api-table">
-      <el-table-column prop="apiName" label="名字" width="200">
+    <el-table :data="apiList" class="api-table" border>
+      <el-table-column prop="apiName" label="名字" width="130">
       </el-table-column>
-      <el-table-column prop="url" label="地址" width="200"> </el-table-column>
+      <el-table-column prop="url" label="地址"  show-overflow-tooltip resizable> </el-table-column>
 
       <el-table-column
         label="创建时间"
@@ -92,15 +91,7 @@
         :formatter="formatterTime"
       >
       </el-table-column>
-      <el-table-column
-        label="修改时间"
-        width="150"
-        prop="createTime"
-        :formatter="formatterTime"
-      >
-      </el-table-column>
-
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="150">
         <template slot-scope="scope">
           <el-link
             type="warning"
@@ -164,20 +155,16 @@ export default {
       dialogTitle: "",
       select: "",
       apiForm: {
+        apiPid: [],
         apiName: "",
         url: "",
       },
-      treeProps: {
-        value: "id", // ID字段名
-        label: "apiName", // 显示名称
-        children: "children", // 子级字段名
-      },
-      apiTreeData: [],
       styles: {
         width: "300px",
       },
-      values: "" ,
+      values: [],
       selectParams: {
+        multiple: true,
         clearable: true,
         placeholder: "请输入内容",
       },
@@ -185,9 +172,9 @@ export default {
         clickParent: true,
         filterable: true,
         // 只想要子节点，不需要父节点
-        leafOnly: true,
-        includeHalfChecked: false,
-        "check-strictly": false,
+        leafOnly: false,
+        includeHalfChecked: true,
+        "check-strictly": true,
         "default-expand-all": true,
         "expand-on-click-node": false,
         "render-content": this._renderFun,
@@ -197,7 +184,7 @@ export default {
           label: "apiName",
           rootId: "0",
           disabled: "disabled",
-          parentId: "parentId",
+          parentId: "apiPid",
           value: "id",
         }
       },
@@ -230,7 +217,6 @@ export default {
     apiTree() {
       // 树
       this.showApisTree().then((res) => {
-        this.apiTreeData = res;
         this.treeParams.data = res
         // this.values = res;
       });
@@ -256,8 +242,8 @@ export default {
       this.isInsertApi = true;
       this.apiDialog = true;
     },
-    updateApiHandle(data) {
-      this.apiForm = data;
+    updateApiHandle(row) {
+      this.apiForm = JSON.parse(JSON.stringify(row));
       this.dialogTitle = "修改接口";
       this.isInsertApi = false;
       this.apiDialog = true;
@@ -265,22 +251,25 @@ export default {
     handleDelete(data) {
       this.deleteApi({ id: data.ig });
     },
+    resetApiForm(formName) {
+      // console.log(formName);
+       this.$refs[formName].resetFields();
+    },
     submitForm() {
+      // console.log(this.isInsertApi);
       if (this.isInsertApi) {
         this.createApi(this.apiForm).then((res) => {
           this.apiDialog = false;
         });
       } else {
-        // console.log(this.apiForm);
-        console.log(this.values);
-        // this.updateApi(this.apiForm).then(res => {
-        //   this.apiDialog = false;
-        // });
+        this.updateApi(this.apiForm).then(res => {
+          this.apiDialog = false;
+        });
       }
     },
      _filterFun(value, data, node) {
       if (!value) return true;
-      return data.id.indexOf(value) !== -1;
+      return data.apiName.indexOf(value) !== -1;
     },
     // 树过滤
     _searchFun(value) {
@@ -311,6 +300,27 @@ export default {
 </script>
 
 <style lang="scss">
+.tool-btn{
+  width: 75%;
+  padding: 5px;
+  margin: 0 auto;
+  .createBtn {
+    float: right;
+    margin: 10px 5% auto auto;
+  }
+  .clear{
+    clear: both;
+  }
+  .screen{
+    // float: right;
+    margin: 10px 3%;
+  }
+}
+.tool-form {
+  max-width: 60%;
+  margin: 0 auto 0 22%;
+  height: 50px;
+}
 .api-table {
   width: 80%;
   margin: 10px auto 0 auto;

@@ -260,7 +260,7 @@ export default {
       this.dictDialog = true;
     },
     updateDictDialog(row) {
-      this.dictForm = row;
+      this.dictForm = JSON.parse(JSON.stringify(row))
       this.dictTitle = "修改字典";
       this.dictInsert = false;
       this.dictDialog = true;
@@ -342,7 +342,28 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.tool-btn{
+  width: 80%;
+  padding: 5px;
+  margin: 0 auto;
+  .createBtn {
+    float: right;
+    margin: 10px 5% auto auto;
+  }
+  .clear{
+    clear: both;
+  }
+  .screen{
+    // float: right;
+    margin: 10px 3%;
+  }
+}
+.tool-form {
+  max-width: 60%;
+  margin: 0 auto 0 22%;
+  height: 50px;
+}
 .dict-table {
   width: 80%;
   margin: 0 auto;

@@ -3,7 +3,8 @@ import api from '@/api'
 export default {
     namespaced: true,
     state: {
-        roles: []
+        roles: [],
+        rolePermissions:[]
     },
     actions: {
         // 字典增删改查
@@ -22,6 +23,11 @@ export default {
         async showRole({ commit, dispatch }, data = {}) {
             const res = await api.SYS_ROLE_ALL(data)
             this.state.roles = res
+            return res;
+        },
+        async getRolePermission({ state, dispatch }, data = {}) {
+            const res = await api.SYS_ROLE_PERMISSION(data)
+            state.rolePermissions = res
             return res;
         }
     },
