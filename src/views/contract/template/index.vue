@@ -85,7 +85,7 @@ export default {
       pageForm: {
         pageNum: 1,
         pageSize: 5,
-        types:[9]
+        types:[7]
       },
       sreachText:"",
       contractUpdateDialog: false,

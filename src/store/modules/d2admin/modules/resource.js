@@ -18,6 +18,10 @@ export default {
     async saveContractTemplate({state, dispatch}, data) {
       const res =  await api.SYS_RESOURCE_CONTRACT_SAVE(data)
       return res;
+    },
+    async createTemplate({state, dispatch}, data) {
+      const res =  await api.SYS_RESOURCE_TEMPLATE_CREATE(data)
+      return res;
     }
   }
 }

@@ -212,7 +212,11 @@ export default {
       apiData: [],
       checkMenus: [],
       checkApis: [],
-      assignPermission: {},
+      permissionForm: {
+        apiIds:[],
+        menuIds:[],
+        id: '',
+      },
     };
   },
   mounted() {
@@ -221,6 +225,7 @@ export default {
   methods: {
     ...mapActions("d2admin/role", [
       "showRole",
+      "assignPermission",
       "createRole",
       "updateRole",
       "deleteRole",
@@ -280,16 +285,17 @@ export default {
       if (this.isInsert) {
         this.createRole(this.roleForm).then(() => {
           this.init();
-          this.insertFormVisible = false;
+          this.roleFormVisible = false;
         });
       } else {
         this.updateRole(this.roleForm).then(() => {
           this.init();
-          this.insertFormVisible = false;
+          this.roleFormVisible = false;
         });
       }
     },
     assignDialogHandle(row) {
+      this.permissionForm.id = row.id
       var apii = []
       var menuu = []
       var data = [];
@@ -303,17 +309,28 @@ export default {
         for(menu in res.menuResponseInfos){
           menuu.push(res.menuResponseInfos[menu].id)
         }
-        // console.log(this.checkApis);
+        console.log(apii);
+        console.log(menuu);
         // console.log(this.checkMenus);
         this.assignPermissionVisible = true;
       }).then(()=>{
         this.$refs.apiTree.setCheckedKeys([]);
         this.$refs.apiTree.setCheckedKeys(apii);
         this.$refs.menuTree.setCheckedKeys([]);
-        this.$refs.menuTree.setCheckedKeys(apii);
+        this.$refs.menuTree.setCheckedKeys(menuu);
       })
     },
-    assignSaveHandle() {},
+    assignSaveHandle() {
+      this.permissionForm.apiIds = this.$refs.apiTree.getCheckedKeys()
+      this.permissionForm.menuIds = this.$refs.menuTree.getCheckedKeys()
+      // console.log(this.permissionForm);
+      this.assignPermission(this.permissionForm).then(res=>{
+        // console.log(res);
+        this.assignPermissionVisible = false;
+
+      })
+
+    },
   },
 };
 </script>

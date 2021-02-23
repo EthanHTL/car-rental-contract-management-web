@@ -8,16 +8,20 @@ export default {
     },
     actions: {
         // 字典增删改查
-        async insertRole({ commit, dispatch }, data = {}) {
-            const res = await api.SYS_Role_INSERT(data)
+        async createRole({ commit, dispatch }, data = {}) {
+            const res = await api.SYS_ROLE_INSERT(data)
+            return res;
+        },
+        async assignPermission({ commit, dispatch }, data = {}) {
+            const res = await api.SYS_ROLE_ASSIGN_PER(data)
             return res;
         },
         async updateRole({ commit, dispatch }, data = {}) {
-            const res = await api.SYS_Role_UPDATE(data)
+            const res = await api.SYS_ROLE_UPDATE(data)
             return res;
         },
         async deleteRole({ commit, dispatch }, data = {}) {
-            const res = await api.SYS_Role_DELETE(data)
+            const res = await api.SYS_ROLE_DELETE(data)
             return res;
         },
         async showRole({ commit, dispatch }, data = {}) {

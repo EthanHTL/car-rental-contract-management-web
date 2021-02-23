@@ -70,7 +70,7 @@
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="pagination.currentPage"
+      :current-page="pagination.pageNum"
       :page-sizes="pagination.pageSizes"
       :page-size="pagination.pageSize"
       :total="pagination.total"
@@ -90,7 +90,7 @@ export default {
     return {
       employees: [],
       pagination: {
-        currentPage: 1,
+        pageNum: 1,
         pageCount: 6,
         pageSizes: [2, 5, 20, 50],
         pageSize: 5,
@@ -112,7 +112,6 @@ export default {
     init() {
       this.findAllEmployee(this.pageForm).then((res) => {
         this.employees = res.list;
-        this.pagination.currentPage = res.navigateFirstPage;
         this.pagination.pageSize = res.pageSize;
         this.pagination.pageNum = res.pageNum;
         this.pagination.total = res.total;
