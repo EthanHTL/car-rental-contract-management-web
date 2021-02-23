@@ -1,12 +1,23 @@
 <template>
-  <d2-container >
-
+  <d2-container>
     <!-- 工具栏 -->
     <div class="tool-btn">
-      <el-button class="screen" type="primary" size="small" :icon="btnIcon" @click="toggle">{{!showForm ?'筛选':'收起'}}</el-button>
+      <el-button
+        class="screen"
+        type="primary"
+        size="small"
+        :icon="btnIcon"
+        @click="toggle"
+        >{{ !showForm ? "筛选" : "收起" }}</el-button
+      >
       <div class="clear"></div>
     </div>
-    <el-form :model="searchForm" :inline="true" class="demo-form-inline tool-form" v-show="showForm">
+    <el-form
+      :model="searchForm"
+      :inline="true"
+      class="demo-form-inline tool-form"
+      v-show="showForm"
+    >
       <el-form-item label="合同名称:">
         <el-input
           v-model="searchForm.contractName"
@@ -33,21 +44,34 @@
         >
       </el-form-item>
     </el-form>
-    
 
     <div class="container-list">
-     <!-- 表格 -->
-      <el-table :data="taskList" style="width: 100%" v-loading="loading" >
+      <!-- 表格 -->
+      <el-table :data="taskList" style="width: 100%" v-loading="loading">
         <el-table-column type="index" width="50"> </el-table-column>
-        <el-table-column prop="contractName" label="合同名" show-overflow-tooltip min-width="80">
+        <el-table-column
+          prop="contractName"
+          label="合同名"
+          show-overflow-tooltip
+          min-width="80"
+        >
         </el-table-column>
-        <el-table-column prop="contractNumbers" label="合同编号" ></el-table-column>
-        <el-table-column prop="contractUsername" label="客户名" width="130"></el-table-column>
+        <el-table-column
+          prop="contractNumbers"
+          label="合同编号"
+        ></el-table-column>
+        <el-table-column
+          prop="contractUsername"
+          label="客户名"
+          width="130"
+        ></el-table-column>
         <el-table-column label="状态" width="150" prop="state">
           <template slot-scope="scope">
             <el-tag
-            :type="stateTagsType[scope.row.state -1]"
-            disable-transitions>{{stateTags[scope.row.state -1]}}</el-tag>
+              :type="stateTagsType[scope.row.state - 1]"
+              disable-transitions
+              >{{ stateTags[scope.row.state - 1] }}</el-tag
+            >
           </template>
         </el-table-column>
         <el-table-column
@@ -63,7 +87,7 @@
               icon="el-icon-view"
               type="info"
               @click="editDialogShow2(scope.$index, scope.row)"
-              style="margin-right:10px"
+              style="margin-right: 10px"
               >详情
             </el-link>
 
@@ -73,35 +97,49 @@
               type="success"
               >进度
             </el-link>
+            <el-link
+              icon="el-icon-finished"
+              @click="renewDialogShow(scope.row)"
+              type="success"
+              >续签
+            </el-link>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pagination.currentPage"
-      :page-sizes="pagination.pageSizes"
-      :page-size="pagination.pageSize"
-      :total="pagination.total"
-      layout="total,sizes, prev, pager, next,  jumper "
-    >
-    </el-pagination>
-
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pagination.currentPage"
+        :page-sizes="pagination.pageSizes"
+        :page-size="pagination.pageSize"
+        :total="pagination.total"
+        layout="total,sizes, prev, pager, next,  jumper "
+      >
+      </el-pagination>
     </div>
 
-    <el-dialog
-      title="流程进度"
-      :visible.sync="processDialog"
-      width="1300px">
-      <img :src="imgSrc" alt="" >
+    <el-dialog title="流程进度" :visible.sync="processDialog" width="1300px">
+      <img :src="imgSrc" alt="" />
     </el-dialog>
     <el-dialog
-      title="合同详情"
-      :visible.sync="contractDialog"
-      width="1000px">
+      title="申请续签"
+      :visible.sync="contractRenewDialog"
+      width="1000px"
       
+    >
+    <el-date-picker
+      v-model="value1"
+      type="daterange"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期">
+    </el-date-picker>
+    <d2-ueditor v-model="renewContractForm.content"/>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="contractRenewDialog = false">取 消</el-button>
+        <el-button type="primary" @click="comfirmHandle">确 定</el-button>
+        </div>
     </el-dialog>
-
   </d2-container>
 </template>
 
@@ -113,11 +151,11 @@ export default {
   name: "",
   data() {
     return {
-      btnIcon: 'el-icon-arrow-down',
-      showForm:false,
+      btnIcon: "el-icon-arrow-down",
+      showForm: false,
       loading: true,
-      stateTags:['待审核','未通过','通过'],
-      stateTagsType:['primary','danger','success'],
+      stateTags: ["待审核", "未通过", "通过"],
+      stateTagsType: ["primary", "danger", "success"],
       taskList: [],
       pagination: {
         currentPage: 1,
@@ -125,6 +163,9 @@ export default {
         pageSizes: [2, 5, 20, 50],
         pageSize: 5,
         total: 500,
+      },
+      renewContractForm: {
+        content: "",
       },
       editDialog: false,
       auditTaks: {
@@ -134,23 +175,25 @@ export default {
         contractName: "",
         state: "",
         pageSize: 10,
-        pageNum: 1
+        pageNum: 1,
       },
-      processDialog:false,
-      contractDialog:false,
-      imgSrc:''
+      value1: [],
+      processDialog: false,
+      contractRenewDialog: false,
+      contractDialog: false,
+      imgSrc: "",
     };
   },
   created() {
-      this.taskList = []
-      this.init();
+    this.taskList = [];
+    this.init();
   },
   methods: {
     ...mapActions("d2admin/contract", ["myStart"]),
     init() {
-      this.loading = true
-      this.searchForm.pageSize = this.pagination.pageSize
-      this.searchForm.pageNum = this.pagination.currentPage
+      this.loading = true;
+      this.searchForm.pageSize = this.pagination.pageSize;
+      this.searchForm.pageNum = this.pagination.currentPage;
       this.myStart(this.searchForm).then((res) => {
         // console.log(res);
         this.taskList = res.list;
@@ -158,26 +201,42 @@ export default {
         this.pagination.pageSize = res.pageSize;
         this.pagination.pageNum = res.pageNum;
         this.pagination.total = res.total;
-        this.loading = false
+        this.loading = false;
       });
     },
-    toggle: function(){
-      this.btnIcon = this.showForm ? 'el-icon-arrow-down': 'el-icon-arrow-up'
+    toggle: function () {
+      this.btnIcon = this.showForm ? "el-icon-arrow-down" : "el-icon-arrow-up";
       this.showForm = !this.showForm;
     },
     editDialogShow(index, row) {
-      this.imgSrc = row.state == '1' ? 'http://localhost:9090/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId='+row.taskInfo.processInstanceId+'&f=true'
-      :'http://localhost:9090/bpmn/contract.png'
+      this.imgSrc =
+        row.state == "1"
+          ? "http://localhost:9090/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId=" +
+            row.taskInfo.processInstanceId +
+            "&f=true"
+          : "http://localhost:9090/bpmn/contract.png";
       this.processDialog = true;
     },
     editDialogShow2(index, row) {
       this.processDialog = true;
     },
-    reset(){
-      this.searchForm =  {
+    comfirmHandle(){
+      console.log(this.value1);
+      console.log(this.renewContractForm);
+    },
+    renewDialogShow(row) {
+      console.log(row);
+      this.value1.push(row.startTime)
+      this.value1.push(row.endTime)
+      console.log(this.value1);
+      this.renewContractForm = row;
+      this.contractRenewDialog = true;
+    },
+    reset() {
+      this.searchForm = {
         contractName: "",
         state: "",
-      }
+      };
     },
     handleSizeChange(val) {
       this.pagination.pageSize = val;
@@ -196,25 +255,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.tool-btn{
+.tool-btn {
   width: 100%;
   padding: 5px;
-  .clear{
+  .clear {
     clear: both;
   }
-  .screen{
+  .screen {
     // float: right;
     margin: 10px 3%;
   }
 }
 
-.tool-form{
+.tool-form {
   max-width: 90%;
   margin: 10px auto 10px 6%;
 }
 
-.container-list{
-    max-width: 90%;
-    margin: 0 auto;
+.container-list {
+  max-width: 90%;
+  margin: 0 auto;
 }
 </style>

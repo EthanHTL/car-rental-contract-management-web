@@ -7,6 +7,13 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             data
         })
     },
+    VEHICLE_GET(data = {}) {
+        return request({
+            url: '/api/v1/car/vehicle/get',
+            method: 'post',
+            data
+        })
+    },
     VEHICLE_TYPE_CREATE(data = {}) {
         return request({
             url: '/api/v1/car/vehicle/type/create',

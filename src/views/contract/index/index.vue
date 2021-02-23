@@ -131,6 +131,7 @@ export default {
       templateForm:{
         path: "",
         img: "",
+        dictType: 7,
         oldFilename:""
       },
       pageForm: {

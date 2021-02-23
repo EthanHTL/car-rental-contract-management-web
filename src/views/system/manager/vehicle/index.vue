@@ -152,7 +152,7 @@
         <el-form-item label=""
           ><el-checkbox
             size="medium"
-            v-model="searchVechileForm.isAccident"
+            v-model="searchVechileForm.isAccident "
             true-label="1"
             false-label="0"
             >事故</el-checkbox

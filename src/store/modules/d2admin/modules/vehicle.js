@@ -7,10 +7,15 @@ export default {
     vehicleList:[]
   },
   actions: {
+
     // 类型
     async typeFindPage({state, dispatch}, data) {
       const res = await api.VEHICLE_TYPE_FIND_PAGE(data)
       state.allType = res
+      return res;
+    },
+    async checkVehicleByNum({state, dispatch}, data) {
+      const res = await api.VEHICLE_GET(data)
       return res;
     },
     async typeCreate({state, dispatch}, data) {

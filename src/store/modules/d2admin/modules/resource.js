@@ -15,6 +15,10 @@ export default {
       this.state.contractTempalteList = res
       return res;
     },
+    async findContractWholePage({state, dispatch}, data) {
+      const res =  await api.SYS_RESOURCE_CONTRACT_WHOLE_PAGE(data)
+      return res;
+    },
     async saveContractTemplate({state, dispatch}, data) {
       const res =  await api.SYS_RESOURCE_CONTRACT_SAVE(data)
       return res;

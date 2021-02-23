@@ -7,6 +7,13 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             data
         })
     },
+    SYS_RESOURCE_CONTRACT_WHOLE_PAGE(data = {}) {
+        return request({
+            url: '/api/v1/car/resource/contract/template/whole/find/page',
+            method: 'post',
+            data
+        })
+    },
     // 合同模板保存
     SYS_RESOURCE_CONTRACT_SAVE(data = {}) {
         return request({
