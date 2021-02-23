@@ -200,6 +200,7 @@ export default {
       console.log(this.templateForm);
       this.createTemplate(this.templateForm).then(res =>{
         console.log(res);
+        this.templateFormVisible = false
       })
     }
   },
@@ -241,10 +242,10 @@ export default {
       padding: 10px;
       .el-card {
         width: 180px;
-        height: 190px;
+        height: 200px;
         margin: 20px 50px;
         img {
-          height: 100px;
+          height: 130px;
         }
       }
     }

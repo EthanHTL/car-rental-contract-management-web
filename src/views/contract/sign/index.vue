@@ -5,8 +5,8 @@
       <el-step title="填写信息"></el-step>
       <el-step title="创建合同"></el-step>
     </el-steps>
-    <div v-if="active == 0">
-      <el-input placeholder="请输入内容" v-model="searchText">
+    <div v-if="active == 0" class="search">
+      <el-input placeholder="请输入内容" v-model="searchText" class="search-input">
         <el-button slot="append" icon="el-icon-search"></el-button>
       </el-input>
       <el-row>
@@ -407,6 +407,15 @@ export default {
     .el-row{
       display: inline-block;
       
+    }
+  }
+
+  .search{
+    .search-input{
+    margin: 0 auto 20px 35%;
+    width: 400px;
+    height: 25px;
+
     }
   }
 </style>
