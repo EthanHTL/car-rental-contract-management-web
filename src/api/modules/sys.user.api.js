@@ -86,6 +86,14 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
       data
     })
   },
+  // 用户信息分页
+  SYS_USER_PAGE(data = {}) {
+    return request({
+      url: '/api/v1/car/users/manager/find/customer/page',
+      method: 'post',
+      data
+    })
+  },
   // 用户分配角色
   SYS_USER_ROLE(data = {}) {
     return request({

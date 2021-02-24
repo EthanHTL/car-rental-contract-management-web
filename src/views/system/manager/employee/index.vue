@@ -2,10 +2,6 @@
   <d2-container>
     <template slot="header"> 员工管理 </template>
 
-    <!-- 新增 -->
-    <el-button type="success" plain @click="employeeFormVisible = true">新增</el-button>
-
-
     <!-- 新增员工 -->
     <el-dialog title="新增员工" :visible.sync="employeeFormVisible">
 
