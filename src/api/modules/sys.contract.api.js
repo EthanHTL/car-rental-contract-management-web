@@ -24,6 +24,14 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             data
         })
     },
+    // 创建
+    SYS_CONTRACT_RENEW(data = {}) {
+        return request({
+            url: baseUrl + '/renew',
+            method: 'post',
+            data
+        })
+    },
     // 待办
     SYS_CON_TASKS(data){
         return request({

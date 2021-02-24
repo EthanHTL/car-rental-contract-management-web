@@ -27,7 +27,7 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="状态:">
-        <el-select v-model="searchForm.state" placeholder="请选择" size="small">
+        <el-select v-model="searchForm.state" placeholder="请选择" clearable size="small">
           <el-option key="1" label="待审核" value="1"> </el-option>
           <el-option key="2" label="通过" value="2"> </el-option>
           <el-option key="3" label="不通过" value="3"> </el-option>
@@ -86,7 +86,7 @@
             <el-link
               icon="el-icon-view"
               type="info"
-              @click="editDialogShow2(scope.$index, scope.row)"
+              @click="editDialogShow2(scope.row)"
               style="margin-right: 10px"
               >详情
             </el-link>
@@ -99,6 +99,7 @@
             </el-link>
             <el-link
               icon="el-icon-finished"
+              v-if="scope.row.state == 3"
               @click="renewDialogShow(scope.row)"
               type="success"
               >续签
@@ -121,24 +122,40 @@
     <el-dialog title="流程进度" :visible.sync="processDialog" width="1300px">
       <img :src="imgSrc" alt="" />
     </el-dialog>
+    <el-dialog title="合同" :visible.sync="contractDialog" width="1300px">
+      <div v-html="renewContractForm.content"></div>
+    </el-dialog>
     <el-dialog
       title="申请续签"
       :visible.sync="contractRenewDialog"
       width="1000px"
-      
     >
-    <el-date-picker
-      v-model="value1"
-      type="daterange"
-      range-separator="至"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期">
-    </el-date-picker>
-    <d2-ueditor v-model="renewContractForm.content"/>
+      <el-form :inline="true" class="demo-form-inline tool-form">
+        <el-form-item label="合同名称:">
+          <el-input
+                v-model="renewContractForm.contractName"
+                placeholder="请输入合同名称"
+                clearable
+                :style="{ width: '100%' }"
+              ></el-input>
+          </el-form-item
+        ><el-form-item label="合同日期:">
+          <el-date-picker
+            v-model="value1"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+
+      <d2-ueditor v-model="renewContractForm.content" />
       <div slot="footer" class="dialog-footer">
         <el-button @click="contractRenewDialog = false">取 消</el-button>
         <el-button type="primary" @click="comfirmHandle">确 定</el-button>
-        </div>
+      </div>
     </el-dialog>
   </d2-container>
 </template>
@@ -165,6 +182,7 @@ export default {
         total: 500,
       },
       renewContractForm: {
+        contractName: "",
         content: "",
       },
       editDialog: false,
@@ -189,7 +207,7 @@ export default {
     this.init();
   },
   methods: {
-    ...mapActions("d2admin/contract", ["myStart"]),
+    ...mapActions("d2admin/contract", ["myStart", "renewContract"]),
     init() {
       this.loading = true;
       this.searchForm.pageSize = this.pagination.pageSize;
@@ -209,6 +227,7 @@ export default {
       this.showForm = !this.showForm;
     },
     editDialogShow(index, row) {
+      this.imgSrc = "";
       this.imgSrc =
         row.state == "1"
           ? "http://localhost:9090/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId=" +
@@ -217,19 +236,47 @@ export default {
           : "http://localhost:9090/bpmn/contract.png";
       this.processDialog = true;
     },
-    editDialogShow2(index, row) {
-      this.processDialog = true;
+    editDialogShow2(row) {
+      this.renewContractForm = JSON.parse(JSON.stringify(row))
+      this.contractDialog = true;
     },
-    comfirmHandle(){
+    comfirmHandle() {
       console.log(this.value1);
       console.log(this.renewContractForm);
+
+      var contract = {
+        contractName: this.renewContractForm.contractName,
+        contractNumbers: this.renewContractForm.contractNumbers,
+        signUnit: this.renewContractForm.customerID,
+        vehicleId: this.renewContractForm.vehicleId,
+        payment: this.renewContractForm.payment,
+        contactUserId: this.renewContractForm.customerID,
+        contactUsername: this.renewContractForm.contractUsername,
+        remark: this.renewContractForm.remark,
+        contractAmount: this.renewContractForm.contractAmount,
+        paidAmount: this.renewContractForm.paidAmount,
+        startTime: this.value1[0],
+        endTime: this.value1[1],
+        contractType: this.renewContractForm.contractType,
+        content: this.renewContractForm.content,
+      };
+      this.renewContract(contract).then((res) => {
+        console.log(res);
+        this.$message({
+          message: "操作成功！",
+          type: "success",
+        });
+        this.contractRenewDialog = false;
+        this.init()
+      });
     },
     renewDialogShow(row) {
-      console.log(row);
-      this.value1.push(row.startTime)
-      this.value1.push(row.endTime)
-      console.log(this.value1);
-      this.renewContractForm = row;
+      this.value1 = []
+      // console.log(row);
+      this.value1.push(row.startTime);
+      this.value1.push(row.endTime);
+      // console.log(this.value1);
+      this.renewContractForm = JSON.parse(JSON.stringify(row))
       this.contractRenewDialog = true;
     },
     reset() {

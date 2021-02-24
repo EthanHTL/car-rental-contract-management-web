@@ -75,8 +75,8 @@
     <el-dialog title="审核合同" :visible.sync="editDialog">
       <div v-html="auditTaks.content"></div>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="auditTask(1,'审核通过')">通过</el-button>
-        <el-button type="primary" @click="auditTask(0,'审核不通过')">不通过</el-button>
+        <el-button type="primary" @click="auditTask(1,'审核通过')">通过</el-button>
+        <el-button type="info" @click="auditTask(0,'审核不通过')">不通过</el-button>
       </div>
     </el-dialog>
   </d2-container>

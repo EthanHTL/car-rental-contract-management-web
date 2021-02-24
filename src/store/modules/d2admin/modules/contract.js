@@ -13,6 +13,10 @@ export default {
             const res = await api.SYS_CON_FIND_ALL()
             return res;
         },
+        async renewContract({ state, dispatch },data) {
+            const res = await api.SYS_CONTRACT_RENEW(data)
+            return res;
+        },
         async myTaskList({ state, dispatch },data={}) {
             const res = await api.SYS_CON_TASKS(data)
             return res;
@@ -31,7 +35,7 @@ export default {
             return res;
         },
         async myStart({ state, dispatch },data={}) {
-            console.log(data);
+            // console.log(data);
             const res = await api.SYS_CON_MYSTART(data)
             return res;
         },

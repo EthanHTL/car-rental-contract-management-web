@@ -262,13 +262,12 @@ export default {
       if (!value) {
         return callback(new Error("车辆不能为空"));
       }
-      setTimeout(() => {
         this.checkVehicleByNum({ vehicleNumber: value }).then((res) => {
-          if (res == null) {
+          if (res == null || res == '') {
             return callback(new Error("车辆不存在"));
           }
+          callback();
         });
-      }, 1000);
     };
 
     return {
@@ -328,6 +327,7 @@ export default {
         ],
         vehicleId: [
           {
+            required: true,
             validator: checkVehicle,
             trigger: "blur",
           },
@@ -485,6 +485,10 @@ export default {
       };
       console.log(contract);
       this.createContract(contract).then((res) => {
+        this.$message({
+          message: '创建成功',
+          type: 'success'
+        });
         this.active = 0;
       });
     },
@@ -530,17 +534,13 @@ export default {
     },
     next() {
       this.$refs["contractForm"].validate((valid) => {
+        console.log(valid);
         if (!valid) return;
         this.contractData.content = this.getValueByObject(
           this.contractText.content
-        );
+        )
         this.active++;
-      });
-    },
-    next2() {
-      this.$refs["contractForm"].validate((valid) => {
-        if (!valid) return;
-        this.active++;
+        console.log(this.active);
       });
     },
     pre() {
