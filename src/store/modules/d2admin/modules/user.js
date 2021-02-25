@@ -37,9 +37,9 @@ export default {
         user: true
       }, {root: true})
     },
-    async test({state, dispatch}) {
-      const res = await api.SYS_USER_REGISTER({})
-      console.log(res)
+    async getMenus({state, dispatch}) {
+      const res = await api.SYS_USER_MENUS()
+      return res
     },
     async test2({state, dispatch}, {
       pageNum = "",

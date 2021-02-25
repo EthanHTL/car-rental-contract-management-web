@@ -16,6 +16,14 @@ export default {
             const res = await api.SYS_ROLE_ASSIGN_PER(data)
             return res;
         },
+        async assignRole({ commit, dispatch }, data = {}) {
+            const res = await api.SYS_ROLE_ASSIGN_USER(data)
+            return res;
+        },
+        async getUserRoles({ commit, dispatch }, data = {}) {
+            const res = await api.SYS_ROLE_USER_GET(data)
+            return res;
+        },
         async updateRole({ commit, dispatch }, data = {}) {
             const res = await api.SYS_ROLE_UPDATE(data)
             return res;

@@ -3,17 +3,27 @@
     <template slot="header"> 员工管理 </template>
 
     <!-- 新增员工 -->
-    <el-dialog title="新增员工" :visible.sync="employeeFormVisible">
+    <el-dialog title="分配角色" width="400px" :visible.sync="userFormVisible"
+      >
+      <el-checkbox-group
+        v-model="checkRoleList"
+        class="role-list"
+      >
+        <el-checkbox
+          v-for="item in roleList"
+          :label="item.id"
+          :key="item.id"
+          >{{item.roleZH}}</el-checkbox
+        >
+      </el-checkbox-group>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="employeeFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="insertEmployeeFormVisible"
-          >确 定</el-button
-        >
+        <el-button @click="userFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="insertUserRoleBtn">确 定</el-button>
       </div>
     </el-dialog>
 
-    <el-table :data="employees" style="width: 100%">
+    <el-table :data="userList" class="employee-table">
       <el-table-column label="姓名" width="180">
         <template slot-scope="scope">
           <el-popover trigger="hover" placement="top">
@@ -51,15 +61,16 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button
+          <el-button size="mini" @click="handleEdit(scope.row)"
+            >分配角色</el-button
           >
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)"
-            >删除</el-button
-          >
+          <el-popconfirm
+            title="这是一段内容确定删除吗？"
+            @confirm="handleDelete(scope.row)"
+            ><el-link icon="el-icon-delete" type="danger" slot="reference"
+              >删除
+            </el-link>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -84,7 +95,7 @@ export default {
   name: "employee",
   data() {
     return {
-      employees: [],
+      userList: [],
       pagination: {
         pageNum: 1,
         pageCount: 6,
@@ -93,11 +104,13 @@ export default {
         total: 500,
       },
       pageForm: {
-        pageNum: "1",
-        pageSize: "2",
+        pageNum: 1,
+        pageSize: 5,
       },
-      employeeFormVisible:false,
-
+      checkRoleList: [],
+      roleList: [],
+      rowUser: {},
+      userFormVisible: false,
     };
   },
   mounted() {
@@ -105,12 +118,17 @@ export default {
   },
   methods: {
     ...mapActions("d2admin/employee", ["findAllEmployee"]),
+    ...mapActions("d2admin/dict", ["showDictDetail"]),
+    ...mapActions("d2admin/role", ["assignRole", "getUserRoles","showRole"]),
     init() {
       this.findAllEmployee(this.pageForm).then((res) => {
-        this.employees = res.list;
+        this.userList = res.list;
         this.pagination.pageSize = res.pageSize;
         this.pagination.pageNum = res.pageNum;
         this.pagination.total = res.total;
+      });
+      this.showRole().then((res) => {
+        this.roleList = res;
       });
     },
     handleSizeChange(val) {
@@ -128,15 +146,53 @@ export default {
       if (row[column.property] == null) return null;
       return dayjs(row[column.property]).format("YYYY-MM-DD");
     },
-    insertEmployeeFormVisible(){
-      this.employeeFormVisible = false
+    insertEmployeeFormVisible() {
+      this.employeeFormVisible = false;
     },
-    handleEdit(){
-
+    handleEdit(row) {
+      this.checkRoleList = []
+      this.rowUser = row
+      this.getUserRoles(row).then((res) => {
+        var i=0;
+        for(i;i<res.length;i++){
+          this.checkRoleList.push(res[i].id)
+        }
+        this.userFormVisible = true
+      });
     },
-    handleDelete(){
-
-    }
+    handleDelete() {},
+    insertUserRoleBtn() {
+      var data = this.rowUser
+      var roleList = []
+      var i=0;
+        for(i;i<this.checkRoleList.length;i++){
+          roleList.push({id:this.checkRoleList[i]})
+        }
+      data.roleList = roleList
+      this.assignRole(data).then(res =>{
+        this.$message({
+              message: '操作成功',
+              type: 'success'
+            });
+        this.userFormVisible = false
+      })
+      
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.employee-table{
+  width: 70%;
+  margin: 20px auto;
+}
+.role-list{
+  display: inline-flex;
+  flex-direction: column;
+  .el-checkbox{
+    margin-bottom: 10px;
+  }
+}
+
+</style>

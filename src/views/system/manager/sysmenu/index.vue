@@ -63,18 +63,19 @@
         label="名字"
         width="180"
       ></el-table-column>
-      <el-table-column prop="icon" label="图标" width="180">
+      <el-table-column prop="icon" label="图标" width="80">
         <template slot-scope="scope">
           <i :class="scope.row.icon"></i>
         </template>
       </el-table-column>
-      <el-table-column prop="url" label="路径" width="180"></el-table-column>
+      <el-table-column prop="url" show-overflow-tooltip label="路径" width="230"></el-table-column>
       <el-table-column
         prop="createTime"
+        :formatter="formatterTime"
         label="创建时间"
         width="180"
       ></el-table-column>
-      <el-table-column label="状态" width="150">
+      <el-table-column label="状态" width="100">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.flag"
@@ -187,11 +188,16 @@ export default {
       this.btnIcon = this.showForm ? "el-icon-arrow-down" : "el-icon-arrow-up";
       this.showForm = !this.showForm;
     },
+    formatterTime(row, column) {
+      if (row[column.property] == null) return null;
+      return dayjs(row[column.property]).format("YYYY-MM-DD");
+    },
     createMenuHandle(formName) {
       this.menuForm.menuPid = "";
       this.menuForm.menuName = "";
       this.menuForm.icon = "";
       this.menuForm.url = "";
+      this.menuForm.id = "";
       this.menuDialogTitle = "新增菜单";
       this.isInsert = true;
       this.menuFormDialog = true;
@@ -213,16 +219,31 @@ export default {
         this.menuForm.menuPid = 0;
       }
       if (this.isInsert) {
-        this.createMenu(this.menuForm).then(() => {
-          this.init();
-          this.menuFormDialog = false;
-        });
+        this.createMenu(this.menuForm)
+          .then(() => {
+            return this.showMenuTree(this.pageForm);
+          })
+          .then((res) => {
+            this.menuTree = res;
+            this.$refs.treeSelect.treeDataUpdateFun(res);
+            this.menuFormDialog = false;
+          });
       } else {
-        this.updateMenu(this.menuForm).then(() => {
-          this.init();
-          this.menuFormDialog = false;
-        });
+        this.updateMenu(this.menuForm)
+          .then(() => {
+            return this.showMenuTree(this.pageForm);
+          })
+          .then((res) => {
+            this.menuTree = res;
+            this.$refs.treeSelect.treeDataUpdateFun(res);
+            this.menuFormDialog = false;
+          });
       }
+
+      this.$message({
+        message: "操作成功",
+        type: "success",
+      });
     },
     _filterFun(value, data, node) {
       if (!value) return true;
@@ -256,7 +277,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.tool-btn{
+.tool-btn {
   width: 75%;
   padding: 5px;
   margin: 0 auto;
@@ -264,10 +285,10 @@ export default {
     float: right;
     margin: 10px 5% auto auto;
   }
-  .clear{
+  .clear {
     clear: both;
   }
-  .screen{
+  .screen {
     // float: right;
     margin: 10px 3%;
   }

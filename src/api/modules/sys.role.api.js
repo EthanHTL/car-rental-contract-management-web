@@ -10,7 +10,23 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
     // 角色权限保存
     SYS_ROLE_ASSIGN_PER(data = {}) {
         return request({
-            url: '/api/v1/car/role/assign/permissions',
+            url: '/api/v1/car/role/permissions/assign',
+            method: 'post',
+            data
+        })
+    },
+    // 角色权限保存
+    SYS_ROLE_USER_GET(data = {}) {
+        return request({
+            url: '/api/v1/car/role/user/get',
+            method: 'post',
+            data
+        })
+    },
+    // 角色权限保存
+    SYS_ROLE_ASSIGN_USER(data = {}) {
+        return request({
+            url: '/api/v1/car/role/assign',
             method: 'post',
             data
         })
@@ -34,23 +50,7 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
     // 角色删除
     SYS_ROLE_DELETE(data = {}) {
         return request({
-            url: '/api/v1/car/role/destory',
-            method: 'post',
-            data
-        })
-    },
-    // 角色分配权限
-    SYS_ROLE_DELETE(data = {}) {
-        return request({
-            url: '/api/v1/car/role/assign/permissions',
-            method: 'post',
-            data
-        })
-    },
-    // 角色删除
-    SYS_ROLE_DELETE(data = {}) {
-        return request({
-            url: '/api/v1/car/role',
+            url: '/api/v1/car/role/destroy',
             method: 'post',
             data
         })

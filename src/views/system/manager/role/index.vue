@@ -158,6 +158,13 @@
           <el-link icon="el-icon-edit" @click="assignDialogHandle(scope.row)"
             >权限分配</el-link
           >
+          <el-popconfirm
+            title="这是一段内容确定删除吗？"
+            @confirm="handleDelete(scope.row)"
+            ><el-link icon="el-icon-delete" type="danger" slot="reference"
+              >删除
+            </el-link>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -167,7 +174,7 @@
 <script>
 import { mapActions } from "vuex";
 import dayjs from "dayjs";
-import log from '@/libs/util.log';
+import log from "@/libs/util.log";
 export default {
   name: "role",
   components: {},
@@ -207,15 +214,14 @@ export default {
       apiProps: {
         children: "children",
         label: "apiName",
-        
       },
       apiData: [],
       checkMenus: [],
       checkApis: [],
       permissionForm: {
-        apiIds:[],
-        menuIds:[],
-        id: '',
+        apiIds: [],
+        menuIds: [],
+        id: "",
       },
     };
   },
@@ -269,6 +275,15 @@ export default {
       if (row[column.property] == null) return null;
       return dayjs(row[column.property]).format("YYYY-MM-DD");
     },
+    handleDelete(row) {
+      this.deleteRole(row).then((res) => {
+        this.$message({
+          message: "操作成功",
+          type: "success",
+        });
+        this.init();
+      });
+    },
     createMenuHandle() {
       this.roleForm.roleZH = "";
       this.roleForm.roleName = "";
@@ -295,41 +310,45 @@ export default {
       }
     },
     assignDialogHandle(row) {
-      this.permissionForm.id = row.id
-      var apii = []
-      var menuu = []
+      this.permissionForm.id = row.id;
+      var apii = [];
+      var menuu = [];
       var data = [];
       data.push(row);
-      this.getRolePermission(data).then((res) => {
-        let api
-        let menu
-        for(api in res.apiResponseInfos){
-          apii.push(res.apiResponseInfos[api].id)
-        }
-        for(menu in res.menuResponseInfos){
-          menuu.push(res.menuResponseInfos[menu].id)
-        }
-        console.log(apii);
-        console.log(menuu);
-        // console.log(this.checkMenus);
-        this.assignPermissionVisible = true;
-      }).then(()=>{
-        this.$refs.apiTree.setCheckedKeys([]);
-        this.$refs.apiTree.setCheckedKeys(apii);
-        this.$refs.menuTree.setCheckedKeys([]);
-        this.$refs.menuTree.setCheckedKeys(menuu);
-      })
+      this.getRolePermission(data)
+        .then((res) => {
+          let api;
+          let menu;
+          for (api in res.apiResponseInfos) {
+            apii.push(res.apiResponseInfos[api].id);
+          }
+          for (menu in res.menuResponseInfos) {
+            menuu.push(res.menuResponseInfos[menu].id);
+          }
+          console.log(apii);
+          console.log(menuu);
+          // console.log(this.checkMenus);
+          this.assignPermissionVisible = true;
+        })
+        .then(() => {
+          this.$refs.apiTree.setCheckedKeys([]);
+          this.$refs.apiTree.setCheckedKeys(apii);
+          this.$refs.menuTree.setCheckedKeys([]);
+          this.$refs.menuTree.setCheckedKeys(menuu);
+        });
     },
     assignSaveHandle() {
-      this.permissionForm.apiIds = this.$refs.apiTree.getCheckedKeys()
-      this.permissionForm.menuIds = this.$refs.menuTree.getCheckedKeys()
+      this.permissionForm.apiIds = this.$refs.apiTree.getCheckedKeys();
+      this.permissionForm.menuIds = this.$refs.menuTree.getCheckedKeys();
       // console.log(this.permissionForm);
-      this.assignPermission(this.permissionForm).then(res=>{
+      this.assignPermission(this.permissionForm).then((res) => {
         // console.log(res);
+        this.$message({
+          message: "操作成功",
+          type: "success",
+        });
         this.assignPermissionVisible = false;
-
-      })
-
+      });
     },
   },
 };
@@ -354,7 +373,7 @@ export default {
   }
 }
 .role-table {
-  width: 70%;
+  width: 55%;
   margin: 10px auto 0 auto;
 }
 .saveBtn {

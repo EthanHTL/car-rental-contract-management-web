@@ -27,6 +27,13 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
       method: 'post'
     })
   },
+  // 菜单
+  SYS_USER_MENUS() {
+    return request({
+      url: '/api/v1/car/users/find/menu',
+      method: 'post',
+    })
+  },
   // 注册
   SYS_USER_REGISTER(data = {}) {
     return request({
