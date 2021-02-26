@@ -71,6 +71,7 @@
                   @click="submit"
                   type="primary"
                   class="button-login"
+                  :loading="loadBtn"
                 >
                   登录
                 </el-button>
@@ -139,6 +140,7 @@ export default {
       timeInterval: null,
       time: dayjs().format("HH:mm:ss"),
       // 快速选择用户
+      loadBtn: false,
       dialogVisible: false,
       users: [
         {
@@ -226,6 +228,8 @@ export default {
     // 提交登录信息
     submit() {
       this.$refs.loginForm.validate((valid) => {
+        this.loadBtn = true
+
         if (valid) {
           // 登录
           // 注意 这里的演示没有传验证码
@@ -236,6 +240,7 @@ export default {
           })
             .then(() => {
               this.$store.dispatch("d2admin/user/myMenus").then((res) => {
+                res.push({ path: "/index", title: "首页", icon: "fa fa-home" });
                 this.$store.commit("d2admin/menu/headerSet", res);
                 this.$store.commit("d2admin/search/init", res);
               });
@@ -248,6 +253,8 @@ export default {
           // 登录表单校验失败
           this.$message.error("表单校验失败，请检查");
         }
+          this.loadBtn = false
+
       });
     },
   },

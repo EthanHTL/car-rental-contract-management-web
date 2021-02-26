@@ -75,9 +75,13 @@ new Vue({
     // 处理路由 得到每一级的路由设置
     this.$store.commit('d2admin/page/init', frameInRoutes)
     // 设置顶栏菜单
+    this.$store.dispatch("d2admin/user/myMenus").then((res) => {
+      this.$store.commit("d2admin/menu/headerSet", res);
+      this.$store.commit("d2admin/search/init", res);
+    }); 
     // this.$store.commit('d2admin/menu/headerSet', menuHeader)
     // 设置侧边栏菜单
-    this.$store.commit('d2admin/menu/asideSet', menuAside)
+    // this.$store.commit('d2admin/menu/asideSet', menuAside)
     // 初始化菜单搜索功能
     // this.$store.commit('d2admin/search/init', res)
   },
@@ -93,7 +97,7 @@ new Vue({
   },
   watch: {
     '$route.matched'(val) {
-      const _side = menuAside.filter(menu => menu.path === val[0].path)
+      const _side = this.$store.state.d2admin.menu.header.filter(menu => menu.path === val[0].path)
       this.$store.commit('d2admin/menu/asideSet', _side.length > 0 ? _side[0].children : [])
     }
   }

@@ -383,7 +383,7 @@ import { mapActions } from "vuex";
 import dayjs from "dayjs";
 
 export default {
-  name: "user",
+  name: "vehicle",
   data() {
     return {
       btnIcon: "el-icon-arrow-down",

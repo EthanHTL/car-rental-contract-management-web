@@ -13,7 +13,7 @@ export default {
      * @param {Object} payload password {String} 密码
      * @param {Object} payload route {Object} 登录成功后定向的路由对象 任何 vue-router 支持的格式
      */
-    async login({ dispatch }, {
+    async login({ commit,dispatch }, {
       username = '',
       password = ''
     } = {}) {
@@ -29,6 +29,11 @@ export default {
       // 设置 vuex 用户信息
       const userinfo = await api.SYS_USER_LOGIN_INFO() 
       await dispatch('d2admin/user/set', userinfo, { root: true })
+      await api.SYS_USER_MENUS().then((res) => {
+        commit("d2admin/menu/headerSet", res, { root: true });
+        commit('d2admin/menu/asideSet', res);
+        commit("d2admin/search/init", res, { root: true });
+      }); 
       // 用户登录后从持久化数据加载一系列的设置
       await dispatch('load')
     },

@@ -61,8 +61,8 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.row)"
-            >分配角色</el-button
+          <el-link type="info" @click="handleEdit(scope.row)"
+            >分配角色</el-link
           >
           <el-popconfirm
             title="这是一段内容确定删除吗？"
@@ -113,7 +113,7 @@ export default {
       userFormVisible: false,
     };
   },
-  mounted() {
+  created() {
     this.init();
   },
   methods: {

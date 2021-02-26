@@ -36,6 +36,9 @@
             @searchFun="_searchFun"
           ></el-tree-select>
         </el-form-item>
+        <el-form-item label="排序">
+          <el-input-number size="small" v-model="menuForm.sort" :min="1"></el-input-number>
+        </el-form-item>
         <el-form-item label="图标">
           <e-icon-picker
             ref="iconPicker"
@@ -124,6 +127,7 @@ export default {
         menuPid: 0,
         menuName: "",
         icon: "",
+        sort: "",
         url: "",
       },
       menuDialogTitle: "",
@@ -132,7 +136,7 @@ export default {
       options: {
         FontAwesome: true,
         ElementUI: true,
-        eIcon: true, //自带的图标，来自阿里妈妈
+        eIcon: false, //自带的图标，来自阿里妈妈
         eIconSymbol: true, //是否开启彩色图标
         addIconList: [],
         removeIconList: [],

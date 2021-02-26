@@ -37,7 +37,7 @@ export default {
         user: true
       }, {root: true})
     },
-    async getMenus({state, dispatch}) {
+    async myMenus({state, dispatch}) {
       const res = await api.SYS_USER_MENUS()
       return res
     },
