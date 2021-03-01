@@ -240,7 +240,6 @@ export default {
           })
             .then(() => {
               this.$store.dispatch("d2admin/user/myMenus").then((res) => {
-                res.push({ path: "/index", title: "首页", icon: "fa fa-home" });
                 this.$store.commit("d2admin/menu/headerSet", res);
                 this.$store.commit("d2admin/search/init", res);
               });

@@ -2,10 +2,22 @@
   <d2-container>
     <!-- 工具栏 -->
     <div class="tool-btn">
-      <el-button class="screen" type="primary" size="small" :icon="btnIcon" @click="toggle">{{!showForm ?'筛选':'收起'}}</el-button>
+      <el-button
+        class="screen"
+        type="primary"
+        size="small"
+        :icon="btnIcon"
+        @click="toggle"
+        >{{ !showForm ? "筛选" : "收起" }}</el-button
+      >
       <div class="clear"></div>
     </div>
-    <el-form :model="searchForm" :inline="true" class="demo-form-inline tool-form" v-show="showForm">
+    <el-form
+      :model="searchForm"
+      :inline="true"
+      class="demo-form-inline tool-form"
+      v-show="showForm"
+    >
       <el-form-item label="合同名称:">
         <el-input
           v-model="searchForm.contractName"
@@ -34,18 +46,32 @@
     </el-form>
 
     <div class="container-list">
-     <!-- 表格 -->
-      <el-table :data="taskList" style="width: 100%" v-loading="loading" >
+      <!-- 表格 -->
+      <el-table :data="taskList" style="width: 100%" v-loading="loading">
         <el-table-column type="index" width="50"> </el-table-column>
-        <el-table-column prop="contractName" label="合同名" show-overflow-tooltip min-width="80">
+        <el-table-column
+          prop="contractName"
+          label="合同名"
+          show-overflow-tooltip
+          min-width="80"
+        >
         </el-table-column>
-        <el-table-column prop="contractNumbers" label="合同编号" ></el-table-column>
-        <el-table-column prop="contractUsername" label="客户名" width="130"></el-table-column>
+        <el-table-column
+          prop="contractNumbers"
+          label="合同编号"
+        ></el-table-column>
+        <el-table-column
+          prop="contractUsername"
+          label="客户名"
+          width="130"
+        ></el-table-column>
         <el-table-column label="状态" width="150" prop="state">
           <template slot-scope="scope">
             <el-tag
-            :type="stateTagsType[scope.row.state -1]"
-            disable-transitions>{{stateTags[scope.row.state -1]}}</el-tag>
+              :type="stateTagsType[scope.row.state - 1]"
+              disable-transitions
+              >{{ stateTags[scope.row.state - 1] }}</el-tag
+            >
           </template>
         </el-table-column>
         <el-table-column
@@ -61,7 +87,7 @@
               icon="el-icon-view"
               type="info"
               @click="editDialogShow2(scope.$index, scope.row)"
-              style="margin-right:10px"
+              style="margin-right: 10px"
               >详情
             </el-link>
             <el-link
@@ -74,31 +100,22 @@
         </el-table-column>
       </el-table>
       <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pagination.currentPage"
-      :page-sizes="pagination.pageSizes"
-      :page-size="pagination.pageSize"
-      :total="pagination.total"
-      layout="total,sizes, prev, pager, next,  jumper "
-    >
-    </el-pagination>
-
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pagination.currentPage"
+        :page-sizes="pagination.pageSizes"
+        :page-size="pagination.pageSize"
+        :total="pagination.total"
+        layout="total,sizes, prev, pager, next,  jumper "
+      >
+      </el-pagination>
     </div>
 
-    <el-dialog
-      title="流程进度"
-      :visible.sync="processDialog"
-      width="1300px">
-      <img :src="imgSrc" alt="" height="500px">
+    <el-dialog title="流程进度" :visible.sync="processDialog" width="1300px">
+      <img :src="imgSrc" alt="" height="500px" />
     </el-dialog>
-    <el-dialog
-      title="合同详情"
-      :visible.sync="contractDialog"
-      width="1000px">
-      
+    <el-dialog title="合同详情" :visible.sync="contractDialog" width="1000px">
     </el-dialog>
-
   </d2-container>
 </template>
 
@@ -110,11 +127,11 @@ export default {
   name: "",
   data() {
     return {
-      btnIcon: 'el-icon-arrow-down',
-      showForm:false,
+      btnIcon: "el-icon-arrow-down",
+      showForm: false,
       loading: true,
-      stateTags:['待审核','未通过','通过'],
-      stateTagsType:['primary','danger','success'],
+      stateTags: ["待审核", "未通过", "通过"],
+      stateTagsType: ["primary", "danger", "success"],
       taskList: [],
       pagination: {
         currentPage: 1,
@@ -131,11 +148,11 @@ export default {
         contractName: "",
         state: "",
         pageSize: 10,
-        pageNum: 1
+        pageNum: 1,
       },
-      processDialog:false,
-      contractDialog:false,
-      imgSrc:''
+      processDialog: false,
+      contractDialog: false,
+      imgSrc: "",
     };
   },
   created() {
@@ -144,32 +161,38 @@ export default {
   methods: {
     ...mapActions("d2admin/contract", ["myHistory"]),
     init() {
-      this.loading = true
-      this.searchForm.pageSize = this.pagination.pageSize
-      this.searchForm.pageNum = this.pagination.currentPage
+      this.loading = true;
+      this.searchForm.pageSize = this.pagination.pageSize;
+      this.searchForm.pageNum = this.pagination.currentPage;
       this.myHistory(this.searchForm).then((res) => {
-        this.taskList = res.list;
-        this.pagination.currentPage = res.navigateFirstPage;
-        this.pagination.pageSize = res.pageSize;
-        this.pagination.pageNum = res.pageNum;
-        this.pagination.total = res.total;
-        this.loading = false
+        if (res != null) {
+          this.taskList = res.list;
+          this.pagination.currentPage = res.navigateFirstPage;
+          this.pagination.pageSize = res.pageSize;
+          this.pagination.pageNum = res.pageNum;
+          this.pagination.total = res.total;
+        }
+        this.loading = false;
       });
     },
-    toggle: function(){
-      this.btnIcon = this.showForm ? 'el-icon-arrow-down': 'el-icon-arrow-up'
+    toggle: function () {
+      this.btnIcon = this.showForm ? "el-icon-arrow-down" : "el-icon-arrow-up";
       this.showForm = !this.showForm;
     },
-    reset(){
-      this.searchForm =  {
+    reset() {
+      this.searchForm = {
         contractName: "",
         state: "",
-      }
+      };
     },
     editDialogShow(index, row) {
       console.log(row);
-      this.imgSrc = row.state == '1' ? 'http://localhost:9090/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId='+row.taskInfo.processInstanceId+'&f=true'
-      :'http://localhost:9090/bpmn/contract.png'
+      this.imgSrc =
+        row.state == "1"
+          ? "http://localhost:9090/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId=" +
+            row.taskInfo.processInstanceId +
+            "&f=true"
+          : "http://localhost:9090/bpmn/contract.png";
       this.processDialog = true;
     },
     handleSizeChange(val) {
@@ -189,25 +212,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.tool-btn{
+.tool-btn {
   width: 100%;
   padding: 5px;
-  .clear{
+  .clear {
     clear: both;
   }
-  .screen{
+  .screen {
     // float: right;
     margin: 10px 3%;
   }
 }
 
-.tool-form{
+.tool-form {
   max-width: 90%;
   margin: 10px auto 10px 6%;
 }
 
-.container-list{
-    max-width: 90%;
-    margin: 0 auto;
+.container-list {
+  max-width: 90%;
+  margin: 0 auto;
 }
 </style>

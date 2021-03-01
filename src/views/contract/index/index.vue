@@ -78,16 +78,23 @@
     <el-dialog title="创建模板" :visible.sync="templateFormVisible">
       <el-form :model="templateForm">
         <el-form-item label="图片">
-          <img :src="templateForm.path" alt="" class="tmImage"/>
+          <img :src="templateForm.path" alt="" class="tmImage" />
         </el-form-item>
         <el-form-item label="模板名">
-          <el-input v-model="templateForm.oldFilename" autocomplete="off"></el-input>
+          <el-input
+            v-model="templateForm.oldFilename"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="模板类型">
+          <el-radio v-model="templateForm.dictType" label="7">合同组件</el-radio>
+          <el-radio v-model="templateForm.dictType" label="6">合同</el-radio>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="templateFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="comfirmHandle">确 定</el-button>
-        </div>
+      </div>
     </el-dialog>
 
     <template slot="footer">
@@ -128,11 +135,11 @@ export default {
         total: 500,
       },
       sreachText: "",
-      templateForm:{
+      templateForm: {
         path: "",
         img: "",
-        dictType: 7,
-        oldFilename:""
+        dictType: '7',
+        oldFilename: "",
       },
       pageForm: {
         pageNum: 1,
@@ -193,17 +200,17 @@ export default {
       }).then((canvas) => {
         // 转成图片，生成图片地址
         this.templateForm.path = canvas.toDataURL("image/png");
-        this.templateFormVisible = true
+        this.templateFormVisible = true;
         // console.log(this.imgUrl);
       });
     },
-    comfirmHandle(){
+    comfirmHandle() {
       console.log(this.templateForm);
-      this.createTemplate(this.templateForm).then(res =>{
+      this.createTemplate(this.templateForm).then((res) => {
         console.log(res);
-        this.templateFormVisible = false
-      })
-    }
+        this.templateFormVisible = false;
+      });
+    },
   },
 };
 </script>
@@ -259,7 +266,7 @@ export default {
       }
     }
   }
-  .tmImage{
+  .tmImage {
     width: 180px;
     height: 190px;
     border: 2px solid springgreen;
