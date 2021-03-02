@@ -246,7 +246,7 @@
     </div>
     <div v-if="active == 2">
       <d2-ueditor v-model="contractData.content" />
-      <el-button type="primary" @click="submitContract">提交</el-button>
+      <el-button type="primary" @click="submitContract" :loading="subLoad">提交</el-button>
       <el-button style="margin-top: 12px" @click="pre">上一步</el-button>
     </div>
   </d2-container>
@@ -272,6 +272,7 @@ export default {
 
     return {
       active: 0,
+      subLoad: false,
       contractList: [],
       searchText: "",
       url: "http://localhost:9090/bpmn/contract.png",
@@ -484,11 +485,13 @@ export default {
         content: this.contractData.content,
       };
       console.log(contract);
+      this.subLoad = true
       this.createContract(contract).then((res) => {
         this.$message({
           message: '创建成功',
           type: 'success'
         });
+        this.subLoad = false
         this.active = 0;
       });
     },

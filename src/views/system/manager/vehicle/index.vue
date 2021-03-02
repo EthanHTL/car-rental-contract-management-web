@@ -197,14 +197,14 @@
         <el-table-column label="事故" width="150">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{
-              scope.row.isAccident == 1 ? "否" : "是"
+              scope.row.isAccident == 1 ? "是" : "否"
             }}</span>
           </template>
         </el-table-column>
         <el-table-column property="isRentOut" label="出租" width="150">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{
-              scope.row.isRentOut == 1 ? "否" : "是"
+              scope.row.isRentOut == 1 ? "是" : "否"
             }}</span>
           </template>
         </el-table-column>

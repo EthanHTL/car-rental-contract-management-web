@@ -102,7 +102,7 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="pagination.currentPage"
+        :current-page="pagination.pageNum"
         :page-sizes="pagination.pageSizes"
         :page-size="pagination.pageSize"
         :total="pagination.total"
@@ -134,7 +134,7 @@ export default {
       stateTagsType: ["primary", "danger", "success"],
       taskList: [],
       pagination: {
-        currentPage: 1,
+        pageNum: 1,
         pageCount: 6,
         pageSizes: [2, 5, 20, 50],
         pageSize: 5,
@@ -163,11 +163,10 @@ export default {
     init() {
       this.loading = true;
       this.searchForm.pageSize = this.pagination.pageSize;
-      this.searchForm.pageNum = this.pagination.currentPage;
+      this.searchForm.pageNum = this.pagination.pageNum;
       this.myHistory(this.searchForm).then((res) => {
         if (res != null) {
           this.taskList = res.list;
-          this.pagination.currentPage = res.navigateFirstPage;
           this.pagination.pageSize = res.pageSize;
           this.pagination.pageNum = res.pageNum;
           this.pagination.total = res.total;

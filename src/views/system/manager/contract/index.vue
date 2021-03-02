@@ -97,13 +97,6 @@
               type="success"
               >进度
             </el-link>
-            <el-link
-              icon="el-icon-finished"
-              v-if="scope.row.state == 3"
-              @click="renewDialogShow(scope.row)"
-              type="success"
-              >续签
-            </el-link>
           </template>
         </el-table-column>
       </el-table>
@@ -124,38 +117,6 @@
     </el-dialog>
     <el-dialog title="合同" :visible.sync="contractDialog" width="1300px">
       <div v-html="renewContractForm.content"></div>
-    </el-dialog>
-    <el-dialog
-      title="申请续签"
-      :visible.sync="contractRenewDialog"
-      width="1000px"
-    >
-      <el-form :inline="true" class="demo-form-inline tool-form">
-        <el-form-item label="合同名称:">
-          <el-input
-                v-model="renewContractForm.contractName"
-                placeholder="请输入合同名称"
-                clearable
-                :style="{ width: '100%' }"
-              ></el-input>
-          </el-form-item
-        ><el-form-item label="合同日期:">
-          <el-date-picker
-            v-model="value1"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
-          </el-date-picker>
-        </el-form-item>
-      </el-form>
-
-      <d2-ueditor v-model="renewContractForm.content" />
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="contractRenewDialog = false">取 消</el-button>
-        <el-button type="primary" @click="comfirmHandle">确 定</el-button>
-      </div>
     </el-dialog>
   </d2-container>
 </template>
@@ -207,12 +168,12 @@ export default {
     this.init();
   },
   methods: {
-    ...mapActions("d2admin/contract", ["myStart", "renewContract"]),
+    ...mapActions("d2admin/contract", ["findPage", "renewContract"]),
     init() {
       this.loading = true;
       this.searchForm.pageSize = this.pagination.pageSize;
       this.searchForm.pageNum = this.pagination.pageNum;
-      this.myStart(this.searchForm).then((res) => {
+      this.findPage(this.searchForm).then((res) => {
         // console.log(res);
         this.taskList = res.list;
         this.pagination.pageSize = res.pageSize;
@@ -238,45 +199,6 @@ export default {
     editDialogShow2(row) {
       this.renewContractForm = JSON.parse(JSON.stringify(row))
       this.contractDialog = true;
-    },
-    comfirmHandle() {
-      console.log(this.value1);
-      console.log(this.renewContractForm);
-
-      var contract = {
-        contractName: this.renewContractForm.contractName,
-        contractNumbers: this.renewContractForm.contractNumbers,
-        signUnit: this.renewContractForm.customerID,
-        vehicleId: this.renewContractForm.vehicleId,
-        payment: this.renewContractForm.payment,
-        contactUserId: this.renewContractForm.customerID,
-        contactUsername: this.renewContractForm.contractUsername,
-        remark: this.renewContractForm.remark,
-        contractAmount: this.renewContractForm.contractAmount,
-        paidAmount: this.renewContractForm.paidAmount,
-        startTime: this.value1[0],
-        endTime: this.value1[1],
-        contractType: this.renewContractForm.contractType,
-        content: this.renewContractForm.content,
-      };
-      this.renewContract(contract).then((res) => {
-        console.log(res);
-        this.$message({
-          message: "操作成功！",
-          type: "success",
-        });
-        this.contractRenewDialog = false;
-        this.init()
-      });
-    },
-    renewDialogShow(row) {
-      this.value1 = []
-      // console.log(row);
-      this.value1.push(row.startTime);
-      this.value1.push(row.endTime);
-      // console.log(this.value1);
-      this.renewContractForm = JSON.parse(JSON.stringify(row))
-      this.contractRenewDialog = true;
     },
     reset() {
       this.searchForm = {

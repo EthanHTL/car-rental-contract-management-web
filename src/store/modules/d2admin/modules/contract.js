@@ -9,6 +9,10 @@ export default {
             const res = await api.SYS_CONTRACT_CREATE(data)
             return res;
         },
+        async findPage({ state, dispatch },data) {
+            const res = await api.SYS_CON_FIND_PAGE(data)
+            return res;
+        },
         async getAll({ state, dispatch },) {
             const res = await api.SYS_CON_FIND_ALL()
             return res;

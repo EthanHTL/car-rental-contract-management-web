@@ -19,6 +19,7 @@ export default {
         { path: 'api', name: 'system-manager-menu', component: _import('system/manager/api'), meta: { ...meta, title: '接口管理' } },
         { path: 'dict', name: 'system-manager-dict', component: _import('system/manager/dict'), meta: { ...meta, title: '字典管理' } },
         { path: 'vehicle', name: 'system-manager-vehicle', component: _import('system/manager/vehicle'), meta: { ...meta, title: '车辆管理' } },
+        { path: 'contract', name: 'system-manager-vehicle', component: _import('system/manager/contract'), meta: { ...meta, title: '合同管理' } },
     ]
 }
 

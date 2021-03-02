@@ -63,7 +63,7 @@
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="pagination.currentPage"
+            :current-page="pagination.pageNum"
             :page-sizes="pagination.pageSizes"
             :page-size="pagination.pageSize"
             background
@@ -163,7 +163,6 @@ export default {
       // this.$store.state.d2admin.system.myEditor.registerButton(buttonD2admin)
       this.findContractPage(this.pageForm).then((res) => {
         this.templateList = res.list;
-        this.pagination.currentPage = res.navigateFirstPage;
         this.pagination.pageSize = res.pageSize;
         this.pagination.pageNum = res.pageNum;
         this.pagination.total = res.total;
