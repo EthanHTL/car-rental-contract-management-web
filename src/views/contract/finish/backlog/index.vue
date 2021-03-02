@@ -42,18 +42,6 @@
         </el-table-column>
         <el-table-column prop="payment" label="支付方式" width="100">
         </el-table-column>
-        <el-table-column label="状态" width="150">
-          <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.state"
-              :active-value="1"
-              :inactive-value="0"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-            >
-            </el-switch>
-          </template>
-        </el-table-column>
         <el-table-column
           label="创建时间"
           width="150"
@@ -75,7 +63,7 @@
     <el-dialog title="审核合同" :visible.sync="editDialog">
       <div v-html="auditTaks.content"></div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="auditTask(1,'审核通过')">通过</el-button>
+        <el-button type="primary" @click="auditTask(1,'审核通过')" :loading="passBtn">通过</el-button>
         <el-button type="info" @click="auditTask(0,'审核不通过')">不通过</el-button>
       </div>
     </el-dialog>
@@ -93,6 +81,7 @@ export default {
       btnIcon: 'el-icon-arrow-down',
       showForm:false,
       loading: false,
+      passBtn: false,
       taskList: [],
       editDialog: false,
       auditTaks: {
@@ -138,12 +127,14 @@ export default {
             state: state,
             remark: remark
         }
+        this.passBtn = true
         this.completeTask(data).then(res =>{
             this.$message({
               message: '操作成功',
               type: 'success'
             });
             this.editDialog = false;
+            this.passBtn = false
             this.init();
         })
     },
