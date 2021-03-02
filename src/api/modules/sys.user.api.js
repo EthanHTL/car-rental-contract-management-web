@@ -14,7 +14,7 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
   SYS_USER_LOGIN(data = {}) {
     // 接口请求
     return request({
-      url: '/user/login?username=' + data.username + '&password=' + data.password,
+      url: '/employee/user/login?username=' + data.username + '&password=' + data.password,
 
       method: 'post',
       data

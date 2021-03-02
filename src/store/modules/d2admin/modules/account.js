@@ -27,13 +27,13 @@ export default {
       util.cookies.set('uuid', res.username)
       util.cookies.set('token', res.token)
       // 设置 vuex 用户信息
-      // const userinfo = await api.SYS_USER_LOGIN_INFO() 
-      // await dispatch('d2admin/user/set', userinfo, { root: true })
-      await api.SYS_USER_MENUS().then((res) => {
-        commit("d2admin/menu/headerSet", res, { root: true });
-        commit('d2admin/menu/asideSet', res);
-        commit("d2admin/search/init", res, { root: true });
-      }); 
+      const userinfo = await api.SYS_USER_LOGIN_INFO() 
+      await dispatch('d2admin/user/set', userinfo, { root: true })
+      // await api.SYS_USER_MENUS().then((res) => {
+      //   commit("d2admin/menu/headerSet", res, { root: true });
+      //   commit('d2admin/menu/asideSet', res);
+      //   commit("d2admin/search/init", res, { root: true });
+      // }); 
       // 用户登录后从持久化数据加载一系列的设置
       await dispatch('load')
     },

@@ -77,6 +77,7 @@ new Vue({
     // 设置顶栏菜单
     this.$store.dispatch("d2admin/user/myMenus").then((res) => {
       this.$store.commit("d2admin/menu/headerSet", res);
+      this.$store.commit('d2admin/menu/asideSet', res);
       this.$store.commit("d2admin/search/init", res);
     }); 
     // this.$store.commit('d2admin/menu/headerSet', menuHeader)
