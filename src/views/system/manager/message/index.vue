@@ -1,104 +1,46 @@
 <template>
   <d2-container>
-    <!-- 工具栏 -->
-    <div class="tool-btn">
-      <el-button
-        class="screen"
-        type="primary"
-        size="small"
-        :icon="btnIcon"
-        @click="toggle"
-        >{{ !showForm ? "筛选" : "收起" }}</el-button
-      >
-      <div class="clear"></div>
-    </div>
-    <el-form
-      :model="searchForm"
-      :inline="true"
-      class="demo-form-inline tool-form"
-      v-show="showForm"
-    >
-      <el-form-item label="合同名称:">
-        <el-input
-          v-model="searchForm.contractName"
-          placeholder="请输入合同名称"
-          clearable
-          size="small"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="状态:">
-        <el-select v-model="searchForm.state" placeholder="请选择" clearable size="small">
-          <el-option key="1" label="待审核" value="1"> </el-option>
-          <el-option key="2" label="通过" value="2"> </el-option>
-          <el-option key="3" label="不通过" value="3"> </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="success" plain @click="init" size="small"
-          >搜索</el-button
-        >
-      </el-form-item>
-      <el-form-item>
-        <el-button type="info" plain @click="reset" size="small"
-          >重置</el-button
-        >
-      </el-form-item>
-    </el-form>
-
     <div class="container-list">
       <!-- 表格 -->
-      <el-table :data="taskList" style="width: 100%" v-loading="loading">
+      <el-table :data="messageList" style="width: 100%" v-loading="loading">
         <el-table-column type="index" width="50"> </el-table-column>
         <el-table-column
-          prop="contractName"
-          label="合同名"
+          prop="username"
+          label="用户名"
           show-overflow-tooltip
-          min-width="80"
+          width="80"
         >
         </el-table-column>
         <el-table-column
-          prop="contractNumbers"
-          label="合同编号"
+          prop="vehicleNumber"
+          label="车辆编号"
+        ></el-table-column><el-table-column
+          prop="email"
+          label="邮箱"
+        ></el-table-column><el-table-column
+          prop="phone"
+          label="电话"
         ></el-table-column>
         <el-table-column
-          prop="contractUsername"
-          label="客户名"
-          width="130"
-        ></el-table-column>
-        <el-table-column label="状态" width="150" prop="state">
-          <template slot-scope="scope">
-            <el-tag
-              :type="stateTagsType[scope.row.state - 1]"
-              disable-transitions
-              >{{ stateTags[scope.row.state - 1] }}</el-tag
-            >
-          </template>
+          label="预约时间"
+          width="150"
+          prop="appointmentTime"
+          :formatter="formatterTime"
+        >
         </el-table-column>
+        <el-table-column
+          prop="message"
+          label="信息"
+        ></el-table-column>
         <el-table-column
           label="创建时间"
           width="150"
           prop="createTime"
           :formatter="formatterTime"
         >
-        </el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-link
-              icon="el-icon-view"
-              type="info"
-              @click="editDialogShow2(scope.row)"
-              style="margin-right: 10px"
-              >详情
-            </el-link>
-
-            <el-link
-              icon="el-icon-finished"
-              @click="editDialogShow(scope.$index, scope.row)"
-              type="success"
-              >进度
-            </el-link>
-          </template>
-        </el-table-column>
+        </el-table-column
+        >
+        
       </el-table>
       <el-pagination
         @size-change="handleSizeChange"
@@ -115,9 +57,6 @@
     <el-dialog title="流程进度" :visible.sync="processDialog" width="1300px">
       <img :src="imgSrc" alt="" />
     </el-dialog>
-    <el-dialog title="合同" :visible.sync="contractDialog" width="1300px">
-      <div v-html="renewContractForm.content"></div>
-    </el-dialog>
   </d2-container>
 </template>
 
@@ -126,7 +65,7 @@ import { mapActions } from "vuex";
 import dayjs from "dayjs";
 
 export default {
-  name: "contract",
+  name: "message",
   data() {
     return {
       btnIcon: "el-icon-arrow-down",
@@ -134,7 +73,7 @@ export default {
       loading: true,
       stateTags: ["待审核", "未通过", "通过"],
       stateTagsType: ["primary", "danger", "success"],
-      taskList: [],
+      messageList: [],
       pagination: {
         pageNum: 1,
         pageCount: 6,
@@ -168,14 +107,13 @@ export default {
     this.init();
   },
   methods: {
-    ...mapActions("d2admin/contract", ["findPage", "renewContract"]),
+    ...mapActions("d2admin/message", ["findPage"]),
     init() {
       this.loading = true;
       this.searchForm.pageSize = this.pagination.pageSize;
       this.searchForm.pageNum = this.pagination.pageNum;
       this.findPage(this.searchForm).then((res) => {
-        // console.log(res);
-        this.taskList = res.list;
+        this.messageList = res.list;
         this.pagination.pageSize = res.pageSize;
         this.pagination.pageNum = res.pageNum;
         this.pagination.total = res.total;
@@ -197,7 +135,7 @@ export default {
       this.processDialog = true;
     },
     editDialogShow2(row) {
-      this.renewContractForm = JSON.parse(JSON.stringify(row))
+      this.renewContractForm = JSON.parse(JSON.stringify(row));
       this.contractDialog = true;
     },
     reset() {

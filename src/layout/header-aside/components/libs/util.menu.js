@@ -22,6 +22,7 @@ export function elMenuItem (h, menu) {
  * @param {Object} menu 菜单项
  */
 export function elSubmenu (h, menu) {
+  console.log(menu);
   let icon = null
   if (menu.icon) icon = <i slot="title" class={ `${menu.icon}` }/>
   else if (menu.iconSvg) icon = <d2-icon-svg slot="title" name={ menu.iconSvg }/>

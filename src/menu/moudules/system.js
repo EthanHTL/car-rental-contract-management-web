@@ -10,6 +10,8 @@ export default {
         { path: '/system/manager/api',title: '接口管理',icon: '' },
         { path: '/system/manager/dict',title: '字典管理',icon: '' },
         { path: '/system/manager/vehicle',title: '车辆管理',icon: '' },
+        { path: '/system/manager/contract',title: '合同管理',icon: '' },
+        { path: '/system/manager/message',title: '预约信息',icon: '' },
         
     ]
 }

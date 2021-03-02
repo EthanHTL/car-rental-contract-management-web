@@ -16,10 +16,11 @@ export default {
         { path: 'employee', name: 'system-manager-employee', component: _import('system/manager/employee'), meta: { ...meta, title: '员工信息管理' } },
         { path: 'role', name: 'system-manager-role', component: _import('system/manager/role'), meta: { ...meta, title: '角色管理' } },
         { path: 'menu', name: 'system-manager-menu', component: _import('system/manager/sysmenu'), meta: { ...meta, title: '菜单管理' } },
-        { path: 'api', name: 'system-manager-menu', component: _import('system/manager/api'), meta: { ...meta, title: '接口管理' } },
+        { path: 'api', name: 'system-manager-api', component: _import('system/manager/api'), meta: { ...meta, title: '接口管理' } },
         { path: 'dict', name: 'system-manager-dict', component: _import('system/manager/dict'), meta: { ...meta, title: '字典管理' } },
         { path: 'vehicle', name: 'system-manager-vehicle', component: _import('system/manager/vehicle'), meta: { ...meta, title: '车辆管理' } },
-        { path: 'contract', name: 'system-manager-vehicle', component: _import('system/manager/contract'), meta: { ...meta, title: '合同管理' } },
+        { path: 'contract', name: 'system-manager-contract', component: _import('system/manager/contract'), meta: { ...meta, title: '合同管理' } },
+        { path: 'message', name: 'system-manager-message', component: _import('system/manager/message'), meta: { ...meta, title: '预约信息' } },
     ]
 }
 
