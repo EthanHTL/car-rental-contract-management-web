@@ -110,11 +110,11 @@ export default {
     },
     // 树点击
     _nodeClickFun(data, node, vm) {
-      console.log("this _nodeClickFun", this.values, data, node);
+      // console.log("this _nodeClickFun", this.values, data, node);
     },
     // 树过滤
     _searchFun(value) {
-      console.log(value, "<--_searchFun");
+      // console.log(value, "<--_searchFun");
       // 自行判断 是走后台查询，还是前端过滤
       this.$refs.treeSelect.filterFun(value);
       // 后台查询

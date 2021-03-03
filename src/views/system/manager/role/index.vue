@@ -101,6 +101,7 @@
               node-key="id"
               ref="menuTree"
               show-checkbox
+              :check-strictly = "true"
               default-expand-all
             >
             </el-tree>

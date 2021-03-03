@@ -610,7 +610,7 @@ export default {
             this.init();
           })
         } else {
-          console.log(this.typeData);
+          // console.log(this.typeData);
           this.typeUpdate(this.typeData).then(()=>{
             this.typeDialog = false;
             this.init();
@@ -650,18 +650,18 @@ export default {
       
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+      // console.log(file, fileList);
     },
     // 上传失败
     uploadError(err, file, fileList) {
-      console.log(file, fileList);
+      // console.log(file, fileList);
     },
     // 上传成功
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
       this.imageFlag = false;
       this.imageUploadPercent = 0;
-      console.log(res);
+      // console.log(res);
       this.vehicleData.picPath = res.data;
     },
     // 上传进度条

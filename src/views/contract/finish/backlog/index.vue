@@ -40,8 +40,14 @@
         </el-table-column>
         <el-table-column prop="contractNumbers" label="合同编号" width="100">
         </el-table-column>
+        <el-table-column
+          prop="contractUsername"
+          label="客户名"
+          width="130"
+        ></el-table-column>
         <el-table-column prop="payment" label="支付方式" width="100">
         </el-table-column>
+        
         <el-table-column
           label="创建时间"
           width="150"
@@ -117,7 +123,7 @@ export default {
       }
     },
     editDialogShow(index,row) {
-        console.log(row);
+        // console.log(row);
         this.auditTaks = row
       this.editDialog = true;
     },

@@ -470,12 +470,12 @@ export default {
       var contract = {
         contractName: this.contractData.contractName,
         contractNumbers: this.contractData.contractNumbers,
-        signUnit: this.contractData.customerID,
+        signUnit: this.contractData.companyID,
         vehicleId: this.contractData.vehicleId,
         payment: this.contractData.payment,
         principal: this.$store.state.d2admin.user.info.id,
-        contactUserId: this.contractData.customerID,
-        contactUsername: this.contractData.customerName,
+        contractUserId: this.contractData.customerID,
+        contractUsername: this.contractData.customerName,
         remark: this.contractData.remark,
         contractAmount: this.contractData.contractAmount,
         paidAmount: this.contractData.paidAmount,
@@ -486,14 +486,14 @@ export default {
       };
       console.log(contract);
       this.subLoad = true
-      this.createContract(contract).then((res) => {
-        this.$message({
-          message: '创建成功',
-          type: 'success'
-        });
-        this.subLoad = false
-        this.active = 0;
-      });
+      // this.createContract(contract).then((res) => {
+      //   this.$message({
+      //     message: '创建成功',
+      //     type: 'success'
+      //   });
+      //   this.subLoad = false
+      //   this.active = 0;
+      // });
     },
     getValueByObject(content) {
       var returnValue = "";

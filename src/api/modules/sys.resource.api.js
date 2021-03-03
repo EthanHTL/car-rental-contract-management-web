@@ -29,5 +29,13 @@ export default ({ service, request, serviceForMock, requestForMock, mock, faker,
             method: 'post',
             data
         })
+    },
+    // 合同模板保存
+    SYS_RESOURCE_TEMPLATE_DELETE(data = {}) {
+        return request({
+            url: '/api/v1/car/resource/contract/template/delete',
+            method: 'post',
+            data
+        })
     }
 })

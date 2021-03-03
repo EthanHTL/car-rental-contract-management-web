@@ -218,7 +218,7 @@ export default {
       });
     },
     comfirmHandle() {
-      console.log(this.menuForm.menuPid);
+      // console.log(this.menuForm.menuPid);
       if (this.menuForm.menuPid == null || this.menuForm.menuPid == "") {
         this.menuForm.menuPid = 0;
       }
@@ -255,7 +255,7 @@ export default {
     },
     // 树过滤
     _searchFun(value) {
-      console.log(value, "<--_searchFun");
+      // console.log(value, "<--_searchFun");
       // 自行判断 是走后台查询，还是前端过滤
       this.$refs.treeSelect.filterFun(value);
       // 后台查询

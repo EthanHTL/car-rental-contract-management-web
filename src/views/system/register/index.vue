@@ -126,7 +126,7 @@ export default {
           callback(new Error('请输入用户名'));
         } else {
           this.$store.dispatch("d2admin/register/checkUserName",{"username":value}).then(res =>{
-            console.log(res);
+            // console.log(res);
             if(!res){
                callback();
             }else{
@@ -250,7 +250,7 @@ export default {
       this.$refs.registerForm.validate((valid) => {
         if (valid) {
           this.register(this.formregister).then(res => {
-            console.log(res);
+            // console.log(res);
             if(res == 1){
               this.$message({
                   message: '注册成功',

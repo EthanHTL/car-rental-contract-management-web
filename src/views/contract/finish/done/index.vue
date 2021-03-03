@@ -65,12 +65,21 @@
           label="客户名"
           width="130"
         ></el-table-column>
-        <el-table-column label="状态" width="150" prop="state">
+        <el-table-column label="审核状态" width="150" prop="state">
+          <template slot-scope="scope">
+            <el-tag
+              :type="stateTagsType[scope.row.flow.state - 1]"
+              disable-transitions
+              >{{ stateTags[scope.row.flow.state - 1] }}</el-tag
+            >
+          </template>
+        </el-table-column>
+        <el-table-column label="合同状态" width="150" prop="state">
           <template slot-scope="scope">
             <el-tag
               :type="stateTagsType[scope.row.state - 1]"
               disable-transitions
-              >{{ stateTags[scope.row.state - 1] }}</el-tag
+              >{{ contractStateTags[scope.row.state - 1] }}</el-tag
             >
           </template>
         </el-table-column>
@@ -86,7 +95,7 @@
             <el-link
               icon="el-icon-view"
               type="info"
-              @click="editDialogShow2(scope.$index, scope.row)"
+              @click="editDialogShow2(scope.row)"
               style="margin-right: 10px"
               >详情
             </el-link>
@@ -115,6 +124,7 @@
       <img :src="imgSrc" alt="" height="500px" />
     </el-dialog>
     <el-dialog title="合同详情" :visible.sync="contractDialog" width="1000px">
+      <div v-html="renewContractForm.content"></div>
     </el-dialog>
   </d2-container>
 </template>
@@ -131,6 +141,7 @@ export default {
       showForm: false,
       loading: true,
       stateTags: ["待审核", "未通过", "通过"],
+      contractStateTags: ["未生效", "已过期", "已生效"],
       stateTagsType: ["primary", "danger", "success"],
       taskList: [],
       pagination: {
@@ -139,6 +150,10 @@ export default {
         pageSizes: [2, 5, 20, 50],
         pageSize: 5,
         total: 500,
+      },
+      renewContractForm: {
+        contractName: "",
+        content: "",
       },
       editDialog: false,
       auditTaks: {
@@ -184,8 +199,12 @@ export default {
         state: "",
       };
     },
+    editDialogShow2(row) {
+      this.renewContractForm = JSON.parse(JSON.stringify(row))
+      this.contractDialog = true;
+    },
     editDialogShow(index, row) {
-      console.log(row);
+      // console.log(row);
       this.imgSrc =
         row.state == "1"
           ? "http://localhost:9090/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId=" +

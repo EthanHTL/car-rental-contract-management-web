@@ -26,6 +26,10 @@ export default {
     async createTemplate({state, dispatch}, data) {
       const res =  await api.SYS_RESOURCE_TEMPLATE_CREATE(data)
       return res;
+    },
+    async deleteTemplate({state, dispatch}, data) {
+      const res =  await api.SYS_RESOURCE_TEMPLATE_DELETE(data)
+      return res;
     }
   }
 }

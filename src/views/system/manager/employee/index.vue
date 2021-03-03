@@ -140,7 +140,7 @@ export default {
       this.init();
     },
     changeSwitch(scope) {
-      console.log(scope);
+      // console.log(scope);
     },
     formatterTime(row, column) {
       if (row[column.property] == null) return null;

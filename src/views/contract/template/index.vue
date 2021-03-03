@@ -100,6 +100,7 @@ export default {
     ...mapActions('d2admin/resource', [
       'findContractPage',
       'saveContractTemplate',
+      'deleteTemplate'
     ]),
     init() {
       this.loading = true;
@@ -129,8 +130,14 @@ export default {
     },
     deleteConract(val){
       // 删除报表模板
-      console.log(val);
-      
+      // console.log(val);
+      this.deleteTemplate({id:val.id}).then(res =>{
+         this.$message({
+          message: "操作成功",
+          type: "success",
+        });
+        this.init();
+      })
     },
     save(){
       this.saveContractTemplate(this.contractText).then(res =>{

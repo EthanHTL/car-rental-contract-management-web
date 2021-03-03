@@ -204,9 +204,9 @@ export default {
       });
     },
     comfirmHandle() {
-      console.log(this.templateForm);
+      // console.log(this.templateForm);
       this.createTemplate(this.templateForm).then((res) => {
-        console.log(res);
+        // console.log(res);
         this.templateFormVisible = false;
       });
     },

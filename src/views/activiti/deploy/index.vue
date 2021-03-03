@@ -57,13 +57,13 @@ export default {
       return dayjs(row[column.property]).format("YYYY-MM-DD");
     },
     handleDelete(row){
-        console.log(row);
-        // this.deleteDeploy(row).then(() =>{
-        //     this.$message({
-        //       message: '操作成功',
-        //       type: 'success'
-        //     });
-        // })
+        // console.log(row);
+        this.deleteDeploy(row).then(() =>{
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            });
+        })
     }
   },
 };

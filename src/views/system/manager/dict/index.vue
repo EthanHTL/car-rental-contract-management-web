@@ -331,7 +331,7 @@ export default {
      * 查看字典配置项
      */
     showDetail(row) {
-      console.log(row);
+      // console.log(row);
       this.detailForm.dictCode = row.code;
       this.showDictDetail(row).then((res) => {
         this.detailData = res;
