@@ -429,7 +429,7 @@ export default {
       imageUrl: "",
       imageFlag: false,
       imageUploadPercent: 0,
-      actionUrl: "http://localhost:9090/api/v1/car/vehicle/upload",
+      actionUrl: "api/api/v1/car/vehicle/upload",
       // actionUrl: 'https://jsonplaceholder.typicode.com/posts/',
       typeData: {
         isInsert: false,
@@ -547,6 +547,7 @@ export default {
       this.imageUrl = "";
       this.vehicleData.isInsert = true
       this.vehicleData.vehicleNumber = ""
+      this.vehicleData.id = ""
       this.vehicleData.vehicleName = ""
       this.vehicleData.picPath = ""
     

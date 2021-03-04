@@ -2,7 +2,7 @@
   <d2-container>
     <template slot="header"> 员工管理 </template>
 
-    <el-table :data="employees" style="width: 100%">
+    <el-table :data="employees" style="width: 70%; margin:0 auto">
       <el-table-column label="姓名" width="180">
         <template slot-scope="scope">
           <el-popover trigger="hover" placement="top">
@@ -40,9 +40,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-link type="info" @click="handleEdit(scope.row)"
-            >分配角色</el-link
-          >
+          <el-link type="info" @click="handleEdit(scope.row)">分配角色</el-link>
           <el-popconfirm
             title="这是一段内容确定删除吗？"
             @confirm="handleDelete(scope.row)"
@@ -53,30 +51,25 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pagination.pageNum"
-      :page-sizes="pagination.pageSizes"
-      :page-size="pagination.pageSize"
-      :total="pagination.total"
-      layout="total, sizes, prev, pager, next, jumper"
-    >
-    </el-pagination>
+    <div class="pagination">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pagination.pageNum"
+        :page-sizes="pagination.pageSizes"
+        :page-size="pagination.pageSize"
+        :total="pagination.total"
+        layout="total, sizes, prev, pager, next, jumper"
+      >
+      </el-pagination>
+    </div>
 
     <!-- 新增员工 -->
-    <el-dialog title="分配角色" width="400px" :visible.sync="userFormVisible"
-      >
-      <el-checkbox-group
-        v-model="checkRoleList"
-        class="role-list"
-      >
-        <el-checkbox
-          v-for="item in roleList"
-          :label="item.id"
-          :key="item.id"
-          >{{item.roleZH}}</el-checkbox
-        >
+    <el-dialog title="分配角色" width="400px" :visible.sync="userFormVisible">
+      <el-checkbox-group v-model="checkRoleList" class="role-list">
+        <el-checkbox v-for="item in roleList" :label="item.id" :key="item.id">{{
+          item.roleZH
+        }}</el-checkbox>
       </el-checkbox-group>
 
       <div slot="footer" class="dialog-footer">
@@ -92,7 +85,7 @@ import { mapActions } from "vuex";
 import dayjs from "dayjs";
 
 export default {
-  name: "sysuser", 
+  name: "sysuser",
   data() {
     return {
       employees: [],
@@ -107,11 +100,10 @@ export default {
         pageNum: "1",
         pageSize: "2",
       },
-       checkRoleList: [],
+      checkRoleList: [],
       roleList: [],
       rowUser: {},
       userFormVisible: false,
-
     };
   },
   created() {
@@ -120,7 +112,7 @@ export default {
   methods: {
     ...mapActions("d2admin/employee", ["findUserPage"]),
     ...mapActions("d2admin/dict", ["showDictDetail"]),
-    ...mapActions("d2admin/role", ["assignRole", "getUserRoles","showRole"]),
+    ...mapActions("d2admin/role", ["assignRole", "getUserRoles", "showRole"]),
     init() {
       this.findUserPage(this.pageForm).then((res) => {
         this.employees = res.list;
@@ -147,40 +139,44 @@ export default {
       if (row[column.property] == null) return null;
       return dayjs(row[column.property]).format("YYYY-MM-DD");
     },
-    insertEmployeeFormVisible(){
-      this.employeeFormVisible = false
+    insertEmployeeFormVisible() {
+      this.employeeFormVisible = false;
     },
     handleEdit(row) {
-      this.checkRoleList = []
-      this.rowUser = row
+      this.checkRoleList = [];
+      this.rowUser = row;
       this.getUserRoles(row).then((res) => {
-        var i=0;
-        for(i;i<res.length;i++){
-          this.checkRoleList.push(res[i].id)
+        var i = 0;
+        for (i; i < res.length; i++) {
+          this.checkRoleList.push(res[i].id);
         }
-        this.userFormVisible = true
+        this.userFormVisible = true;
       });
     },
-    handleDelete(){
-
-    },
+    handleDelete() {},
     insertUserRoleBtn() {
-      var data = this.rowUser
-      var roleList = []
-      var i=0;
-        for(i;i<this.checkRoleList.length;i++){
-          roleList.push({id:this.checkRoleList[i]})
-        }
-      data.roleList = roleList
-      this.assignRole(data).then(res =>{
+      var data = this.rowUser;
+      var roleList = [];
+      var i = 0;
+      for (i; i < this.checkRoleList.length; i++) {
+        roleList.push({ id: this.checkRoleList[i] });
+      }
+      data.roleList = roleList;
+      this.assignRole(data).then((res) => {
         this.$message({
-              message: '操作成功',
-              type: 'success'
-            });
-        this.userFormVisible = false
-      })
-      
+          message: "操作成功",
+          type: "success",
+        });
+        this.userFormVisible = false;
+      });
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.pagination {
+  width: 50%;
+  margin: 0 auto;
+}
+</style>

@@ -125,7 +125,7 @@
     </el-dialog>
 
     <!-- 字典table -->
-    <el-table :data="dictData" class="dict-table"  v-loading="loading">
+    <el-table :data="dictData" class="dict-table" v-loading="loading">
       <el-table-column type="index" width="50"> </el-table-column>
       <el-table-column
         prop="name"
@@ -163,16 +163,18 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pagination.pageNum"
-      :page-sizes="pagination.pageSizes"
-      :page-size="pagination.pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="pagination.total"
-    >
-    </el-pagination>
+    <div class="pagination">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pagination.pageNum"
+        :page-sizes="pagination.pageSizes"
+        :page-size="pagination.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="pagination.total"
+      >
+      </el-pagination>
+    </div>
   </d2-container>
 </template>
 
@@ -260,7 +262,7 @@ export default {
       this.dictDialog = true;
     },
     updateDictDialog(row) {
-      this.dictForm = JSON.parse(JSON.stringify(row))
+      this.dictForm = JSON.parse(JSON.stringify(row));
       this.dictTitle = "修改字典";
       this.dictInsert = false;
       this.dictDialog = true;
@@ -343,7 +345,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.tool-btn{
+.tool-btn {
   width: 80%;
   padding: 5px;
   margin: 0 auto;
@@ -351,10 +353,10 @@ export default {
     float: right;
     margin: 10px 5% auto auto;
   }
-  .clear{
+  .clear {
     clear: both;
   }
-  .screen{
+  .screen {
     // float: right;
     margin: 10px 3%;
   }
@@ -366,6 +368,10 @@ export default {
 }
 .dict-table {
   width: 80%;
+  margin: 0 auto;
+}
+.pagination {
+  width: 50%;
   margin: 0 auto;
 }
 </style>

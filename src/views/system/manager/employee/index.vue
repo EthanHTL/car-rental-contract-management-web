@@ -74,16 +74,19 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pagination.pageNum"
-      :page-sizes="pagination.pageSizes"
-      :page-size="pagination.pageSize"
-      :total="pagination.total"
-      layout="total, sizes, prev, pager, next, jumper"
-    >
-    </el-pagination>
+    <div class="pagination">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pagination.pageNum"
+        :page-sizes="pagination.pageSizes"
+        :page-size="pagination.pageSize"
+        :total="pagination.total"
+        layout="total, sizes, prev, pager, next, jumper"
+      >
+      </el-pagination>
+    </div>
+    
   </d2-container>
 </template>
 
@@ -187,6 +190,7 @@ export default {
   width: 70%;
   margin: 20px auto;
 }
+
 .role-list{
   display: inline-flex;
   flex-direction: column;
@@ -194,5 +198,8 @@ export default {
     margin-bottom: 10px;
   }
 }
-
+.pagination{
+  width: 50%;
+  margin: 0 auto;
+}
 </style>

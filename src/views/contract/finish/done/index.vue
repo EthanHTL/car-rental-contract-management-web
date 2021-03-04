@@ -108,16 +108,18 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="pagination.pageNum"
-        :page-sizes="pagination.pageSizes"
-        :page-size="pagination.pageSize"
-        :total="pagination.total"
-        layout="total,sizes, prev, pager, next,  jumper "
-      >
-      </el-pagination>
+      <div class="pagination">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pagination.pageNum"
+          :page-sizes="pagination.pageSizes"
+          :page-size="pagination.pageSize"
+          :total="pagination.total"
+          layout="total,sizes, prev, pager, next,  jumper "
+        >
+        </el-pagination>
+      </div>
     </div>
 
     <el-dialog title="流程进度" :visible.sync="processDialog" width="1300px">
@@ -200,7 +202,7 @@ export default {
       };
     },
     editDialogShow2(row) {
-      this.renewContractForm = JSON.parse(JSON.stringify(row))
+      this.renewContractForm = JSON.parse(JSON.stringify(row));
       this.contractDialog = true;
     },
     editDialogShow(index, row) {
@@ -250,5 +252,9 @@ export default {
 .container-list {
   max-width: 90%;
   margin: 0 auto;
+  .pagination {
+    width: 50%;
+    margin: 0 auto;
+  }
 }
 </style>

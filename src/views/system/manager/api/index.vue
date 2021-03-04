@@ -49,12 +49,18 @@
         <el-button type="success" plain @click="init" size="small"
           >搜索</el-button
         >
-        <el-button type="info" plain @click="resetApiForm('pageForm')" size="small">重置</el-button>
+        <el-button
+          type="info"
+          plain
+          @click="resetApiForm('pageForm')"
+          size="small"
+          >重置</el-button
+        >
       </el-form-item>
     </el-form>
 
     <el-dialog :title="dialogTitle" :visible.sync="apiDialog">
-      <el-form :model="apiForm" >
+      <el-form :model="apiForm">
         <el-tree-select
           popoverClass="test-class-wrap"
           v-model="apiForm.apiPid"
@@ -82,7 +88,8 @@
     <el-table :data="apiList" class="api-table" border>
       <el-table-column prop="apiName" label="名字" width="130">
       </el-table-column>
-      <el-table-column prop="url" label="地址"  show-overflow-tooltip resizable> </el-table-column>
+      <el-table-column prop="url" label="地址" show-overflow-tooltip resizable>
+      </el-table-column>
 
       <el-table-column
         label="创建时间"
@@ -109,17 +116,18 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pagination.pageNum"
-      :page-sizes="pagination.pageSizes"
-      :page-size="pagination.pageSize"
-      :total="pagination.total"
-      layout="total,sizes, prev, pager, next,  jumper "
-    >
-    </el-pagination>
+    <div class="pagination">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pagination.pageNum"
+        :page-sizes="pagination.pageSizes"
+        :page-size="pagination.pageSize"
+        :total="pagination.total"
+        layout="total,sizes, prev, pager, next,  jumper "
+      >
+      </el-pagination>
+    </div>
   </d2-container>
 </template>
 
@@ -186,9 +194,8 @@ export default {
           disabled: "disabled",
           parentId: "apiPid",
           value: "id",
-        }
+        },
       },
-
     };
   },
   mounted() {
@@ -217,7 +224,7 @@ export default {
     apiTree() {
       // 树
       this.showApisTree().then((res) => {
-        this.treeParams.data = res
+        this.treeParams.data = res;
         // this.values = res;
       });
     },
@@ -253,7 +260,7 @@ export default {
     },
     resetApiForm(formName) {
       // console.log(formName);
-       this.$refs[formName].resetFields();
+      this.$refs[formName].resetFields();
     },
     submitForm() {
       // console.log(this.isInsertApi);
@@ -262,12 +269,12 @@ export default {
           this.apiDialog = false;
         });
       } else {
-        this.updateApi(this.apiForm).then(res => {
+        this.updateApi(this.apiForm).then((res) => {
           this.apiDialog = false;
         });
       }
     },
-     _filterFun(value, data, node) {
+    _filterFun(value, data, node) {
       if (!value) return true;
       return data.apiName.indexOf(value) !== -1;
     },
@@ -300,7 +307,7 @@ export default {
 </script>
 
 <style lang="scss">
-.tool-btn{
+.tool-btn {
   width: 75%;
   padding: 5px;
   margin: 0 auto;
@@ -308,10 +315,10 @@ export default {
     float: right;
     margin: 10px 5% auto auto;
   }
-  .clear{
+  .clear {
     clear: both;
   }
-  .screen{
+  .screen {
     // float: right;
     margin: 10px 3%;
   }
@@ -324,5 +331,9 @@ export default {
 .api-table {
   width: 80%;
   margin: 10px auto 0 auto;
+}
+.pagination {
+  width: 50%;
+  margin: 0 auto;
 }
 </style>

@@ -27,7 +27,12 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="状态:">
-        <el-select v-model="searchForm.state" placeholder="请选择" clearable size="small">
+        <el-select
+          v-model="searchForm.state"
+          placeholder="请选择"
+          clearable
+          size="small"
+        >
           <el-option key="1" label="待审核" value="1"> </el-option>
           <el-option key="2" label="通过" value="2"> </el-option>
           <el-option key="3" label="不通过" value="3"> </el-option>
@@ -116,16 +121,18 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="pagination.currentPage"
-        :page-sizes="pagination.pageSizes"
-        :page-size="pagination.pageSize"
-        :total="pagination.total"
-        layout="total,sizes, prev, pager, next,  jumper "
-      >
-      </el-pagination>
+      <div class="pagination">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pagination.currentPage"
+          :page-sizes="pagination.pageSizes"
+          :page-size="pagination.pageSize"
+          :total="pagination.total"
+          layout="total,sizes, prev, pager, next,  jumper "
+        >
+        </el-pagination>
+      </div>
     </div>
 
     <el-dialog title="流程进度" :visible.sync="processDialog" width="1300px">
@@ -142,12 +149,11 @@
       <el-form :inline="true" class="demo-form-inline tool-form">
         <el-form-item label="合同名称:">
           <el-input
-                v-model="renewContractForm.contractName"
-                placeholder="请输入合同名称"
-                clearable
-                :style="{ width: '100%' }"
-              ></el-input>
-          </el-form-item
+            v-model="renewContractForm.contractName"
+            placeholder="请输入合同名称"
+            clearable
+            :style="{ width: '100%' }"
+          ></el-input> </el-form-item
         ><el-form-item label="合同日期:">
           <el-date-picker
             v-model="value1"
@@ -247,7 +253,7 @@ export default {
     },
     editDialogShow2(row) {
       console.log(row);
-      this.renewContractForm = JSON.parse(JSON.stringify(row))
+      this.renewContractForm = JSON.parse(JSON.stringify(row));
       this.contractDialog = true;
     },
     comfirmHandle() {
@@ -277,16 +283,16 @@ export default {
           type: "success",
         });
         this.contractRenewDialog = false;
-        this.init()
+        this.init();
       });
     },
     renewDialogShow(row) {
-      this.value1 = []
+      this.value1 = [];
       // console.log(row);
       this.value1.push(row.startTime);
       this.value1.push(row.endTime);
       // console.log(this.value1);
-      this.renewContractForm = JSON.parse(JSON.stringify(row))
+      this.renewContractForm = JSON.parse(JSON.stringify(row));
       this.contractRenewDialog = true;
     },
     reset() {
@@ -323,7 +329,10 @@ export default {
     margin: 10px 3%;
   }
 }
-
+.pagination {
+  width: 50%;
+  margin: 0 auto;
+}
 .tool-form {
   max-width: 90%;
   margin: 10px auto 10px 6%;

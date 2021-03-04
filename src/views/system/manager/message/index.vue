@@ -11,16 +11,9 @@
           width="80"
         >
         </el-table-column>
-        <el-table-column
-          prop="vehicleNumber"
-          label="车辆编号"
-        ></el-table-column><el-table-column
-          prop="email"
-          label="邮箱"
-        ></el-table-column><el-table-column
-          prop="phone"
-          label="电话"
-        ></el-table-column>
+        <el-table-column prop="vehicleNumber" label="车辆编号"></el-table-column
+        ><el-table-column prop="email" label="邮箱"></el-table-column
+        ><el-table-column prop="phone" label="电话"></el-table-column>
         <el-table-column
           label="预约时间"
           width="150"
@@ -28,30 +21,27 @@
           :formatter="formatterTime"
         >
         </el-table-column>
-        <el-table-column
-          prop="message"
-          label="信息"
-        ></el-table-column>
+        <el-table-column prop="message" label="信息"></el-table-column>
         <el-table-column
           label="创建时间"
           width="150"
           prop="createTime"
           :formatter="formatterTime"
         >
-        </el-table-column
-        >
-        
+        </el-table-column>
       </el-table>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="pagination.currentPage"
-        :page-sizes="pagination.pageSizes"
-        :page-size="pagination.pageSize"
-        :total="pagination.total"
-        layout="total,sizes, prev, pager, next,  jumper "
-      >
-      </el-pagination>
+      <div class="pagination">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pagination.currentPage"
+          :page-sizes="pagination.pageSizes"
+          :page-size="pagination.pageSize"
+          :total="pagination.total"
+          layout="total,sizes, prev, pager, next,  jumper "
+        >
+        </el-pagination>
+      </div>
     </div>
 
     <el-dialog title="流程进度" :visible.sync="processDialog" width="1300px">
@@ -180,6 +170,10 @@ export default {
 
 .container-list {
   max-width: 90%;
+  margin: 0 auto;
+}
+.pagination {
+  width: 50%;
   margin: 0 auto;
 }
 </style>

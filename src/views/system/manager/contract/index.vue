@@ -27,7 +27,12 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="状态:">
-        <el-select v-model="searchForm.state" placeholder="请选择" clearable size="small">
+        <el-select
+          v-model="searchForm.state"
+          placeholder="请选择"
+          clearable
+          size="small"
+        >
           <el-option key="1" label="待审核" value="1"> </el-option>
           <el-option key="2" label="通过" value="2"> </el-option>
           <el-option key="3" label="不通过" value="3"> </el-option>
@@ -65,12 +70,23 @@
           label="客户名"
           width="130"
         ></el-table-column>
-        <el-table-column label="状态" width="150" prop="state">
+        <el-table-column label="审核状态" width="150" prop="state">
           <template slot-scope="scope">
             <el-tag
+              v-if="scope.row.flow!=null"
+              :type="stateTagsType[scope.row.flow.state - 1]"
+              disable-transitions
+              >{{ stateTags[scope.row.flow.state - 1] }}</el-tag
+            >
+          </template>
+        </el-table-column>
+        <el-table-column label="合同状态" width="150" prop="state">
+          <template slot-scope="scope">
+            <el-tag
+                v-if="scope.row.state!=null"
               :type="stateTagsType[scope.row.state - 1]"
               disable-transitions
-              >{{ stateTags[scope.row.state - 1] }}</el-tag
+              >{{ contractStateTags[scope.row.state - 1] }}</el-tag
             >
           </template>
         </el-table-column>
@@ -93,23 +109,25 @@
 
             <el-link
               icon="el-icon-finished"
-              @click="editDialogShow(scope.$index, scope.row)"
+              @click="editDialogShow(scope.row)"
               type="success"
               >进度
             </el-link>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="pagination.currentPage"
-        :page-sizes="pagination.pageSizes"
-        :page-size="pagination.pageSize"
-        :total="pagination.total"
-        layout="total,sizes, prev, pager, next,  jumper "
-      >
-      </el-pagination>
+      <div class="pagination">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pagination.currentPage"
+          :page-sizes="pagination.pageSizes"
+          :page-size="pagination.pageSize"
+          :total="pagination.total"
+          layout="total,sizes, prev, pager, next,  jumper "
+        >
+        </el-pagination>
+      </div>
     </div>
 
     <el-dialog title="流程进度" :visible.sync="processDialog" width="1300px">
@@ -133,6 +151,7 @@ export default {
       showForm: false,
       loading: true,
       stateTags: ["待审核", "未通过", "通过"],
+      contractStateTags: ["未生效", "已过期", "已生效"],
       stateTagsType: ["primary", "danger", "success"],
       taskList: [],
       pagination: {
@@ -186,18 +205,18 @@ export default {
       this.btnIcon = this.showForm ? "el-icon-arrow-down" : "el-icon-arrow-up";
       this.showForm = !this.showForm;
     },
-    editDialogShow(index, row) {
+    editDialogShow(row) {
       this.imgSrc = "";
       this.imgSrc =
-        row.state == "1"
-          ? "http://localhost:9090/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId=" +
-            row.taskInfo.processInstanceId +
+        row.flow.state == "1"
+          ? "/api/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId=" +
+            row.flow.processInstanceId +
             "&f=true"
-          : "http://localhost:9090/bpmn/contract.png";
+          : "/api/bpmn/contract.png";
       this.processDialog = true;
     },
     editDialogShow2(row) {
-      this.renewContractForm = JSON.parse(JSON.stringify(row))
+      this.renewContractForm = JSON.parse(JSON.stringify(row));
       this.contractDialog = true;
     },
     reset() {
@@ -242,6 +261,10 @@ export default {
 
 .container-list {
   max-width: 90%;
+  margin: 0 auto;
+}
+.pagination {
+  width: 50%;
   margin: 0 auto;
 }
 </style>

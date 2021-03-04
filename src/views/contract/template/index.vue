@@ -1,6 +1,6 @@
 <template>
   <d2-container>
-    <div class="searchBar" style="margin-top: 15px;">
+    <div class="searchBar" style="margin-top: 15px">
       <el-input placeholder="请输入内容" v-model="sreachText">
         <el-button slot="append" icon="el-icon-search"></el-button>
       </el-input>
@@ -19,7 +19,7 @@
     </el-dialog> -->
     <!-- 修改模板 -->
     <el-dialog title="修改模板" :visible.sync="contractUpdateDialog">
-      <d2-ueditor v-model="contractText.content"/>
+      <d2-ueditor v-model="contractText.content" />
       <div slot="footer" class="dialog-footer">
         <el-button @click="contractUpdateDialog = false">取 消</el-button>
         <el-button type="primary" @click="save">确 定</el-button>
@@ -29,43 +29,47 @@
     <el-row>
       <el-col :span="5" v-for="(o, index) in data" :key="o.id" :offset="1">
         <el-card :body-style="{ padding: '0px' }">
-          <img :src="url" class="image">
-          <div style="padding: 14px;">
-            <span>{{o.oldFilename}}</span>
+          <img :src="url" class="image" />
+          <div style="padding: 14px">
+            <span>{{ o.oldFilename }}</span>
             <div class="bottom clearfix">
               <el-popconfirm
-                confirm-button-text='好的'
-                cancel-button-text='不用了'
+                confirm-button-text="好的"
+                cancel-button-text="不用了"
                 icon="el-icon-info"
                 icon-color="red"
                 title="这是一段内容确定删除吗？"
                 @confirm="deleteConract(o)"
               >
-                <el-button type="text" class="button" slot="reference"  >删除</el-button>
+                <el-button type="text" class="button" slot="reference"
+                  >删除</el-button
+                >
               </el-popconfirm>
-              <el-button type="text" class="button" @click="updateConract(o)">编辑</el-button>
+              <el-button type="text" class="button" @click="updateConract(o)"
+                >编辑</el-button
+              >
             </div>
           </div>
         </el-card>
       </el-col>
     </el-row>
-
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pagination.currentPage"
-      :page-sizes="pagination.pageSizes"
-      :page-size="pagination.pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="pagination.total"
-    >
-    </el-pagination>
-
+    <div class="pagination">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pagination.currentPage"
+        :page-sizes="pagination.pageSizes"
+        :page-size="pagination.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="pagination.total"
+      >
+      </el-pagination>
+    </div>
   </d2-container>
 </template>
 
 <script>
-import log from '@/libs/util.log';
+import log from "@/libs/util.log";
 
 import { mapActions } from "vuex";
 
@@ -73,7 +77,7 @@ export default {
   name: "contract-tempalte",
   data() {
     return {
-      url:"http://localhost:9090/bpmn/contract.png",
+      url: "http://localhost:9090/bpmn/contract.png",
       data: [],
       pagination: {
         currentPage: 1,
@@ -85,22 +89,21 @@ export default {
       pageForm: {
         pageNum: 1,
         pageSize: 5,
-        types:[7]
+        types: [7],
       },
-      sreachText:"",
+      sreachText: "",
       contractUpdateDialog: false,
-      contractText:""
+      contractText: "",
     };
   },
   created() {
-    this.init()
-
+    this.init();
   },
   methods: {
-    ...mapActions('d2admin/resource', [
-      'findContractPage',
-      'saveContractTemplate',
-      'deleteTemplate'
+    ...mapActions("d2admin/resource", [
+      "findContractPage",
+      "saveContractTemplate",
+      "deleteTemplate",
     ]),
     init() {
       this.loading = true;
@@ -120,30 +123,30 @@ export default {
     },
     handleCurrentChange(val) {
       //
-        // console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       this.pageForm.pageNum = val;
       this.init();
     },
-    updateConract(val){
+    updateConract(val) {
       this.contractText = val;
-      this.contractUpdateDialog = true
+      this.contractUpdateDialog = true;
     },
-    deleteConract(val){
+    deleteConract(val) {
       // 删除报表模板
       // console.log(val);
-      this.deleteTemplate({id:val.id}).then(res =>{
-         this.$message({
+      this.deleteTemplate({ id: val.id }).then((res) => {
+        this.$message({
           message: "操作成功",
           type: "success",
         });
         this.init();
-      })
+      });
     },
-    save(){
-      this.saveContractTemplate(this.contractText).then(res =>{
-       this.contractUpdateDialog = false
-      })
-    }
+    save() {
+      this.saveContractTemplate(this.contractText).then((res) => {
+        this.contractUpdateDialog = false;
+      });
+    },
   },
 };
 </script>
@@ -160,6 +163,10 @@ export default {
 
 .el-card {
   margin-top: 10px;
+}
+.pagination {
+  width: 50%;
+  margin: 0 auto;
 }
 
 .image {
@@ -182,7 +189,6 @@ export default {
   float: right;
 }
 
-
 .clearfix:before,
 .clearfix:after {
   display: table;
@@ -190,7 +196,7 @@ export default {
 }
 
 .clearfix:after {
-  clear: both
+  clear: both;
 }
 
 .searchBar {
@@ -198,10 +204,8 @@ export default {
   background-color: #fff;
   margin: 20px auto 20px auto;
 }
-.el-pagination{
+.el-pagination {
   max-width: 700px;
   margin: 30px auto;
 }
-
-
 </style>
