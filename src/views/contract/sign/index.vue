@@ -20,7 +20,8 @@
       <el-row>
         <el-col :span="5" v-for="o in contractList" :key="o.id" :offset="1">
           <el-card :body-style="{ padding: '0px' }">
-            <img :src="url" class="image" />
+            <img style="width:100%;height:150px" v-if="o.path!=''&&o.path!=null" :src="'http://127.0.0.1:9090'+o.path" class="image" />
+            <img style="width:100%;height:150px" v-else :src="url" class="image" />
             <div style="padding: 14px">
               <span>{{ o.oldFilename }}</span>
               <div class="bottom clearfix">
@@ -32,17 +33,18 @@
           </el-card>
         </el-col>
       </el-row>
-
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="pagination.pageNum"
-        :page-sizes="pagination.pageSizes"
-        :page-size="pagination.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="pagination.total"
-      >
-      </el-pagination>
+      <div class="pagination">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pagination.pageNum"
+          :page-sizes="pagination.pageSizes"
+          :page-size="pagination.pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="pagination.total"
+        >
+        </el-pagination>
+      </div>
     </div>
     <div class="contract-form" v-if="active == 1">
       <el-row :gutter="5">
@@ -246,7 +248,9 @@
     </div>
     <div v-if="active == 2">
       <d2-ueditor v-model="contractData.content" />
-      <el-button type="primary" @click="submitContract" :loading="subLoad">提交</el-button>
+      <el-button type="primary" @click="submitContract" :loading="subLoad"
+        >提交</el-button
+      >
       <el-button style="margin-top: 12px" @click="pre">上一步</el-button>
     </div>
   </d2-container>
@@ -262,12 +266,12 @@ export default {
       if (!value) {
         return callback(new Error("车辆不能为空"));
       }
-        this.checkVehicleByNum({ vehicleNumber: value }).then((res) => {
-          if (res == null || res == '') {
-            return callback(new Error("车辆不存在"));
-          }
-          callback();
-        });
+      this.checkVehicleByNum({ vehicleNumber: value }).then((res) => {
+        if (res == null || res == "") {
+          return callback(new Error("车辆不存在"));
+        }
+        callback();
+      });
     };
 
     return {
@@ -275,7 +279,7 @@ export default {
       subLoad: false,
       contractList: [],
       searchText: "",
-      url: "http://localhost:9090/bpmn/contract.png",
+      url: "http://127.0.0.1:9090/bpmn/contract.png",
       pagination: {
         pageNum: 1,
         pageCount: 6,
@@ -485,7 +489,7 @@ export default {
         content: this.contractData.content,
       };
       console.log(contract);
-      this.subLoad = true
+      this.subLoad = true;
       // this.createContract(contract).then((res) => {
       //   this.$message({
       //     message: '创建成功',
@@ -541,7 +545,7 @@ export default {
         if (!valid) return;
         this.contractData.content = this.getValueByObject(
           this.contractText.content
-        )
+        );
         this.active++;
         console.log(this.active);
       });
@@ -561,6 +565,10 @@ export default {
 };
 </script>
 <style lang="scss" scope>
+.pagination {
+  width: 50%;
+  margin: 15px auto 0 auto;
+}
 .activeLi {
   width: 60%;
   margin: 10px auto 20px auto;

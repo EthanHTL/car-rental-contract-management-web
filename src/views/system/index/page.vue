@@ -1,5 +1,5 @@
 <template>
-  <d2-container-frame src="http://localhost:9090/index"/>
+  <d2-container-frame src="http://127.0.0.1:9090/index"/>
 </template>
 
 <script>

@@ -265,6 +265,6 @@ export default {
 }
 .pagination {
   width: 50%;
-  margin: 0 auto;
+  margin: 15px auto 0 auto;
 }
 </style>

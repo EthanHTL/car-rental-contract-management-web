@@ -209,10 +209,10 @@ export default {
       // console.log(row);
       this.imgSrc =
         row.state == "1"
-          ? "http://localhost:9090/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId=" +
+          ? "http://127.0.0.1:9090/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId=" +
             row.taskInfo.processInstanceId +
             "&f=true"
-          : "http://localhost:9090/bpmn/contract.png";
+          : "http://127.0.0.1:9090/bpmn/contract.png";
       this.processDialog = true;
     },
     handleSizeChange(val) {
@@ -254,7 +254,7 @@ export default {
   margin: 0 auto;
   .pagination {
     width: 50%;
-    margin: 0 auto;
+  margin: 15px auto 0 auto;
   }
 }
 </style>

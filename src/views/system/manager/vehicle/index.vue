@@ -85,21 +85,25 @@
             <el-popconfirm
               title="这是一段内容确定删除吗？"
               @confirm="deleteType(scope.row)"
-              ><el-link icon="el-icon-delete" type="danger" slot="reference">删除 </el-link>
+              ><el-link icon="el-icon-delete" type="danger" slot="reference"
+                >删除
+              </el-link>
             </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="pagination.pageNum"
-        :page-sizes="pagination.pageSizes"
-        :page-size="pagination.pageSize"
-        :total="pagination.total"
-        layout="total,sizes, prev, pager, next,  jumper "
-      >
-      </el-pagination>
+      <div class="pagination">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pagination.pageNum"
+          :page-sizes="pagination.pageSizes"
+          :page-size="pagination.pageSize"
+          :total="pagination.total"
+          layout="total,sizes, prev, pager, next,  jumper "
+        >
+        </el-pagination>
+      </div>
     </div>
 
     <el-drawer
@@ -152,7 +156,7 @@
         <el-form-item label=""
           ><el-checkbox
             size="medium"
-            v-model="searchVechileForm.isAccident "
+            v-model="searchVechileForm.isAccident"
             true-label="1"
             false-label="0"
             >事故</el-checkbox
@@ -191,7 +195,7 @@
         ></el-table-column>
         <el-table-column property="date" label="图片" width="150">
           <template slot-scope="scope">
-            <img :src="'http://localhost:9090' + scope.row.picPath"
+            <img :src="'http://127.0.0.1:9090' + scope.row.picPath"
           /></template>
         </el-table-column>
         <el-table-column label="事故" width="150">
@@ -217,24 +221,28 @@
               style="margin-right: 10px"
               >编辑
             </el-link>
-             <el-popconfirm
+            <el-popconfirm
               title="这是一段内容确定删除吗？"
               @confirm="deleteVehicle(scope.row)"
-              ><el-link icon="el-icon-delete" type="danger" slot="reference">删除 </el-link>
+              ><el-link icon="el-icon-delete" type="danger" slot="reference"
+                >删除
+              </el-link>
             </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        @size-change="handleSizeChange2"
-        @current-change="handleCurrentChange2"
-        :current-page="pagination2.pageNum"
-        :page-sizes="pagination2.pageSizes"
-        :page-size="pagination2.pageSize"
-        :total="pagination2.total"
-        layout="total,sizes, prev, pager, next,  jumper "
-      >
-      </el-pagination>
+      <div class="pagination">
+        <el-pagination
+          @size-change="handleSizeChange2"
+          @current-change="handleCurrentChange2"
+          :current-page="pagination2.pageNum"
+          :page-sizes="pagination2.pageSizes"
+          :page-size="pagination2.pageSize"
+          :total="pagination2.total"
+          layout="total,sizes, prev, pager, next,  jumper "
+        >
+        </el-pagination>
+      </div>
     </el-drawer>
 
     <el-dialog :title="typeTitle" :visible.sync="typeDialog" width="550px">
@@ -475,8 +483,7 @@ export default {
             message: "请输入名字",
             trigger: "blur",
           },
-        ]
-        
+        ],
       },
     };
   },
@@ -528,38 +535,38 @@ export default {
     // 新增类型
     createType() {
       this.typeTitle = "新增类型";
-      this.typeData.isInsert = true
-      this.typeData.imageUrl = ""
-      this.typeData.vehicleTypeName = ""
-      this.typeData.remark = ""
-      
+      this.typeData.isInsert = true;
+      this.typeData.imageUrl = "";
+      this.typeData.vehicleTypeName = "";
+      this.typeData.remark = "";
+
       this.typeDialog = true;
     },
     // 修改类型
     editDialogShow2(row) {
       this.typeTitle = "修改类型";
-      this.typeData = JSON.parse(JSON.stringify(row))
+      this.typeData = JSON.parse(JSON.stringify(row));
       this.typeData.isInsert = false;
       this.typeDialog = true;
     },
     createVehicle() {
       this.vehicleTitle = "新增车辆";
       this.imageUrl = "";
-      this.vehicleData.isInsert = true
-      this.vehicleData.vehicleNumber = ""
-      this.vehicleData.id = ""
-      this.vehicleData.vehicleName = ""
-      this.vehicleData.picPath = ""
-    
+      this.vehicleData.isInsert = true;
+      this.vehicleData.vehicleNumber = "";
+      this.vehicleData.id = "";
+      this.vehicleData.vehicleName = "";
+      this.vehicleData.picPath = "";
+
       this.vehicleDialog = true;
     },
     // 修改车辆
     editDialogShow3(row) {
       this.vehicleTitle = "修改车辆信息";
-      this.vehicleData.isInsert = false
+      this.vehicleData.isInsert = false;
       this.vehicleData = row;
       this.vehicleDialog = true;
-      this.imageUrl = "http://localhost:9090" + row.picPath;
+      this.imageUrl = "http://127.0.0.1:9090" + row.picPath;
     },
     //
     handleSizeChange(val) {
@@ -573,7 +580,7 @@ export default {
     },
     // 根据类别获取车辆信息
     getVehicleList() {
-      this.vehicleList = []
+      this.vehicleList = [];
       this.searchVechileForm.pageSize = this.pagination2.pageSize;
       this.searchVechileForm.pageNum = this.pagination2.pageNum;
       return this.vehicleFindPage(this.searchVechileForm).then((res) => {
@@ -606,49 +613,46 @@ export default {
       this.$refs["typeForm"].validate((valid) => {
         if (!valid) return;
         if (this.typeData.isInsert) {
-          this.typeCreate(this.typeData).then(()=>{
+          this.typeCreate(this.typeData).then(() => {
             this.typeDialog = false;
             this.init();
-          })
+          });
         } else {
           // console.log(this.typeData);
-          this.typeUpdate(this.typeData).then(()=>{
+          this.typeUpdate(this.typeData).then(() => {
             this.typeDialog = false;
             this.init();
           });
         }
-        
       });
     },
-    handelConfirmVehicle(){
+    handelConfirmVehicle() {
       this.$refs["vehicleForm"].validate((valid) => {
         if (!valid) return;
         if (this.vehicleData.isInsert) {
-          this.vehicleCreate(this.vehicleData).then(()=>{
+          this.vehicleCreate(this.vehicleData).then(() => {
             this.vehicleDialog = false;
             this.getVehicleList();
           });
         } else {
-          this.vehicleUpdate(this.vehicleData).then(()=>{
+          this.vehicleUpdate(this.vehicleData).then(() => {
             this.vehicleDialog = false;
             this.getVehicleList();
           });
         }
-        
       });
     },
     deleteType(row) {
       // console.log(row);
-      this.typeDelete({"id":row.id}).then(()=>{
-        this.init()
-      })
+      this.typeDelete({ id: row.id }).then(() => {
+        this.init();
+      });
     },
     deleteVehicle(row) {
       // console.log(row);
-      this.vehicleDelete({"id":row.id}).then(()=>{
-        this.getVehicleList()
-      })
-      
+      this.vehicleDelete({ id: row.id }).then(() => {
+        this.getVehicleList();
+      });
     },
     handleRemove(file, fileList) {
       // console.log(file, fileList);
@@ -680,13 +684,17 @@ export default {
         this.$message.error("上传头像图片大小不能超过 10MB!");
       }
       this.imageFlag = true;
-      return  isLt2M;
+      return isLt2M;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.pagination{
+  width: 50%;
+  margin: 15px auto 0 auto;
+}
 .el-row {
   width: 90%;
 }
