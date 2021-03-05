@@ -20,7 +20,7 @@
       <el-row>
         <el-col :span="5" v-for="o in contractList" :key="o.id" :offset="1">
           <el-card :body-style="{ padding: '0px' }">
-            <img style="width:100%;height:150px" v-if="o.path!=''&&o.path!=null" :src="'http://127.0.0.1:9090'+o.path" class="image" />
+            <img style="width:100%;height:150px" v-if="o.path!=''&&o.path!=null" :src="'http://8.131.59.205:8081/image'+o.path" class="image" />
             <img style="width:100%;height:150px" v-else :src="url" class="image" />
             <div style="padding: 14px">
               <span>{{ o.oldFilename }}</span>

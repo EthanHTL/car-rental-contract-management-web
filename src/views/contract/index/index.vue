@@ -40,7 +40,7 @@
           >
             <img
               v-if="o.path != undefined"
-              :src="'http://127.0.0.1:9090' + o.path"
+              :src="'http://8.131.59.205:8081/image' + o.path"
               class="image"
             />
             <img
