@@ -26,7 +26,7 @@
           flex="dir:top main:center cross:center"
         >
           <!-- logo -->
-          <img class="page-login--logo" src="./image/logo@2x.png" />
+          <img class="page-login--logo" src="./image/black-logo.png" style="width:100px;" />
           <!-- form -->
           <div class="page-login--form">
             <el-card shadow="never">
@@ -302,7 +302,6 @@ export default {
   // main
   .page-login--logo {
     width: 240px;
-    margin-bottom: 2em;
     margin-top: -2em;
   }
   // 登录表单
