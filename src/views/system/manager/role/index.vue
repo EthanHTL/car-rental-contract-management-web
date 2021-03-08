@@ -36,10 +36,10 @@
           size="small"
         ></el-input>
       </el-form-item>
-      <el-form-item label="接口">
+      <el-form-item label="代码">
         <el-input
           v-model="pageForm.url"
-          placeholder="请输入接口"
+          placeholder="请输入代码"
           clearable
           size="small"
         ></el-input>

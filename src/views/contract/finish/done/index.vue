@@ -126,7 +126,8 @@
       <img :src="imgSrc" alt="" height="500px" />
     </el-dialog>
     <el-dialog title="合同详情" :visible.sync="contractDialog" width="1000px">
-      <div v-html="renewContractForm.content"></div>
+      <el-button type="success" icon="fa fa-upload" circle v-print="'#contract'"></el-button>
+      <div v-html="renewContractForm.content" id="contract"></div>
     </el-dialog>
   </d2-container>
 </template>

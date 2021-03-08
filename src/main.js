@@ -16,6 +16,10 @@ import animated from 'animate.css' // npm install animate.css --save安装，在
 
 Vue.use(animated)
 
+// 打印
+import Print from 'vue-print-nb'
+Vue.use(Print);  //注册
+
 // icon
 import iconPicker from 'e-icon-picker';
 import "e-icon-picker/dist/symbol.js"; //基本彩色图标库
@@ -23,7 +27,7 @@ import 'e-icon-picker/dist/index.css'; // 基本样式，包含基本图标
 import 'font-awesome/css/font-awesome.min.css'; //font-awesome 图标库
 import 'element-ui/lib/theme-chalk/icon.css'; //element-ui 图标库
 
-Vue.use(iconPicker, {FontAwesome: true, ElementUI: true, eIcon: true, eIconSymbol: true});
+Vue.use(iconPicker, { FontAwesome: true, ElementUI: true, eIcon: true, eIconSymbol: true });
 
 
 // D2-Crud 表格组件
@@ -41,26 +45,26 @@ import dayjs from 'dayjs'
 Vue.filter('formatDate', function (value) {
   return dayjs(value).format('YYYY-MM-DD HH:mm:ss')
 })
-Date.prototype.format = function(fmt) { 
-  var o = { 
-  "M+" : this.getMonth()+1,                 //月份 
-  "d+" : this.getDate(),                    //日 
-  "h+" : this.getHours(),                   //小时 
-  "m+" : this.getMinutes(),                 //分 
-  "s+" : this.getSeconds(),                 //秒 
-  "q+" : Math.floor((this.getMonth()+3)/3), //季度 
-  "S" : this.getMilliseconds()             //毫秒 
-  }; 
-  if(/(y+)/.test(fmt)) {
-  fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+Date.prototype.format = function (fmt) {
+  var o = {
+    "M+": this.getMonth() + 1,                 //月份 
+    "d+": this.getDate(),                    //日 
+    "h+": this.getHours(),                   //小时 
+    "m+": this.getMinutes(),                 //分 
+    "s+": this.getSeconds(),                 //秒 
+    "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+    "S": this.getMilliseconds()             //毫秒 
+  };
+  if (/(y+)/.test(fmt)) {
+    fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
   }
-  for(var k in o) {
-  if(new RegExp("("+ k +")").test(fmt)){
-  fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+  for (var k in o) {
+    if (new RegExp("(" + k + ")").test(fmt)) {
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    }
   }
-  }
-  return fmt; 
- }
+  return fmt;
+}
 
 // 核心插件
 Vue.use(d2Admin)
@@ -71,7 +75,7 @@ new Vue({
   i18n,
   render: h => h(App),
   created() {
-    
+
     // 处理路由 得到每一级的路由设置
     this.$store.commit('d2admin/page/init', frameInRoutes)
     // 设置顶栏菜单
@@ -79,7 +83,7 @@ new Vue({
       this.$store.commit("d2admin/menu/headerSet", res);
       // this.$store.commit('d2admin/menu/asideSet', res);
       this.$store.commit("d2admin/search/init", res);
-    }); 
+    });
     // this.$store.commit('d2admin/menu/headerSet', menuHeader)
     // 设置侧边栏菜单
     // this.$store.commit('d2admin/menu/asideSet', menuAside)
