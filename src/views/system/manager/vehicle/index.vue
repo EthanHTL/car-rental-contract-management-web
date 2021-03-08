@@ -566,7 +566,7 @@ export default {
       this.vehicleData.isInsert = false;
       this.vehicleData = row;
       this.vehicleDialog = true;
-      this.imageUrl = "http://127.0.0.1:9090" + row.picPath;
+      this.imageUrl = "http://8.131.59.205:9090" + row.picPath;
     },
     //
     handleSizeChange(val) {

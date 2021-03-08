@@ -213,7 +213,7 @@ export default {
           ? "http://127.0.0.1:9090/api/v1/car/contract/activitiHistory/queryProPlan?processInstanceId=" +
             row.taskInfo.processInstanceId +
             "&f=true"
-          : "http://127.0.0.1:9090/bpmn/contract.png";
+          : "http://8.131.59.205:9090/bpmn/contract.png";
       this.processDialog = true;
     },
     handleSizeChange(val) {

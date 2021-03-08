@@ -279,7 +279,7 @@ export default {
       subLoad: false,
       contractList: [],
       searchText: "",
-      url: "http://127.0.0.1:9090/bpmn/contract.png",
+      url: "http://8.131.59.205:9090/bpmn/contract.png",
       pagination: {
         pageNum: 1,
         pageCount: 6,

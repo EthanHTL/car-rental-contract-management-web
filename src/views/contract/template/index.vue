@@ -77,7 +77,7 @@ export default {
   name: "contract-tempalte",
   data() {
     return {
-      url: "http://127.0.0.1:9090/bpmn/contract.png",
+      url: "http://8.131.59.205:9090/bpmn/contract.png",
       data: [],
       pagination: {
         currentPage: 1,
