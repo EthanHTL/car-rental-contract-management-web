@@ -1,6 +1,48 @@
 <template>
   <d2-container>
     <template slot="header"> 员工管理 </template>
+        <!-- 工具栏 -->
+    <div class="tool-btn">
+      <el-button
+        class="screen"
+        type="primary"
+        size="small"
+        :icon="btnIcon"
+        @click="toggle"
+        >{{ !showForm ? "筛选" : "收起" }}</el-button
+      >
+      <el-button
+        class="createBtn"
+        type="primary"
+        size="small"
+        >新增</el-button
+      >
+      <div class="clear"></div>
+    </div>
+    <!-- 搜索条件 -->
+    <el-form
+      :model="pageForm"
+      :inline="true"
+      class="demo-form-inline tool-form"
+      v-show="showForm"
+    >
+      <el-form-item label="名称:">
+        <el-input
+          v-model="pageForm.username"
+          placeholder="请输入用户名"
+          clearable
+          size="small"
+        ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="success" plain @click="init" size="small"
+          >搜索</el-button
+        >
+      </el-form-item>
+      <el-form-item>
+        <el-button type="info" plain size="small">重置</el-button>
+      </el-form-item>
+    </el-form>
 
     <el-table :data="employees" style="width: 70%; margin:0 auto">
       <el-table-column label="姓名" width="180">
@@ -14,7 +56,11 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column prop="sex" label="性别" width="100"> </el-table-column>
+      <el-table-column prop="sex" label="性别" width="100">
+        <template slot-scope="scope">
+          {{scope.row.sex == '1' ? '男':'女'}}
+        </template>
+        </el-table-column>
       <el-table-column prop="addr" label="地址" width="200"> </el-table-column>
       <el-table-column prop="telephone" width="150" label="电话">
       </el-table-column>
@@ -88,6 +134,8 @@ export default {
   name: "sysuser",
   data() {
     return {
+      btnIcon: "el-icon-arrow-down",
+      showForm: false,
       employees: [],
       pagination: {
         pageNum: 1,
@@ -99,6 +147,7 @@ export default {
       pageForm: {
         pageNum: "1",
         pageSize: "2",
+        username: "",
       },
       checkRoleList: [],
       roleList: [],
@@ -152,6 +201,10 @@ export default {
         }
         this.userFormVisible = true;
       });
+    },
+    toggle: function () {
+      this.btnIcon = this.showForm ? "el-icon-arrow-down" : "el-icon-arrow-up";
+      this.showForm = !this.showForm;
     },
     handleDelete() {},
     insertUserRoleBtn() {

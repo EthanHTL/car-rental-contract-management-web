@@ -40,12 +40,12 @@
           >
             <img
               v-if="o.path != undefined"
-              :src="'http://8.131.59.205:8081/image' + o.path"
+              :src="'http://127.0.0.1:8081/image' + o.path"
               class="image"
             />
             <img
               v-else
-              src="http://8.131.59.205:9090/bpmn/contract.png"
+              src="http://127.0.0.1:9090/bpmn/contract.png"
               class="image"
             />
             <div style="padding: 14px">

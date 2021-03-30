@@ -195,7 +195,7 @@
         ></el-table-column>
         <el-table-column property="date" label="图片" width="150">
           <template slot-scope="scope">
-            <img :src="'http://8.131.59.205:8081/image' + scope.row.picPath"
+            <img :src="'http://127.0.0.1:9090' + scope.row.picPath"
           /></template>
         </el-table-column>
         <el-table-column label="事故" width="150">
@@ -566,7 +566,7 @@ export default {
       this.vehicleData.isInsert = false;
       this.vehicleData = row;
       this.vehicleDialog = true;
-      this.imageUrl = "http://8.131.59.205:9090" + row.picPath;
+      this.imageUrl = "http://127.0.0.1:9090" + row.picPath;
     },
     //
     handleSizeChange(val) {
