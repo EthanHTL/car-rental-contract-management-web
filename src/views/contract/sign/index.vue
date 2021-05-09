@@ -17,10 +17,10 @@
           @change="searchBtn"
         ></el-button>
       </el-input>
-      <el-row>
-        <el-col :span="5" v-for="o in contractList" :key="o.id" :offset="1">
-          <el-card :body-style="{ padding: '0px' }">
-            <img style="width:100%;height:150px" v-if="o.path!=''&&o.path!=null" :src="'http://127.0.0.1:8081/image'+o.path" class="image" />
+      <el-row  v-for="(page, index) of pages" :key="index" >
+        <el-col :span="5" v-for="(o, innerindex) of page" :key="o.id" :offset="innerindex > 0 ? 1 : 0">
+          <el-card :body-style="{ padding: '2px' }">
+            <img style="width:100%;height:150px" v-if="o.path!=''&&o.path!=null" :src="'http://127.0.0.1:9090'+o.path" class="image" />
             <img style="width:100%;height:150px" v-else :src="url" class="image" />
             <div style="padding: 14px">
               <span>{{ o.oldFilename }}</span>
@@ -438,7 +438,19 @@ export default {
       ],
     };
   },
-  computed: {},
+  computed: {
+    pages () {
+      const pages = []
+      this.contractList.forEach((item, index) => {
+        const page = Math.floor(index / 4)//4代表4条为一行，随意更改
+        if (!pages[page]) {
+          pages[page] = []
+        }
+        pages[page].push(item)
+      })
+      return pages
+    }
+  },
   watch: {},
   created() {
     this.init();
@@ -578,9 +590,7 @@ export default {
   margin: 0 auto;
   width: 80%;
   text-align: center;
-  .el-row {
-    display: inline-block;
-  }
+  
 }
 
 .search {

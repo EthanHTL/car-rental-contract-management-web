@@ -40,7 +40,7 @@
           >
             <img
               v-if="o.path != undefined"
-              :src="'http://127.0.0.1:8081/image' + o.path"
+              :src="'http://127.0.0.1:9090' + o.path"
               class="image"
             />
             <img
@@ -107,7 +107,7 @@
       <el-button type="danger" @click="text = ''">
         <d2-icon name="trash-o" /> 清空
       </el-button>
-      <el-button type="primary" @click="createTemplete">
+      <el-button type="primary" @click="createTempImg">
         <d2-icon name="trash-o" /> 保存
       </el-button>
     </template>
@@ -138,6 +138,7 @@ export default {
       templateForm: {
         path: "",
         img: "",
+        content: "",
         dictType: '7',
         oldFilename: "",
       },
@@ -193,12 +194,13 @@ export default {
 
       this.templateDrawer = false;
     },
-    createTemplete() {
+    createTempImg() {
       html2canvas(this.$refs.imageDom, {
         backgroundColor: null, //避免图片有白色边框
       }).then((canvas) => {
         // 转成图片，生成图片地址
         this.templateForm.path = canvas.toDataURL("image/png");
+        this.templateForm.content = this.text
         this.templateFormVisible = true;
         // console.log(this.imgUrl);
       });
@@ -206,7 +208,10 @@ export default {
     comfirmHandle() {
       // console.log(this.templateForm);
       this.createTemplate(this.templateForm).then((res) => {
-        // console.log(res);
+        this.$message({
+          message: '创建成功',
+          type: 'success'
+        });
         this.templateFormVisible = false;
       });
     },
